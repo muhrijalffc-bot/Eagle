@@ -1,38 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latihan JavaScript</title>
+  <style>
+    /* ===== CSS: mengatur tampilan ===== */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px 0;
+      box-sizing: border-box;
+    }
+    .kartu {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 360px;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus { border-color: #667eea; outline: none; }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #5a67d8; }
+    .reset { background: #aaa; }
+    .reset:hover { background: #888; }
+    .hasil { font-weight: bold; min-height: 24px; margin-top: 16px; }
+    .bar-luar { background: #eee; border-radius: 10px; height: 14px; margin-top: 12px; overflow: hidden; }
+    .bar { height: 100%; width: 0%; background: green; transition: width 0.5s, background 0.5s; }
+    .info { font-size: 13px; color: #666; margin-top: 6px; }
+    .soal { text-align: left; font-size: 14px; margin-top: 12px; }
+    .catatan { font-size: 12px; color: #888; margin-top: 12px; }
+  </style>
+</head>
 <body>
-  <h2>Hai adik adik </h2>
 
-  <input id="kolomNama" placeholder="Ketik namamu">
-  <input id="kolomSemester" type="number" placeholder="Semester">
-  <button onclick="sapa()">Klik aku</button>
+  <!-- ===== KARTU 1: sapaan ===== -->
+  <div class="kartu">
+    <h2>Latihan JavaScript 🚀</h2>
 
-  <p id="hasil"></p>
+    <input id="kolomNama" placeholder="Ketik namamu">
+    <input id="kolomSemester" type="number" placeholder="Semester (1-14)">
+    <button onclick="sapa()">Klik aku</button>
+    <button class="reset" onclick="ulang()">Reset</button>
 
+    <p id="hasil" class="hasil"></p>
+    <div class="bar-luar"><div id="bar" class="bar"></div></div>
+    <p id="info" class="info"></p>
+  </div>
+
+  <!-- ===== KARTU 2: mini kalkulator stres ===== -->
+  <div class="kartu">
+    <h2>Kalkulator Stres Mini 🧠</h2>
+    <p class="info">Pilih seberapa sering kamu merasakan hal berikut<br>(1 = Tidak Pernah, 5 = Sangat Sering)</p>
+
+    <!-- Pertanyaan dibuat otomatis oleh JavaScript -->
+    <div id="daftarSoal"></div>
+
+    <button onclick="hitungStres()">Hitung skor</button>
+    <button class="reset" onclick="ulangStres()">Reset</button>
+
+    <p id="hasilStres" class="hasil"></p>
+    <div class="bar-luar"><div id="barStres" class="bar"></div></div>
+    <p id="infoStres" class="info"></p>
+    <p class="catatan">Ini hanya latihan coding, bukan alat ukur psikologis yang valid.</p>
+  </div>
+
+  <!-- ===== JavaScript: membuat halaman interaktif ===== -->
   <script>
+    // ---------- BAGIAN 1: sapaan ----------
+    let jumlahKlik = 0;
+
     function sapa() {
-  let nama = document.getElementById("kolomNama").value;
-  let semester = Number(document.getElementById("kolomSemester").value);
-  let hasil = document.getElementById("hasil");
+      let nama = document.getElementById("kolomNama").value.trim();
+      let semester = Number(document.getElementById("kolomSemester").value);
+      let hasil = document.getElementById("hasil");
+      let bar = document.getElementById("bar");
 
-  if (nama === "" || semester === 0) {
-    hasil.innerText = "Isi nama dan semestermu dulu ya!";
-    hasil.style.color = "black";
-    return;
-  }
+      if (nama === "" || semester < 1 || semester > 14) {
+        hasil.innerText = "Isi nama dan semester (1-14) dengan benar ya!";
+        hasil.style.color = "black";
+        return;
+      }
 
-  let pesan = "Halo, " + nama + "! Kamu semester " + semester + ". ";
+      jumlahKlik = jumlahKlik + 1;
 
-  if (semester >= 7) {
-    pesan = pesan + "Semangat skripsinya! 💪";
-    hasil.style.color = "red";
-  } else {
-    pesan = pesan + "Masih santai, nikmati dulu! 😄";
-    hasil.style.color = "green";
-  }
+      let pesan = "Halo, " + nama + "! Kamu semester " + semester + ". ";
+      let warna;
+      if (semester >= 7) {
+        pesan = pesan + "Semangat skripsinya! 💪";
+        warna = "red";
+      } else {
+        pesan = pesan + "Masih santai, nikmati dulu! 😄";
+        warna = "green";
+      }
 
-  hasil.innerText = pesan;
-}
+      hasil.innerText = pesan;
+      hasil.style.color = warna;
+
+      let persen = Math.min((semester / 8) * 100, 100);
+      bar.style.width = persen + "%";
+      bar.style.background = warna;
+
+      document.getElementById("info").innerText =
+        "Tombol sudah diklik " + jumlahKlik + " kali";
+    }
+
+    function ulang() {
+      document.getElementById("kolomNama").value = "";
+      document.getElementById("kolomSemester").value = "";
+      document.getElementById("hasil").innerText = "";
+      document.getElementById("bar").style.width = "0%";
+      document.getElementById("info").innerText = "";
+      jumlahKlik = 0;
+    }
+
+    // ---------- BAGIAN 2: kalkulator stres ----------
+
+    // Array: daftar pertanyaan. Mau tambah pertanyaan? Tulis satu baris lagi di sini.
+    let pertanyaan = [
+      "Saya merasa cemas saat memikirkan skripsi",
+      "Saya sulit tidur karena memikirkan tugas kuliah",
+      "Saya merasa lelah secara fisik dan mental",
+      "Saya merasa sulit untuk fokus",
+      "Saya merasa kehilangan motivasi"
+    ];
+
+    // Perulangan: bikin kotak pilihan 1-5 untuk setiap pertanyaan
+    let htmlSoal = "";
+    pertanyaan.forEach(function (teks, nomor) {
+      htmlSoal = htmlSoal +
+        '<div class="soal">' + (nomor + 1) + ". " + teks +
+        '<select id="soal' + nomor + '">' +
+        '<option value="0">- pilih -</option>' +
+        '<option value="1">1 - Tidak Pernah</option>' +
+        '<option value="2">2 - Jarang</option>' +
+        '<option value="3">3 - Kadang</option>' +
+        '<option value="4">4 - Sering</option>' +
+        '<option value="5">5 - Sangat Sering</option>' +
+        "</select></div>";
+    });
+    document.getElementById("daftarSoal").innerHTML = htmlSoal;
+
+    function hitungStres() {
+      let total = 0;
+      let adaYangKosong = false;
+
+      // Jumlahkan semua jawaban
+      for (let i = 0; i < pertanyaan.length; i++) {
+        let nilai = Number(document.getElementById("soal" + i).value);
+        if (nilai === 0) {
+          adaYangKosong = true;
+        }
+        total = total + nilai;
+      }
+
+      let hasil = document.getElementById("hasilStres");
+      let bar = document.getElementById("barStres");
+
+      if (adaYangKosong) {
+        hasil.innerText = "Jawab semua pertanyaan dulu ya!";
+        hasil.style.color = "black";
+        return;
+      }
+
+      // Skor minimal = jumlah soal x 1, maksimal = jumlah soal x 5
+      let maksimal = pertanyaan.length * 5;
+      let persen = (total / maksimal) * 100;
+
+      let kategori;
+      let warna;
+      if (persen <= 40) {
+        kategori = "Rendah 😊";
+        warna = "green";
+      } else if (persen <= 70) {
+        kategori = "Sedang 😐";
+        warna = "orange";
+      } else {
+        kategori = "Tinggi 😟";
+        warna = "red";
+      }
+
+      hasil.innerText = "Tingkat stres: " + kategori;
+      hasil.style.color = warna;
+      bar.style.width = persen + "%";
+      bar.style.background = warna;
+      document.getElementById("infoStres").innerText =
+        "Skor kamu " + total + " dari " + maksimal;
+    }
+
+    function ulangStres() {
+      for (let i = 0; i < pertanyaan.length; i++) {
+        document.getElementById("soal" + i).value = "0";
+      }
+      document.getElementById("hasilStres").innerText = "";
+      document.getElementById("barStres").style.width = "0%";
+      document.getElementById("infoStres").innerText = "";
+    }
+
+    // Tekan Enter di kolom nama/semester = klik tombol sapaan
+    document.getElementById("kolomNama").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { sapa(); }
+    });
+    document.getElementById("kolomSemester").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { sapa(); }
+    });
   </script>
 </body>
 </html>
