@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Latihan JavaScript</h2>
+
+  <input id="kolomNama" placeholder="Ketik namamu">
+  <button onclick="sapa()">Klik aku</button>
+
+  <p id="hasil"></p>
+
+  <script>
+    function sapa() {
+      let nama = document.getElementById("kolomNama").value;
+      document.getElementById("hasil").innerText = "Halo, " + nama + "! 👋";
+    }
+  </script>
+</body>
+</html>
