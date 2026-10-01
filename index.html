@@ -52,8 +52,10 @@
     .bar-luar { background: #eee; border-radius: 10px; height: 14px; margin-top: 12px; overflow: hidden; }
     .bar { height: 100%; width: 0%; background: green; transition: width 0.5s, background 0.5s; }
     .info { font-size: 13px; color: #666; margin-top: 6px; }
-    .soal { text-align: left; font-size: 14px; margin-top: 12px; }
-    .catatan { font-size: 12px; color: #888; margin-top: 12px; }
+    .baris { text-align: left; font-size: 14px; margin-top: 12px; }
+    .baris input[type="range"] { padding: 0; border: none; }
+    .nilaiGeser { float: right; font-weight: bold; color: #667eea; }
+    .bobot { color: #999; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -72,21 +74,20 @@
     <p id="info" class="info"></p>
   </div>
 
-  <!-- ===== KARTU 2: mini kalkulator stres ===== -->
+  <!-- ===== KARTU 2: penilai masakan Suki Pedas Eka ===== -->
   <div class="kartu">
-    <h2>Kalkulator Stres Mini 🧠</h2>
-    <p class="info">Pilih seberapa sering kamu merasakan hal berikut<br>(1 = Tidak Pernah, 5 = Sangat Sering)</p>
+    <h2>Penilai Suki Pedas Eka 🍲🌶️</h2>
+    <p class="info">Geser tiap slider untuk memberi nilai 1-10</p>
 
-    <!-- Pertanyaan dibuat otomatis oleh JavaScript -->
-    <div id="daftarSoal"></div>
+    <!-- Slider dibuat otomatis oleh JavaScript -->
+    <div id="daftarNilai"></div>
 
-    <button onclick="hitungStres()">Hitung skor</button>
-    <button class="reset" onclick="ulangStres()">Reset</button>
+    <button onclick="hitungSuki()">Hitung nilai akhir</button>
+    <button class="reset" onclick="ulangSuki()">Reset</button>
 
-    <p id="hasilStres" class="hasil"></p>
-    <div class="bar-luar"><div id="barStres" class="bar"></div></div>
-    <p id="infoStres" class="info"></p>
-    <p class="catatan">Ini hanya latihan coding, bukan alat ukur psikologis yang valid.</p>
+    <p id="hasilSuki" class="hasil"></p>
+    <div class="bar-luar"><div id="barSuki" class="bar"></div></div>
+    <p id="infoSuki" class="info"></p>
   </div>
 
   <!-- ===== JavaScript: membuat halaman interaktif ===== -->
@@ -138,87 +139,83 @@
       jumlahKlik = 0;
     }
 
-    // ---------- BAGIAN 2: kalkulator stres ----------
+    // ---------- BAGIAN 2: penilai Suki Pedas Eka ----------
 
-    // Array: daftar pertanyaan. Mau tambah pertanyaan? Tulis satu baris lagi di sini.
-    let pertanyaan = [
-      "Saya merasa cemas saat memikirkan skripsi",
-      "Saya sulit tidur karena memikirkan tugas kuliah",
-      "Saya merasa lelah secara fisik dan mental",
-      "Saya merasa sulit untuk fokus",
-      "Saya merasa kehilangan motivasi"
+    // Array berisi objek: tiap kriteria punya nama dan bobot (pentingnya, total 100)
+    let kriteria = [
+      { nama: "Rasa kuah",      bobot: 30 },
+      { nama: "Level pedas",    bobot: 20 },
+      { nama: "Isian & bahan",  bobot: 20 },
+      { nama: "Kesegaran",      bobot: 15 },
+      { nama: "Tampilan",       bobot: 15 }
     ];
 
-    // Perulangan: bikin kotak pilihan 1-5 untuk setiap pertanyaan
-    let htmlSoal = "";
-    pertanyaan.forEach(function (teks, nomor) {
-      htmlSoal = htmlSoal +
-        '<div class="soal">' + (nomor + 1) + ". " + teks +
-        '<select id="soal' + nomor + '">' +
-        '<option value="0">- pilih -</option>' +
-        '<option value="1">1 - Tidak Pernah</option>' +
-        '<option value="2">2 - Jarang</option>' +
-        '<option value="3">3 - Kadang</option>' +
-        '<option value="4">4 - Sering</option>' +
-        '<option value="5">5 - Sangat Sering</option>' +
-        "</select></div>";
+    // Perulangan: bikin slider untuk tiap kriteria
+    let htmlNilai = "";
+    kriteria.forEach(function (k, i) {
+      htmlNilai = htmlNilai +
+        '<div class="baris">' + k.nama +
+        ' <span class="bobot">(bobot ' + k.bobot + '%)</span>' +
+        '<span class="nilaiGeser" id="angka' + i + '">5</span>' +
+        '<input type="range" id="geser' + i + '" min="1" max="10" value="5" ' +
+        'oninput="document.getElementById(\'angka' + i + '\').innerText = this.value">' +
+        "</div>";
     });
-    document.getElementById("daftarSoal").innerHTML = htmlSoal;
+    document.getElementById("daftarNilai").innerHTML = htmlNilai;
 
-    function hitungStres() {
-      let total = 0;
-      let adaYangKosong = false;
+    function hitungSuki() {
+      let jumlah = 0;      // jumlah (nilai x bobot)
+      let totalBobot = 0;
 
-      // Jumlahkan semua jawaban
-      for (let i = 0; i < pertanyaan.length; i++) {
-        let nilai = Number(document.getElementById("soal" + i).value);
-        if (nilai === 0) {
-          adaYangKosong = true;
-        }
-        total = total + nilai;
+      for (let i = 0; i < kriteria.length; i++) {
+        let nilai = Number(document.getElementById("geser" + i).value);
+        jumlah = jumlah + nilai * kriteria[i].bobot;
+        totalBobot = totalBobot + kriteria[i].bobot;
       }
 
-      let hasil = document.getElementById("hasilStres");
-      let bar = document.getElementById("barStres");
+      // Rata-rata berbobot (skala 1-10), lalu diubah ke skala 100
+      let nilaiAkhir = (jumlah / totalBobot) * 10;
 
-      if (adaYangKosong) {
-        hasil.innerText = "Jawab semua pertanyaan dulu ya!";
-        hasil.style.color = "black";
-        return;
-      }
-
-      // Skor minimal = jumlah soal x 1, maksimal = jumlah soal x 5
-      let maksimal = pertanyaan.length * 5;
-      let persen = (total / maksimal) * 100;
-
-      let kategori;
+      let komentar;
       let warna;
-      if (persen <= 40) {
-        kategori = "Rendah 😊";
+      if (nilaiAkhir >= 90) {
+        komentar = "Luar biasa! Layak buka warung ⭐";
         warna = "green";
-      } else if (persen <= 70) {
-        kategori = "Sedang 😐";
+      } else if (nilaiAkhir >= 75) {
+        komentar = "Enak banget, tambah lagi! 😋";
+        warna = "green";
+      } else if (nilaiAkhir >= 60) {
+        komentar = "Lumayan, masih bisa ditingkatkan 🙂";
         warna = "orange";
       } else {
-        kategori = "Tinggi 😟";
+        komentar = "Perlu perbaikan resep, semangat Eka! 💪";
         warna = "red";
       }
 
-      hasil.innerText = "Tingkat stres: " + kategori;
+      // Jumlah emoji cabai mengikuti nilai "Level pedas" (slider ke-2)
+      let pedas = Number(document.getElementById("geser1").value);
+      let cabai = "🌶️".repeat(Math.ceil(pedas / 2));
+
+      let hasil = document.getElementById("hasilSuki");
+      hasil.innerText = "Nilai akhir: " + nilaiAkhir.toFixed(1) + " / 100\n" + komentar;
       hasil.style.color = warna;
-      bar.style.width = persen + "%";
+      hasil.style.whiteSpace = "pre-line";
+
+      let bar = document.getElementById("barSuki");
+      bar.style.width = nilaiAkhir + "%";
       bar.style.background = warna;
-      document.getElementById("infoStres").innerText =
-        "Skor kamu " + total + " dari " + maksimal;
+
+      document.getElementById("infoSuki").innerText = "Tingkat pedas: " + cabai;
     }
 
-    function ulangStres() {
-      for (let i = 0; i < pertanyaan.length; i++) {
-        document.getElementById("soal" + i).value = "0";
+    function ulangSuki() {
+      for (let i = 0; i < kriteria.length; i++) {
+        document.getElementById("geser" + i).value = 5;
+        document.getElementById("angka" + i).innerText = 5;
       }
-      document.getElementById("hasilStres").innerText = "";
-      document.getElementById("barStres").style.width = "0%";
-      document.getElementById("infoStres").innerText = "";
+      document.getElementById("hasilSuki").innerText = "";
+      document.getElementById("barSuki").style.width = "0%";
+      document.getElementById("infoSuki").innerText = "";
     }
 
     // Tekan Enter di kolom nama/semester = klik tombol sapaan
