@@ -10,14 +10,28 @@
 
   <script>
     function sapa() {
-      if (nama === "") {
-  // tampilkan pesan peringatan
-} else {
-  // tampilkan sapaan
+  let nama = document.getElementById("kolomNama").value;
+  let semester = Number(document.getElementById("kolomSemester").value);
+  let hasil = document.getElementById("hasil");
+
+  if (nama === "" || semester === 0) {
+    hasil.innerText = "Isi nama dan semestermu dulu ya!";
+    hasil.style.color = "black";
+    return;
+  }
+
+  let pesan = "Halo, " + nama + "! Kamu semester " + semester + ". ";
+
+  if (semester >= 7) {
+    pesan = pesan + "Semangat skripsinya! 💪";
+    hasil.style.color = "red";
+  } else {
+    pesan = pesan + "Masih santai, nikmati dulu! 😄";
+    hasil.style.color = "green";
+  }
+
+  hasil.innerText = pesan;
 }
-      let nama = document.getElementById("kolomNama").value;
-      document.getElementById("hasil").innerText = "Halo, " + nama + "! 👋";
-    }
   </script>
 </body>
 </html>
