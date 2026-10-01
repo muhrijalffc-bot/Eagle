@@ -1,0 +1,2 @@
+# LatihanRijall
+A javascript training
