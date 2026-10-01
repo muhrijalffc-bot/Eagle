@@ -1,2 +1,1 @@
-# LatihanRijall
-A javascript training
+# HALO
