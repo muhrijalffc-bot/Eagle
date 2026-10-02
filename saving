@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabunganku — Catatan Harian & Tabungan</title>
+<style>
+:root{--bg:#f6f7fb;--kartu:#fff;--teks:#0f172a;--abu:#64748b;--garis:#e8ebf2;--utama:#0d9488;--utama2:#ccfbf1;--hijau:#10b981;--merah:#f43f5e;--sisi:#0f172a}
+[data-tema="gelap"]{--bg:#0b1218;--kartu:#121c24;--teks:#e5eef0;--abu:#8aa0a8;--garis:#1f2d37;--utama2:#0f3a38;--sisi:#070d11}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--teks);font-size:14px}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+aside{background:var(--sisi);color:#cbd5e1;padding:22px 14px;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:18px;padding:0 10px 24px}
+.logo i{background:var(--utama);width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-style:normal}
+nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#94a3b8;cursor:pointer;margin-bottom:4px}
+nav a:hover{background:#ffffff12;color:#fff}
+nav a.aktif{background:var(--utama);color:#fff}
+.isi{padding:0 28px 40px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:22px 0}
+.topbar h1{margin:0;font-size:22px}.topbar p{margin:2px 0 0;color:var(--abu)}
+.aksi{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit}
+.btn{padding:9px 14px;border-radius:10px;border:1px solid var(--garis);background:var(--kartu);color:var(--teks);cursor:pointer}
+.btn:hover{border-color:var(--utama)}
+.btn.utama{background:var(--utama);border-color:var(--utama);color:#fff;font-weight:600}
+.btn.kecil{padding:6px 10px;font-size:13px}
+.grid{display:grid;gap:16px}
+.kpi{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.dua{grid-template-columns:2fr 1fr;margin-top:16px}
+.dua2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:16px}
+.kartu{background:var(--kartu);border:1px solid var(--garis);border-radius:16px;padding:20px;box-shadow:0 1px 2px #0000000a}
+.kartu h3{margin:0;font-size:14px;color:var(--abu);font-weight:600}
+.ikon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:18px;float:right}
+.nilai{font-size:24px;font-weight:700;margin:12px 0 6px;letter-spacing:-.5px}
+.delta{font-size:12px;color:var(--abu)}
+.naik{color:var(--hijau);font-weight:600}.turun{color:var(--merah);font-weight:600}
+.judul{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.judul h2{margin:0;font-size:16px}
+.grafik{position:relative;height:200px;display:flex;align-items:flex-end;gap:6px;padding:0 4px 24px}
+.gl{position:absolute;left:0;right:0;border-top:1px dashed var(--garis)}
+.gl span{position:absolute;top:-8px;left:0;font-size:10px;color:var(--abu);background:var(--kartu);padding-right:4px}
+.kol{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:2px;position:relative;z-index:1}
+.kol b{width:42%;max-width:14px;border-radius:4px 4px 0 0;min-height:2px;transition:height .5s}
+.kol em{position:absolute;bottom:-22px;font-style:normal;font-size:11px;color:var(--abu)}
+.legenda{display:flex;gap:14px;color:var(--abu);font-size:12px}
+.legenda i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.donat{width:140px;height:140px;border-radius:50%;margin:4px auto 14px;display:grid;place-items:center}
+.donat div{width:90px;height:90px;border-radius:50%;background:var(--kartu);display:grid;place-items:center;text-align:center;font-size:11px;color:var(--abu)}
+.donat strong{display:block;font-size:14px;color:var(--teks)}
+.lk{display:flex;justify-content:space-between;padding:4px 0;font-size:13px}
+.lk i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px}
+.bar{background:var(--garis);border-radius:8px;height:10px;overflow:hidden;margin:8px 0 6px}
+.bar div{height:100%;background:var(--utama);transition:width .5s}
+.bar.ok div{background:var(--hijau)}
+.kosong{text-align:center;color:var(--abu);padding:22px}
+.hari{margin-top:6px}
+.hari-judul{display:flex;justify-content:space-between;padding:10px 4px;font-weight:600;border-bottom:1px solid var(--garis);flex-wrap:wrap;gap:6px}
+.hari-judul small{font-weight:400;color:var(--abu)}
+.trx{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--garis)}
+.trx .ik{width:36px;height:36px;border-radius:10px;background:var(--utama2);display:grid;place-items:center;flex:none}
+.trx .tt{flex:1;min-width:0}.trx small{display:block;color:var(--abu)}
+.trx b{white-space:nowrap}
+.x{background:none;border:none;cursor:pointer;opacity:.5;font-size:15px}.x:hover{opacity:1}
+.chip{padding:6px 12px;border-radius:20px;border:1px solid var(--garis);background:var(--kartu);color:var(--abu);font-size:13px}
+.in{width:100%;padding:10px;border-radius:10px;border:1px solid var(--garis);background:var(--bg);color:var(--teks)}
+.dompet{display:grid;grid-template-columns:44px 1fr 150px 36px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--garis)}
+.dompet .ik{width:40px;height:40px;border-radius:12px;background:var(--utama2);display:grid;place-items:center;font-size:20px}
+.dompet small{display:block;color:var(--abu)}
+.banner{background:var(--utama2);color:var(--utama);border-radius:14px;padding:14px 18px;margin-bottom:16px;font-weight:600}
+.sembunyi{display:none!important}
+dialog{border:none;border-radius:18px;padding:24px;width:min(420px,92vw);background:var(--kartu);color:var(--teks);box-shadow:0 20px 60px #00000055}
+dialog::backdrop{background:#0f172a99}
+dialog h2{margin:0 0 14px}
+dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{padding:9px 4px;border:1px solid var(--garis);background:var(--bg);color:var(--teks);border-radius:10px;cursor:pointer;font-size:13px}
+.seg button.aktif{background:var(--utama);border-color:var(--utama);color:#fff;font-weight:600}
+.baris{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.err{color:var(--merah);font-size:13px;min-height:16px;margin-top:10px}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--sisi);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:50}
+#toast.tampil{opacity:1;transform:none}
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:12px}nav{display:flex;gap:6px;overflow-x:auto}nav a{white-space:nowrap}.logo{padding-bottom:10px}.dua{grid-template-columns:1fr}.isi{padding:0 16px 40px}.dompet{grid-template-columns:40px 1fr 36px}.dompet input{grid-column:1/3}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="logo"><i>🐷</i>Tabunganku</div>
+    <nav>
+      <a id="nav-dashboard" class="aktif" onclick="ganti('dashboard')">📊 Dashboard</a>
+      <a id="nav-harian" onclick="ganti('harian')">🗓️ Catatan Harian</a>
+      <a id="nav-target" onclick="ganti('target')">🎯 Target Tabungan</a>
+      <a id="nav-saldo" onclick="ganti('saldo')">👛 Saldo Awal</a>
+    </nav>
+  </aside>
+
+  <div class="isi">
+    <div class="topbar">
+      <div><h1 id="judul">Dashboard</h1><p id="sub"></p></div>
+      <div class="aksi">
+        <button class="btn" onclick="ekspor()">⬇ Ekspor CSV</button>
+        <button class="btn" onclick="tema()" title="Ganti tema">🌓</button>
+        <button class="btn utama" onclick="bukaT('keluar')">+ Catat transaksi</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="v-dashboard">
+      <div class="grid kpi" id="kpi"></div>
+      <div class="grid dua">
+        <div class="kartu">
+          <div class="judul"><h2>14 hari terakhir</h2>
+            <div class="legenda"><span><i style="background:var(--hijau)"></i>Masuk</span><span><i style="background:var(--merah)"></i>Keluar</span></div></div>
+          <div class="grafik" id="grafik"></div>
+        </div>
+        <div class="kartu"><div class="judul"><h2>Pengeluaran bulan ini</h2></div><div id="donat"></div></div>
+      </div>
+      <div class="grid dua2">
+        <div class="kartu"><div class="judul"><h2>Progres target</h2><button class="btn kecil" onclick="ganti('target')">Lihat semua</button></div><div id="progres"></div></div>
+        <div class="kartu"><div class="judul"><h2>Transaksi terbaru</h2><button class="btn kecil" onclick="ganti('harian')">Lihat semua</button></div><div id="terbaru"></div></div>
+      </div>
+    </div>
+
+    <!-- CATATAN HARIAN -->
+    <div id="v-harian" class="sembunyi">
+      <div class="kartu">
+        <div class="judul">
+          <div class="aksi"><input type="month" class="in" id="bulan" style="width:auto" onchange="render()"><input class="in" id="cari" style="width:200px" placeholder="🔍 Cari..." oninput="render()"></div>
+          <div class="aksi" id="ringkasBulan"></div>
+        </div>
+        <div id="listHarian"></div>
+      </div>
+    </div>
+
+    <!-- TARGET -->
+    <div id="v-target" class="sembunyi">
+      <div class="aksi" style="margin-bottom:16px"><button class="btn utama" onclick="bukaTarget()">+ Target baru</button></div>
+      <div class="grid dua2" style="margin-top:0" id="listTarget"></div>
+    </div>
+
+    <!-- SALDO AWAL -->
+    <div id="v-saldo" class="sembunyi">
+      <div id="banner"></div>
+      <div class="grid dua2" style="margin-top:0">
+        <div class="kartu">
+          <div class="judul"><h2>Saldo awal per dompet</h2></div>
+          <div id="listDompet"></div>
+          <p class="delta" id="totalAwal" style="margin-top:12px"></p>
+          <button class="btn utama" id="btnMulai" onclick="mulaiPakai()">Simpan &amp; mulai</button>
+        </div>
+        <div>
+          <div class="kartu">
+            <div class="judul"><h2>Tambah dompet</h2></div>
+            <label class="delta">Nama dompet</label><input class="in" id="dNama" placeholder="Contoh: Bank BRI, GoPay, Tunai">
+            <label class="delta">Saldo awal (Rp)</label><input class="in" id="dSaldo" type="number" min="0" placeholder="0">
+            <label class="delta">Ikon</label>
+            <select class="in" id="dIkon"><option>💵</option><option>🏦</option><option>📱</option><option>💳</option><option>👛</option></select>
+            <div class="err" id="errD"></div>
+            <button class="btn" onclick="tambahDompet()">+ Tambah dompet</button>
+          </div>
+          <div class="kartu" style="margin-top:16px">
+            <div class="judul"><h2>Batas pengeluaran harian</h2></div>
+            <input class="in" id="batas" type="number" min="0" placeholder="0 = tidak dibatasi" onchange="ubahBatas(this.value)">
+            <p class="delta">Dipakai untuk menandai hari ketika pengeluaranmu melewati batas.</p>
+          </div>
+          <div class="kartu" style="margin-top:16px">
+            <div class="judul"><h2>Mulai ulang</h2></div>
+            <p class="delta">Menghapus semua dompet, transaksi, dan target di browser ini.</p>
+            <button class="btn" style="color:var(--merah)" onclick="resetSemua()">🗑️ Hapus semua data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="dlgT">
+  <h2>Catat transaksi</h2>
+  <div class="seg">
+    <button id="sg-masuk" onclick="setJenis('masuk')">💰 Pemasukan</button>
+    <button id="sg-keluar" onclick="setJenis('keluar')">💸 Pengeluaran</button>
+    <button id="sg-tabung" onclick="setJenis('tabung')">🐷 Menabung</button>
+  </div>
+  <label>Tanggal</label><input class="in" type="date" id="tTgl">
+  <label>Jumlah (Rp)</label><input class="in" type="number" id="tJml" min="1" placeholder="0">
+  <div id="rowKat"><label>Kategori</label><select class="in" id="tKat"></select></div>
+  <div id="rowTarget" class="sembunyi"><label>Setor ke target</label><select class="in" id="tTarget"></select></div>
+  <label>Dompet</label><select class="in" id="tDompet"></select>
+  <label>Keterangan (opsional)</label><input class="in" id="tKet" placeholder="Contoh: makan siang">
+  <div class="err" id="errT"></div>
+  <div class="baris"><button class="btn" onclick="document.getElementById('dlgT').close()">Batal</button><button class="btn utama" onclick="simpanT()">Simpan</button></div>
+</dialog>
+
+<dialog id="dlgTarget">
+  <h2>Target tabungan baru</h2>
+  <label>Nama target</label><input class="in" id="gNama" placeholder="Contoh: Laptop baru, Dana darurat">
+  <label>Jumlah target (Rp)</label><input class="in" type="number" id="gJml" min="1" placeholder="0">
+  <label>Tenggat (opsional)</label><input class="in" type="date" id="gTenggat">
+  <div class="err" id="errG"></div>
+  <div class="baris"><button class="btn" onclick="document.getElementById('dlgTarget').close()">Batal</button><button class="btn utama" onclick="simpanTarget()">Simpan</button></div>
+</dialog>
+<div id="toast"></div>
+
+<script>
+const KUNCI="tabunganku";
+const WARNA=["#0d9488","#f43f5e","#f59e0b","#6366f1","#06b6d4","#8b5cf6","#94a3b8"];
+const BAWAAN={siap:false,batasHarian:0,
+  dompet:[{id:1,nama:"Tunai",saldoAwal:0,ikon:"💵"}],target:[],trx:[],
+  katMasuk:["Gaji","Uang saku","Bonus","Lainnya"],
+  katKeluar:["Makan","Transport","Belanja","Tagihan","Hiburan","Kesehatan","Lainnya"]};
+const IKON={masuk:"💰",keluar:"💸",tabung:"🐷"};
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,"0");
+function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function salin(o){return JSON.parse(JSON.stringify(o))}
+function muat(){try{let x=localStorage.getItem(KUNCI);if(x)return Object.assign(salin(BAWAAN),JSON.parse(x))}catch(e){}return salin(BAWAAN)}
+function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}}
+let S=muat(),tampil="dashboard",jenisAktif="keluar",targetAwal="";
+
+function rp(n){return "Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID")}
+function rpT(n){return (n<0?"-":"")+rp(n)}
+function singkat(n){return n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(Math.round(n))}
+function aman(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2200)}
+function tglPanjang(t){return new Date(t+"T00:00:00").toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"short",year:"numeric"})}
+
+// ---------- Perhitungan ----------
+function jml(arr,j){return arr.filter(t=>t.jenis===j).reduce((a,t)=>a+t.jumlah,0)}
+function saldoDompet(d){
+  let s=d.saldoAwal;
+  S.trx.forEach(t=>{if(t.dompetId===d.id){s+=t.jenis==="masuk"?t.jumlah:-t.jumlah}});
+  return s;
+}
+function totalSaldo(){return S.dompet.reduce((a,d)=>a+saldoDompet(d),0)}
+function terkumpul(tid){return S.trx.filter(t=>t.jenis==="tabung"&&(t.targetId||"")===tid).reduce((a,t)=>a+t.jumlah,0)}
+function namaDompet(id){let d=S.dompet.find(x=>x.id===id);return d?d.nama:"-"}
+
+// ---------- Navigasi ----------
+const JUDUL={dashboard:"Dashboard",harian:"Catatan Harian",target:"Target Tabungan",saldo:"Saldo Awal"};
+function ganti(v){
+  tampil=v;
+  for(let k in JUDUL){$("nav-"+k).classList.toggle("aktif",k===v);$("v-"+k).classList.toggle("sembunyi",k!==v)}
+  $("judul").innerText=JUDUL[v];
+  render();
+}
+function render(){
+  if(tampil==="dashboard")renderDashboard();
+  if(tampil==="harian")renderHarian();
+  if(tampil==="target")renderTarget();
+  if(tampil==="saldo")renderSaldo();
+  $("sub").innerText=({dashboard:"Ringkasan keuangan pribadimu",harian:"Pemasukan, pengeluaran, dan setoran per hari",target:"Pantau progres tiap target menabung",saldo:"Atur saldo awal dan dompet"})[tampil];
+}
+
+// ---------- Dashboard ----------
+function kpi(j,ik,bg,nilai,sub,w){return '<div class="kartu"><span class="ikon" style="background:'+bg+'">'+ik+'</span><h3>'+j+'</h3><div class="nilai" style="color:'+(w||"inherit")+'">'+nilai+'</div>'+sub+'</div>'}
+function barisTrx(t,hapus){
+  let w=t.jenis==="masuk"?"var(--hijau)":t.jenis==="keluar"?"var(--merah)":"var(--utama)";
+  let tanda=t.jenis==="masuk"?"+":"-";
+  let tg=t.targetId?(S.target.find(x=>x.id===t.targetId)||{}).nama:"";
+  return '<div class="trx"><div class="ik">'+IKON[t.jenis]+'</div><div class="tt"><div>'+aman(t.ket||t.kat)+'</div><small>'+aman(t.kat)+(tg?" → "+aman(tg):"")+" · "+aman(namaDompet(t.dompetId))+(hapus?"":" · "+t.tgl)+'</small></div><b style="color:'+w+'">'+tanda+rp(t.jumlah)+'</b>'+(hapus?'<button class="x" onclick="hapusT('+t.id+')" title="Hapus">🗑️</button>':"")+"</div>";
+}
+function renderDashboard(){
+  let now=new Date(),h=iso(now),b=h.slice(0,7);
+  let bulan=S.trx.filter(t=>t.tgl.startsWith(b)),hari=S.trx.filter(t=>t.tgl===h);
+  let saldo=totalSaldo(),tab=jml(S.trx,"tabung"),mM=jml(bulan,"masuk"),mK=jml(bulan,"keluar"),hK=jml(hari,"keluar"),hM=jml(hari,"masuk");
+  let batas=S.batasHarian||0;
+  let subHari=batas>0?(hK>batas?'<span class="turun">Melewati batas '+rp(batas)+"</span>":'<span class="naik">Sisa '+rp(batas-hK)+'</span> <span class="delta">dari batas harian</span>'):'<span class="delta">Pemasukan hari ini '+rp(hM)+"</span>";
+  $("kpi").innerHTML=[
+    kpi("Saldo dompet","👛","#0d948822",rpT(saldo),'<span class="delta">'+S.dompet.length+" dompet · uang yang bisa dipakai</span>",saldo<0?"var(--merah)":""),
+    kpi("Total tabungan","🐷","#10b98122",rp(tab),'<span class="delta">'+S.target.length+" target</span>","var(--hijau)"),
+    kpi("Pemasukan bulan ini","💰","#10b98122",rp(mM),'<span class="delta">Selisih dengan pengeluaran: '+rpT(mM-mK)+"</span>"),
+    kpi("Pengeluaran hari ini","💸","#f43f5e22",rp(hK),subHari),
+    kpi("Rata-rata harian","📅","#f59e0b22",rp(mK/now.getDate()),'<span class="delta">Pengeluaran bulan ini '+rp(mK)+"</span>")
+  ].join("");
+
+  let hr=[];
+  for(let i=13;i>=0;i--){
+    let d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),x=S.trx.filter(t=>t.tgl===iso(d));
+    hr.push({l:d.getDate(),m:jml(x,"masuk"),k:jml(x,"keluar")});
+  }
+  let mx=Math.max(1,...hr.map(x=>Math.max(x.m,x.k)));
+  let garis=[1,.75,.5,.25].map(f=>'<div class="gl" style="top:'+((1-f)*88)+'%"><span>'+singkat(mx*f)+"</span></div>").join("");
+  $("grafik").innerHTML=garis+hr.map(x=>'<div class="kol"><b style="height:'+(x.m/mx*88)+'%;background:var(--hijau)" title="Masuk '+rp(x.m)+'"></b><b style="height:'+(x.k/mx*88)+'%;background:var(--merah)" title="Keluar '+rp(x.k)+'"></b><em>'+x.l+"</em></div>").join("");
+
+  let pk={};bulan.filter(t=>t.jenis==="keluar").forEach(t=>pk[t.kat]=(pk[t.kat]||0)+t.jumlah);
+  let ks=Object.keys(pk).sort((a,c)=>pk[c]-pk[a]);
+  if(ks.length===0){$("donat").innerHTML='<div class="kosong">Belum ada pengeluaran bulan ini</div>'}
+  else{
+    let acc=0,seg=ks.map((k,i)=>{let a=acc/mK*100;acc+=pk[k];return WARNA[i%WARNA.length]+" "+a+"% "+(acc/mK*100)+"%"});
+    $("donat").innerHTML='<div class="donat" style="background:conic-gradient('+seg.join(",")+')"><div><span><strong>'+singkat(mK)+"</strong>total</span></div></div>"+
+      ks.map((k,i)=>'<div class="lk"><span><i style="background:'+WARNA[i%WARNA.length]+'"></i>'+aman(k)+"</span><b>"+rp(pk[k])+"</b></div>").join("");
+  }
+
+  $("progres").innerHTML=S.target.length===0?'<div class="kosong">Belum ada target.<br><button class="btn kecil" style="margin-top:10px" onclick="bukaTarget()">+ Buat target</button></div>':
+    S.target.slice(0,3).map(g=>{let t=terkumpul(g.id),p=Math.min(100,t/g.jumlah*100);
+      return '<div style="margin-bottom:14px"><b>'+aman(g.nama)+'</b><span style="float:right" class="delta">'+rp(t)+" / "+rp(g.jumlah)+'</span><div class="bar'+(p>=100?" ok":"")+'"><div style="width:'+p+'%"></div></div><span class="delta">'+p.toFixed(0)+"% tercapai</span></div>"}).join("");
+
+  let baru=S.trx.slice().sort((a,c)=>c.tgl.localeCompare(a.tgl)||c.id-a.id).slice(0,5);
+  $("terbaru").innerHTML=baru.length===0?'<div class="kosong">Belum ada transaksi.<br>Klik "+ Catat transaksi".</div>':baru.map(t=>barisTrx(t,false)).join("");
+}
+
+// ---------- Catatan harian ----------
+function renderHarian(){
+  if(!$("bulan").value)$("bulan").value=iso(new Date()).slice(0,7);
+  let b=$("bulan").value,q=$("cari").value.trim().toLowerCase(),batas=S.batasHarian||0;
+  let list=S.trx.filter(t=>t.tgl.startsWith(b)&&(q===""||(t.ket+" "+t.kat).toLowerCase().includes(q)))
+    .sort((a,c)=>c.tgl.localeCompare(a.tgl)||c.id-a.id);
+  $("ringkasBulan").innerHTML='<span class="chip naik">Masuk '+rp(jml(list,"masuk"))+'</span><span class="chip turun">Keluar '+rp(jml(list,"keluar"))+'</span><span class="chip" style="color:var(--utama)">Menabung '+rp(jml(list,"tabung"))+"</span>";
+  if(list.length===0){$("listHarian").innerHTML='<div class="kosong">Tidak ada transaksi di bulan ini.</div>';return}
+  let kel={};list.forEach(t=>{(kel[t.tgl]=kel[t.tgl]||[]).push(t)});
+  $("listHarian").innerHTML=Object.keys(kel).sort().reverse().map(function(tg){
+    let x=kel[tg],k=jml(x,"keluar"),lewat=batas>0&&k>batas;
+    return '<div class="hari"><div class="hari-judul"><span>'+tglPanjang(tg)+(lewat?' <span class="turun">⚠ lewat batas</span>':"")+'</span><small>Masuk '+rp(jml(x,"masuk"))+" · Keluar "+rp(k)+(jml(x,"tabung")>0?" · Tabung "+rp(jml(x,"tabung")):"")+"</small></div>"+x.map(t=>barisTrx(t,true)).join("")+"</div>";
+  }).join("");
+}
+
+// ---------- Target tabungan ----------
+function renderTarget(){
+  let hariIni=new Date(iso(new Date())+"T00:00:00");
+  let kartu=S.target.map(function(g){
+    let t=terkumpul(g.id),p=Math.min(100,t/g.jumlah*100),sisa=Math.max(0,g.jumlah-t),info="";
+    if(sisa===0){info='<span class="naik">🎉 Target tercapai!</span>'}
+    else if(g.tenggat){
+      let hs=Math.ceil((new Date(g.tenggat+"T00:00:00")-hariIni)/86400000);
+      info=hs>0?'<span class="delta">Tenggat '+tglPanjang(g.tenggat)+" ("+hs+" hari lagi)<br>Perlu menabung <b>"+rp(sisa/hs)+"/hari</b> atau ±"+rp(sisa/Math.max(1,hs/30))+"/bulan</span>":'<span class="turun">Tenggat sudah lewat</span>';
+    }
+    return '<div class="kartu"><div class="judul"><h2>🎯 '+aman(g.nama)+'</h2><button class="x" onclick="hapusTarget('+g.id+')" title="Hapus">🗑️</button></div>'+
+      '<div class="nilai" style="margin:0">'+rp(t)+'</div><span class="delta">dari '+rp(g.jumlah)+" · sisa "+rp(sisa)+'</span><div class="bar'+(sisa===0?" ok":"")+'"><div style="width:'+p+'%"></div></div><div style="margin-bottom:12px">'+info+'</div>'+
+      '<button class="btn kecil utama" onclick="bukaT(\'tabung\','+g.id+')">+ Setor tabungan</button></div>';
+  }).join("");
+  let umum=terkumpul("");
+  if(umum>0)kartu+='<div class="kartu"><div class="judul"><h2>🐷 Tabungan umum</h2></div><div class="nilai" style="margin:0">'+rp(umum)+'</div><span class="delta">Setoran tanpa target tertentu</span><div style="margin-top:12px"><button class="btn kecil utama" onclick="bukaT(\'tabung\')">+ Setor tabungan</button></div></div>';
+  $("listTarget").innerHTML=kartu||'<div class="kartu kosong" style="grid-column:1/-1">Belum ada target. Klik "+ Target baru" untuk mulai menabung dengan tujuan.</div>';
+}
+function bukaTarget(){$("gNama").value="";$("gJml").value="";$("gTenggat").value="";$("errG").innerText="";$("dlgTarget").showModal()}
+function simpanTarget(){
+  let nama=$("gNama").value.trim(),jumlah=Number($("gJml").value);
+  if(nama===""||!(jumlah>0)){$("errG").innerText="Isi nama target dan jumlah (lebih dari 0).";return}
+  S.target.push({id:Date.now(),nama:nama,jumlah:jumlah,tenggat:$("gTenggat").value});
+  simpan();$("dlgTarget").close();render();toast("Target ditambahkan ✓");
+}
+function hapusTarget(id){
+  let n=S.trx.filter(t=>t.targetId===id).length;
+  if(!confirm(n>0?"Target ini punya "+n+" setoran. Setoran dipindah ke Tabungan umum. Lanjut hapus?":"Hapus target ini?"))return;
+  S.trx.forEach(t=>{if(t.targetId===id)t.targetId=""});
+  S.target=S.target.filter(g=>g.id!==id);simpan();render();toast("Target dihapus");
+}
+
+// ---------- Saldo awal ----------
+function renderSaldo(){
+  $("banner").innerHTML=S.siap?"":'<div class="banner">👋 Selamat datang! Isi saldo awal tiap dompet (uang yang kamu pegang sekarang), lalu klik "Simpan &amp; mulai".</div>';
+  $("btnMulai").classList.toggle("sembunyi",S.siap);
+  $("listDompet").innerHTML=S.dompet.map(d=>'<div class="dompet"><div class="ik">'+d.ikon+'</div><div><b>'+aman(d.nama)+"</b><small>Saldo saat ini "+rpT(saldoDompet(d))+'</small></div><input class="in" type="number" min="0" value="'+d.saldoAwal+'" onchange="ubahSaldo('+d.id+',this.value)" title="Saldo awal (Rp)"><button class="x" onclick="hapusDompet('+d.id+')" title="Hapus">🗑️</button></div>').join("");
+  $("totalAwal").innerText="Total saldo awal: "+rp(S.dompet.reduce((a,d)=>a+d.saldoAwal,0))+" · Total saldo sekarang: "+rpT(totalSaldo());
+  $("batas").value=S.batasHarian||"";
+}
+function ubahSaldo(id,v){
+  let d=S.dompet.find(x=>x.id===id);if(!d)return;
+  v=Number(v);d.saldoAwal=v>0?v:0;simpan();render();toast("Saldo awal diperbarui ✓");
+}
+function tambahDompet(){
+  let nama=$("dNama").value.trim(),v=Number($("dSaldo").value)||0;
+  if(nama===""){$("errD").innerText="Isi nama dompet.";return}
+  if(S.dompet.some(d=>d.nama.toLowerCase()===nama.toLowerCase())){$("errD").innerText="Nama dompet sudah ada.";return}
+  $("errD").innerText="";
+  S.dompet.push({id:Date.now(),nama:nama,saldoAwal:v>0?v:0,ikon:$("dIkon").value});
+  $("dNama").value="";$("dSaldo").value="";simpan();render();toast("Dompet ditambahkan ✓");
+}
+function hapusDompet(id){
+  if(S.dompet.length<=1){toast("Minimal harus ada 1 dompet");return}
+  if(S.trx.some(t=>t.dompetId===id)){toast("Dompet masih dipakai transaksi");return}
+  if(!confirm("Hapus dompet ini?"))return;
+  S.dompet=S.dompet.filter(d=>d.id!==id);simpan();render();
+}
+function ubahBatas(v){v=Number(v);S.batasHarian=v>0?v:0;simpan();toast("Batas harian disimpan ✓")}
+function mulaiPakai(){S.siap=true;simpan();ganti("dashboard");toast("Selamat menabung! 🐷")}
+function resetSemua(){
+  if(prompt("Ketik HAPUS untuk menghapus semua data:")!=="HAPUS")return;
+  S=salin(BAWAAN);simpan();ganti("saldo");toast("Semua data dihapus");
+}
+
+// ---------- Form transaksi ----------
+function setJenis(j){
+  jenisAktif=j;
+  ["masuk","keluar","tabung"].forEach(k=>$("sg-"+k).classList.toggle("aktif",k===j));
+  $("rowKat").classList.toggle("sembunyi",j==="tabung");
+  $("rowTarget").classList.toggle("sembunyi",j!=="tabung");
+  let kat=j==="masuk"?S.katMasuk:S.katKeluar;
+  $("tKat").innerHTML=kat.map(k=>"<option>"+aman(k)+"</option>").join("");
+}
+function bukaT(j,targetId){
+  setJenis(j||"keluar");
+  $("tTgl").value=iso(new Date());$("tJml").value="";$("tKet").value="";$("errT").innerText="";
+  $("tDompet").innerHTML=S.dompet.map(d=>'<option value="'+d.id+'">'+d.ikon+" "+aman(d.nama)+" ("+rpT(saldoDompet(d))+")</option>").join("");
+  $("tTarget").innerHTML='<option value="">🐷 Tabungan umum</option>'+S.target.map(g=>'<option value="'+g.id+'">🎯 '+aman(g.nama)+"</option>").join("");
+  if(targetId)$("tTarget").value=String(targetId);
+  $("dlgT").showModal();
+}
+function simpanT(){
+  let tgl=$("tTgl").value,jumlah=Number($("tJml").value),did=Number($("tDompet").value);
+  if(tgl===""||!(jumlah>0)){$("errT").innerText="Isi tanggal dan jumlah (lebih dari 0).";return}
+  let d=S.dompet.find(x=>x.id===did);
+  if(jenisAktif!=="masuk"&&d&&jumlah>saldoDompet(d)&&!confirm("Saldo "+d.nama+" ("+rpT(saldoDompet(d))+") tidak cukup. Tetap simpan?"))return;
+  let t={id:Date.now(),tgl:tgl,jenis:jenisAktif,jumlah:jumlah,dompetId:did,ket:$("tKet").value.trim()};
+  if(jenisAktif==="tabung"){t.kat="Tabungan";t.targetId=$("tTarget").value?Number($("tTarget").value):""}
+  else{t.kat=$("tKat").value}
+  S.trx.push(t);simpan();$("dlgT").close();render();
+  toast(jenisAktif==="tabung"?"Setoran tabungan dicatat 🐷":"Transaksi disimpan ✓");
+}
+function hapusT(id){
+  if(!confirm("Hapus transaksi ini?"))return;
+  S.trx=S.trx.filter(t=>t.id!==id);simpan();render();toast("Transaksi dihapus");
+}
+
+// ---------- Ekspor & tema ----------
+function ekspor(){
+  let b=["tanggal,jenis,kategori,keterangan,jumlah,dompet,target"].concat(S.trx.slice().sort((a,c)=>a.tgl.localeCompare(c.tgl)).map(t=>{
+    let tg=t.targetId?(S.target.find(x=>x.id===t.targetId)||{}).nama:"";
+    return [t.tgl,t.jenis,'"'+t.kat.replace(/"/g,'""')+'"','"'+(t.ket||"").replace(/"/g,'""')+'"',t.jumlah,'"'+namaDompet(t.dompetId)+'"','"'+(tg||"")+'"'].join(",");
+  }));
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([b.join("\n")],{type:"text/csv"}));
+  a.download="tabunganku-"+iso(new Date())+".csv";a.click();toast("File CSV diunduh");
+}
+function tema(){
+  let g=document.documentElement.dataset.tema==="gelap";
+  document.documentElement.dataset.tema=g?"":"gelap";
+  try{localStorage.setItem("temaTabungan",g?"":"gelap")}catch(e){}
+}
+try{document.documentElement.dataset.tema=localStorage.getItem("temaTabungan")||""}catch(e){}
+
+ganti(S.siap?"dashboard":"saldo");
+</script>
+</body>
+</html>
