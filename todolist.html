@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pengingat — To-Do List</title>
+<style>
+:root{--bg:#f2f2f7;--grup:#fff;--teks:#111;--abu:#8e8e93;--garis:#e5e5ea;--aksen:#e8648f;--merah:#ff3b30}
+[data-tema="gelap"]{--bg:#000;--grup:#1c1c1e;--teks:#f2f2f7;--garis:#2c2c2e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--teks);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;font-size:16px}
+.app{max-width:520px;margin:0 auto;padding:16px 16px 110px;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+.bar{display:flex;gap:10px;align-items:center;margin-bottom:18px}
+.cari{flex:1;border:none;background:var(--grup);border-radius:12px;padding:11px 14px;outline:none}
+.ibtn{border:none;background:var(--grup);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px}
+/* kotak (tiles) */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border-radius:16px;padding:12px 14px;color:#fff;cursor:pointer;min-height:84px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 8px #00000022;transition:transform .15s}
+.tile:active{transform:scale(.97)}
+.tp{display:flex;justify-content:space-between;align-items:flex-start}
+.tik{width:32px;height:32px;border-radius:50%;background:#ffffffcc;display:grid;place-items:center;font-size:17px}
+.tc{font-size:30px;font-weight:700;line-height:1;text-shadow:0 1px 3px #00000022}
+.tn{font-weight:600;font-size:15px;text-shadow:0 1px 3px #00000022;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* daftar saya */
+.sec{font-size:22px;font-weight:700;margin:26px 4px 10px}
+.grup{background:var(--grup);border-radius:14px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--garis)}
+.row:last-child{border-bottom:none}
+.row .ik{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:16px;flex:none}
+.row .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .jm{color:var(--abu)}
+.row .pnh{color:var(--abu);opacity:.6}
+.kosong{text-align:center;color:var(--abu);padding:28px 10px}
+/* detail */
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.back{background:none;border:none;color:var(--aksen);font-size:17px;cursor:pointer;padding:6px 0}
+.more{background:var(--grup);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;color:var(--aksen)}
+.jd{font-size:34px;font-weight:800;margin:4px 0 0;letter-spacing:-.5px}
+.jh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cnt{font-size:34px;font-weight:300}
+.gtgl{font-weight:700;margin:20px 4px 6px;font-size:15px}
+.t{display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid var(--garis);align-items:flex-start}
+.t:last-child{border-bottom:none}
+.cek{width:24px;height:24px;border-radius:50%;border:2px solid var(--abu);background:transparent;flex:none;cursor:pointer;margin-top:1px;display:grid;place-items:center;font-size:13px;color:#fff;padding:0}
+.t.done .cek{background:var(--c,var(--aksen));border-color:var(--c,var(--aksen))}
+.tb{flex:1;min-width:0;cursor:pointer}
+.tj{word-break:break-word}.t.done .tj{color:var(--abu);text-decoration:line-through}
+.ts{font-size:13px;color:var(--abu);margin-top:2px}
+.ts.telat{color:var(--merah)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.aksen{background:none;border:none;color:var(--aksen);cursor:pointer;padding:8px 4px;font-size:15px}
+.kecil{color:var(--abu);font-size:13px;text-align:center;margin-top:30px}
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 40%);display:flex;justify-content:space-between;max-width:520px;margin:0 auto}
+.dock button{border:none;background:none;color:var(--aksen);font-weight:600;font-size:16px;cursor:pointer;padding:10px 4px}
+/* dialog */
+dialog{border:none;border-radius:20px;padding:20px;width:min(440px,94vw);background:var(--grup);color:var(--teks);box-shadow:0 20px 60px #00000066}
+dialog::backdrop{background:#0008}
+dialog h2{margin:0 0 12px;font-size:18px}
+dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
+.in{width:100%;border:1px solid var(--garis);background:var(--bg);border-radius:10px;padding:10px;outline:none}
+.in:focus{border-color:var(--aksen)}
+.dua{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cp{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cp button{border:1px solid var(--garis);background:var(--bg);border-radius:20px;padding:5px 12px;font-size:13px;cursor:pointer}
+.ikg{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.ikg button{border:2px solid transparent;background:var(--bg);border-radius:10px;padding:5px 0;font-size:18px;cursor:pointer}
+.ikg button.pilih{border-color:var(--aksen)}
+.wg{display:flex;gap:8px;flex-wrap:wrap}
+.wg button{width:30px;height:30px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+.wg button.pilih{border-color:var(--teks)}
+.baris{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;align-items:center}
+.baris .sp{flex:1}
+.b{border:none;border-radius:10px;padding:10px 16px;cursor:pointer;background:var(--bg);font-weight:500}
+.b.utama{background:var(--aksen);color:#fff;font-weight:600}
+.b.bahaya{color:var(--merah)}
+.err{color:var(--merah);font-size:13px;min-height:16px;margin-top:8px}
+.sembunyi{display:none!important}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(10px);background:#000c;color:#fff;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;font-size:14px}
+#toast.tampil{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar" id="bar">
+    <input class="cari" id="cari" placeholder="🔍 Cari pengingat" oninput="render()">
+    <button class="ibtn" onclick="tema()" title="Ganti tema">🌓</button>
+  </div>
+  <div id="main"></div>
+</div>
+
+<div class="dock">
+  <button onclick="bukaTugas()">⊕ Pengingat Baru</button>
+  <button onclick="bukaDaftar()">Tambah Daftar</button>
+</div>
+
+<dialog id="dlgT">
+  <h2 id="tJudulDlg">Pengingat baru</h2>
+  <input class="in" id="tJudul" placeholder="Judul">
+  <label>Catatan</label><textarea class="in" id="tCatatan" rows="2" placeholder="Opsional"></textarea>
+  <div class="dua">
+    <div><label>Tanggal</label><input class="in" type="date" id="tTgl"></div>
+    <div><label>Jam</label><input class="in" type="time" id="tJam"></div>
+  </div>
+  <div class="cp">
+    <button onclick="setTgl(0)">Hari ini</button>
+    <button onclick="setTgl(1)">Besok</button>
+    <button onclick="setTgl(7)">Minggu depan</button>
+    <button onclick="setTgl(null)">Tanpa tanggal</button>
+  </div>
+  <label>Daftar</label><select class="in" id="tList"></select>
+  <div class="err" id="errT"></div>
+  <div class="baris">
+    <button class="b bahaya sembunyi" id="btnHapusT" onclick="hapusTugas()">Hapus</button>
+    <span class="sp"></span>
+    <button class="b" onclick="document.getElementById('dlgT').close()">Batal</button>
+    <button class="b utama" onclick="simpanTugas()">Simpan</button>
+  </div>
+</dialog>
+
+<dialog id="dlgL">
+  <h2 id="lJudulDlg">Daftar baru</h2>
+  <input class="in" id="lNama" placeholder="Nama daftar">
+  <label>Ikon</label><div class="ikg" id="lIkon"></div>
+  <label>Warna</label><div class="wg" id="lWarna"></div>
+  <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="lPin"> Tampilkan sebagai kotak di bagian atas</label>
+  <div class="err" id="errL"></div>
+  <div class="baris">
+    <button class="b bahaya sembunyi" id="btnHapusL" onclick="hapusDaftar()">Hapus daftar</button>
+    <span class="sp"></span>
+    <button class="b" onclick="document.getElementById('dlgL').close()">Batal</button>
+    <button class="b utama" onclick="simpanDaftar()">Simpan</button>
+  </div>
+</dialog>
+<div id="toast"></div>
+
+<script>
+const KUNCI="todoku";
+const WARNA={
+  pink:["#f7a8c4","#e8648f"],rose:["#f2b8c6","#d4778f"],peach:["#fbc7ad","#ee9270"],beige:["#d9cab9","#ad9a86"],
+  lavender:["#cfbbf0","#9a80d2"],gray:["#c6c9d1","#8c909b"],mauve:["#d9aac5","#a86a90"],sage:["#c0d9c1","#7ea882"]};
+const EMOJI=["🎀","⭐","📚","🛒","💼","🏠","💃","🧺","☁️","🕯️","🌸","🍓","💻","✈️","🎵","🧹","💡","🌷","🍰","🏃"];
+const SMART=[{id:"hariini",nama:"Hari Ini",ikon:"📅",warna:"pink"},{id:"terjadwal",nama:"Terjadwal",ikon:"🗓️",warna:"rose"},{id:"semua",nama:"Semua",ikon:"📥",warna:"gray"}];
+const HARI=["Min","Sen","Sel","Rab","Kam","Jum","Sab"],BLN=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,"0");
+function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function hariIni(){return iso(new Date())}
+function geser(n){let d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+function aman(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),1800)}
+
+function seed(){
+  let h=hariIni(),b=geser(1);
+  return {tema:"",lists:[
+    {id:1,nama:"Kuliah",ikon:"📚",warna:"pink",pin:true},
+    {id:2,nama:"Pribadi",ikon:"🎀",warna:"rose",pin:true},
+    {id:3,nama:"Belanja",ikon:"🛒",warna:"beige",pin:true},
+    {id:4,nama:"Pekerjaan",ikon:"💼",warna:"mauve",pin:true},
+    {id:5,nama:"Rutinitas Pagi",ikon:"☁️",warna:"lavender",pin:false},
+    {id:6,nama:"Ide Akhir Pekan",ikon:"💡",warna:"gray",pin:false},
+    {id:7,nama:"Olahraga",ikon:"💃",warna:"peach",pin:false}],
+  tugas:[
+    {id:11,listId:1,judul:"Kerjakan bab 3 skripsi",catatan:"Targetkan 5 halaman",tgl:h,jam:"19:00",selesai:false},
+    {id:12,listId:1,judul:"Bimbingan dengan dosen",catatan:"",tgl:b,jam:"10:00",selesai:false},
+    {id:13,listId:2,judul:"Telepon ibu",catatan:"",tgl:h,jam:"20:00",selesai:false},
+    {id:14,listId:3,judul:"Beli sabun dan sampo",catatan:"",tgl:"",jam:"",selesai:false},
+    {id:15,listId:4,judul:"Balas email klien",catatan:"",tgl:geser(-1),jam:"09:00",selesai:false},
+    {id:16,listId:5,judul:"Minum air putih",catatan:"",tgl:"",jam:"",selesai:true},
+    {id:17,listId:6,judul:"Piknik ke pantai",catatan:"",tgl:"",jam:"",selesai:false}]};
+}
+function muat(){try{let x=localStorage.getItem(KUNCI);if(x)return JSON.parse(x)}catch(e){}return seed()}
+function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}}
+let S=muat(),view="home",tampilSelesai=false,editT=null,editL=null,ikonP=EMOJI[0],warnaP="pink";
+
+// ---------- Data ----------
+function daftar(id){return S.lists.find(l=>l.id===id)}
+function ambil(id,selesai){
+  let h=hariIni();
+  return S.tugas.filter(function(t){
+    if(t.selesai!==selesai)return false;
+    if(id==="hariini")return t.tgl&&t.tgl<=h;
+    if(id==="terjadwal")return !!t.tgl;
+    if(id==="semua")return true;
+    return t.listId===id;
+  });
+}
+function urut(a,b){
+  let ka=(a.tgl||"9999")+(a.jam||"99:99"),kb=(b.tgl||"9999")+(b.jam||"99:99");
+  return ka.localeCompare(kb)||a.id-b.id;
+}
+function terlambat(t){return !t.selesai&&!!t.tgl&&new Date(t.tgl+"T"+(t.jam||"23:59"))<new Date()}
+function labelTgl(t){
+  if(t===hariIni())return "Hari ini";
+  if(t===geser(1))return "Besok";
+  if(t===geser(-1))return "Kemarin";
+  let d=new Date(t+"T00:00:00");
+  return HARI[d.getDay()]+", "+d.getDate()+" "+BLN[d.getMonth()]+(d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():"");
+}
+
+// ---------- Tampilan ----------
+function tema(){
+  let g=document.documentElement.dataset.tema==="gelap";
+  document.documentElement.dataset.tema=g?"":"gelap";S.tema=g?"":"gelap";simpan();
+}
+function buka(id){view=id;$("cari").value="";window.scrollTo(0,0);render()}
+function pulang(){view="home";render()}
+
+function tile(l){
+  let w=WARNA[l.warna]||WARNA.pink;
+  return '<div class="tile" style="background:linear-gradient(145deg,'+w[0]+','+w[1]+')" onclick="buka('+(typeof l.id==="number"?l.id:"'"+l.id+"'")+')"><div class="tp"><span class="tik">'+l.ikon+'</span><b class="tc">'+ambil(l.id,false).length+'</b></div><div class="tn">'+aman(l.nama)+"</div></div>";
+}
+function renderHome(){
+  let pinned=S.lists.filter(l=>l.pin),lain=S.lists.filter(l=>!l.pin);
+  let h='<div class="tiles">'+SMART.concat(pinned).map(tile).join("")+"</div>";
+  h+='<div class="sec">Daftar Saya</div>';
+  h+=lain.length===0?'<div class="grup"><div class="kosong">Belum ada daftar lain.<br>Ketuk "Tambah Daftar" di bawah.</div></div>':
+    '<div class="grup">'+lain.map(function(l){
+      let w=WARNA[l.warna]||WARNA.pink;
+      return '<div class="row" onclick="buka('+l.id+')"><span class="ik" style="background:'+w[0]+'66">'+l.ikon+'</span><span class="nm">'+aman(l.nama)+'</span><span class="jm">'+ambil(l.id,false).length+'</span><span class="pnh">›</span></div>';
+    }).join("")+"</div>";
+  h+='<div class="kecil"><button class="aksen" onclick="resetSemua()">Hapus semua data</button></div>';
+  return h;
+}
+function renderCari(q){
+  let hasil=S.tugas.filter(t=>(t.judul+" "+t.catatan).toLowerCase().includes(q)).sort(urut);
+  return '<div class="sec" style="margin-top:6px">Hasil pencarian</div>'+(hasil.length===0?'<div class="grup"><div class="kosong">Tidak ada pengingat yang cocok.</div></div>':'<div class="grup">'+hasil.map(t=>barisT(t,true)).join("")+"</div>");
+}
+function barisT(t,tunjukDaftar){
+  let l=daftar(t.listId)||{nama:"-",warna:"pink"},w=WARNA[l.warna]||WARNA.pink,tel=terlambat(t);
+  let info=[];
+  if(tunjukDaftar)info.push('<span class="dot" style="background:'+w[1]+'"></span>'+aman(l.nama));
+  if(t.tgl)info.push(labelTgl(t.tgl)+(t.jam?", "+t.jam:""));
+  let sub=(t.catatan?'<div class="ts">'+aman(t.catatan)+"</div>":"")+(info.length?'<div class="ts'+(tel?" telat":"")+'">'+info.join(" · ")+"</div>":"");
+  return '<div class="t'+(t.selesai?" done":"")+'" style="--c:'+w[1]+'"><button class="cek" style="border-color:'+(t.selesai?w[1]:tel?"var(--merah)":"var(--abu)")+'" onclick="centang('+t.id+')">'+(t.selesai?"✓":"")+'</button><div class="tb" onclick="bukaTugas('+t.id+')"><div class="tj">'+aman(t.judul)+"</div>"+sub+"</div></div>";
+}
+function renderDetail(){
+  let smart=SMART.find(s=>s.id===view),l=smart||daftar(view);
+  if(!l){view="home";return renderHome()}
+  let w=WARNA[l.warna]||WARNA.pink,aktif=ambil(view,false).sort(urut),selesai=ambil(view,true).sort(urut);
+  let tunjuk=!!smart;
+  let h='<div class="dh"><button class="back" onclick="pulang()">‹ Daftar</button>'+(smart?"":'<button class="more" onclick="bukaDaftar('+l.id+')">⋯</button>')+"</div>";
+  h+='<div class="jh"><h1 class="jd" style="color:'+w[1]+'">'+aman(l.nama)+'</h1><div class="cnt" style="color:'+w[1]+'">'+aktif.length+"</div></div>";
+  if(aktif.length===0){h+='<div class="kosong">Tidak ada pengingat.<br>Ketuk "Pengingat Baru" untuk menambah.</div>'}
+  else if(view==="terjadwal"){
+    let kel={};aktif.forEach(t=>{(kel[t.tgl]=kel[t.tgl]||[]).push(t)});
+    Object.keys(kel).sort().forEach(function(tg){
+      h+='<div class="gtgl" style="color:'+(tg<hariIni()?"var(--merah)":"inherit")+'">'+(tg<hariIni()?"Terlambat · ":"")+labelTgl(tg)+'</div><div class="grup">'+kel[tg].map(t=>barisT(t,tunjuk)).join("")+"</div>";
+    });
+  }else{h+='<div class="grup" style="margin-top:14px">'+aktif.map(t=>barisT(t,tunjuk)).join("")+"</div>"}
+  if(selesai.length>0){
+    h+='<div style="display:flex;justify-content:space-between;margin-top:14px"><button class="aksen" onclick="toggleSelesai()">'+(tampilSelesai?"Sembunyikan":"Tampilkan")+" yang selesai ("+selesai.length+')</button>'+(tampilSelesai?'<button class="aksen" onclick="hapusSelesai()">Hapus semua</button>':"")+"</div>";
+    if(tampilSelesai)h+='<div class="grup">'+selesai.map(t=>barisT(t,tunjuk)).join("")+"</div>";
+  }
+  return h;
+}
+function render(){
+  let q=$("cari").value.trim().toLowerCase();
+  $("bar").classList.toggle("sembunyi",view!=="home");
+  $("main").innerHTML=view==="home"?(q?renderCari(q):renderHome()):renderDetail();
+}
+
+// ---------- Aksi pengingat ----------
+function centang(id){let t=S.tugas.find(x=>x.id===id);if(!t)return;t.selesai=!t.selesai;simpan();render()}
+function toggleSelesai(){tampilSelesai=!tampilSelesai;render()}
+function hapusSelesai(){
+  if(!confirm("Hapus semua pengingat yang sudah selesai di tampilan ini?"))return;
+  let id=ambil(view,true).map(t=>t.id);
+  S.tugas=S.tugas.filter(t=>!id.includes(t.id));simpan();render();toast("Pengingat selesai dihapus");
+}
+function setTgl(n){$("tTgl").value=n===null?"":geser(n);if(n===null)$("tJam").value=""}
+function bukaTugas(id){
+  if(S.lists.length===0){toast("Buat daftar dulu");bukaDaftar();return}
+  editT=id||null;
+  let t=id?S.tugas.find(x=>x.id===id):null;
+  $("tJudulDlg").innerText=t?"Ubah pengingat":"Pengingat baru";
+  $("tList").innerHTML=S.lists.map(l=>'<option value="'+l.id+'">'+l.ikon+" "+aman(l.nama)+"</option>").join("");
+  $("tJudul").value=t?t.judul:"";$("tCatatan").value=t?t.catatan:"";
+  $("tTgl").value=t?t.tgl:(view==="hariini"?hariIni():"");$("tJam").value=t?t.jam:"";
+  let awal=t?t.listId:(daftar(view)?view:S.lists[0].id);
+  $("tList").value=String(awal);
+  $("btnHapusT").classList.toggle("sembunyi",!t);$("errT").innerText="";
+  $("dlgT").showModal();
+}
+function simpanTugas(){
+  let judul=$("tJudul").value.trim();
+  if(judul===""){$("errT").innerText="Isi judul pengingat.";return}
+  let tgl=$("tTgl").value,jam=$("tJam").value;
+  if(jam&&!tgl)tgl=hariIni();
+  let data={listId:Number($("tList").value),judul:judul,catatan:$("tCatatan").value.trim(),tgl:tgl,jam:jam};
+  if(editT){Object.assign(S.tugas.find(x=>x.id===editT),data)}
+  else{S.tugas.push(Object.assign({id:Date.now(),selesai:false},data))}
+  simpan();$("dlgT").close();render();toast(editT?"Pengingat diperbarui":"Pengingat ditambahkan");
+}
+function hapusTugas(){
+  if(!editT)return;
+  S.tugas=S.tugas.filter(t=>t.id!==editT);simpan();$("dlgT").close();render();toast("Pengingat dihapus");
+}
+
+// ---------- Aksi daftar ----------
+function gambarPilihan(){
+  $("lIkon").innerHTML=EMOJI.map(e=>'<button class="'+(e===ikonP?"pilih":"")+'" onclick="pilihIkon(\''+e+'\')">'+e+"</button>").join("");
+  $("lWarna").innerHTML=Object.keys(WARNA).map(k=>'<button class="'+(k===warnaP?"pilih":"")+'" style="background:linear-gradient(145deg,'+WARNA[k][0]+","+WARNA[k][1]+')" onclick="pilihWarna(\''+k+'\')"></button>').join("");
+}
+function pilihIkon(e){ikonP=e;gambarPilihan()}
+function pilihWarna(k){warnaP=k;gambarPilihan()}
+function bukaDaftar(id){
+  editL=id||null;
+  let l=id?daftar(id):null;
+  $("lJudulDlg").innerText=l?"Ubah daftar":"Daftar baru";
+  $("lNama").value=l?l.nama:"";ikonP=l?l.ikon:EMOJI[0];warnaP=l?l.warna:"pink";
+  $("lPin").checked=l?l.pin:true;$("errL").innerText="";
+  $("btnHapusL").classList.toggle("sembunyi",!l);
+  gambarPilihan();$("dlgL").showModal();
+}
+function simpanDaftar(){
+  let nama=$("lNama").value.trim();
+  if(nama===""){$("errL").innerText="Isi nama daftar.";return}
+  let data={nama:nama,ikon:ikonP,warna:warnaP,pin:$("lPin").checked};
+  if(editL){Object.assign(daftar(editL),data)}
+  else{S.lists.push(Object.assign({id:Date.now()},data))}
+  simpan();$("dlgL").close();render();toast(editL?"Daftar diperbarui":"Daftar ditambahkan");
+}
+function hapusDaftar(){
+  if(!editL)return;
+  let n=S.tugas.filter(t=>t.listId===editL).length;
+  if(!confirm(n>0?"Daftar ini berisi "+n+" pengingat yang ikut terhapus. Lanjut?":"Hapus daftar ini?"))return;
+  S.tugas=S.tugas.filter(t=>t.listId!==editL);
+  S.lists=S.lists.filter(l=>l.id!==editL);
+  simpan();$("dlgL").close();view="home";render();toast("Daftar dihapus");
+}
+function resetSemua(){
+  if(!confirm("Hapus semua daftar dan pengingat? Tindakan ini tidak bisa dibatalkan."))return;
+  S={tema:S.tema,lists:[],tugas:[]};simpan();render();toast("Semua data dihapus");
+}
+
+document.documentElement.dataset.tema=S.tema||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"gelap":"");
+render();
+</script>
+</body>
+</html>
