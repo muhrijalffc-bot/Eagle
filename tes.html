@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Akuntansi</title>
+  <style>
+    :root { --hijau:#16a34a; --merah:#dc2626; --biru:#2563eb; --abu:#64748b; --garis:#e2e8f0; }
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background:#f1f5f9; margin:0; color:#0f172a; }
+    header { background:#0f172a; color:white; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    header h1 { margin:0; font-size:20px; }
+    header select { padding:6px 10px; border-radius:6px; border:none; }
+    main { max-width:1100px; margin:20px auto; padding:0 16px; }
+    .grid { display:grid; gap:14px; }
+    .grid4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+    .grid2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top:14px; }
+    .kartu { background:white; border-radius:12px; padding:18px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+    .kartu h3 { margin:0 0 10px; font-size:15px; color:var(--abu); font-weight:600; }
+    .angka { font-size:24px; font-weight:bold; }
+    .masuk { color:var(--hijau); } .keluar { color:var(--merah); }
+    /* grafik batang */
+    .grafik { display:flex; align-items:flex-end; gap:12px; height:180px; padding-top:10px; }
+    .kolom { flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; }
+    .batang-grup { display:flex; align-items:flex-end; gap:3px; height:150px; }
+    .batang { width:16px; border-radius:4px 4px 0 0; min-height:2px; transition:height .4s; }
+    .label { font-size:12px; color:var(--abu); margin-top:6px; }
+    .legenda { font-size:12px; color:var(--abu); margin-top:8px; }
+    .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin:0 4px 0 10px; }
+    /* kategori */
+    .kat { margin-bottom:10px; font-size:14px; }
+    .kat .bar { background:var(--garis); border-radius:6px; height:8px; margin-top:4px; overflow:hidden; }
+    .kat .isi { height:100%; background:var(--merah); }
+    /* form */
+    form, .form { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; }
+    input, select { padding:9px; border:1px solid var(--garis); border-radius:8px; font-size:14px; width:100%; }
+    button { padding:9px 14px; border:none; border-radius:8px; background:var(--biru); color:white; font-size:14px; cursor:pointer; }
+    button:hover { opacity:.9; }
+    .hapus { background:transparent; color:var(--merah); padding:2px 8px; }
+    /* tabel */
+    .atas { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+    .atas h3 { margin:0; }
+    .atas select { width:auto; }
+    .tabel-bungkus { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th { text-align:left; color:var(--abu); font-weight:600; padding:8px; border-bottom:2px solid var(--garis); }
+    td { padding:8px; border-bottom:1px solid var(--garis); }
+    td.num, th.num { text-align:right; }
+    .badge { padding:2px 8px; border-radius:10px; font-size:12px; color:white; }
+    .badge.masuk { background:var(--hijau); } .badge.keluar { background:var(--merah); }
+    .kosong { text-align:center; color:var(--abu); padding:20px; }
+    #pesan { color:var(--merah); font-size:13px; margin-top:8px; min-height:16px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 Dashboard Akuntansi</h1>
+    <div>Periode: <select id="periode" onchange="render()">
+      <option value="semua">Semua waktu</option>
+      <option value="bulan">Bulan ini</option>
+    </select></div>
+  </header>
+
+  <main>
+    <!-- Ringkasan -->
+    <div class="grid grid4">
+      <div class="kartu"><h3>Total Pemasukan</h3><div class="angka masuk" id="totMasuk">-</div></div>
+      <div class="kartu"><h3>Total Pengeluaran</h3><div class="angka keluar" id="totKeluar">-</div></div>
+      <div class="kartu"><h3>Laba / Rugi</h3><div class="angka" id="laba">-</div></div>
+      <div class="kartu"><h3>Jumlah Transaksi</h3><div class="angka" id="jumlah">-</div></div>
+    </div>
+
+    <!-- Grafik dan kategori -->
+    <div class="grid grid2">
+      <div class="kartu">
+        <h3>Pemasukan vs Pengeluaran (6 bulan terakhir)</h3>
+        <div class="grafik" id="grafik"></div>
+        <div class="legenda"><span class="dot" style="background:var(--hijau)"></span>Pemasukan<span class="dot" style="background:var(--merah)"></span>Pengeluaran</div>
+      </div>
+      <div class="kartu">
+        <h3>Pengeluaran per Kategori</h3>
+        <div id="kategori"></div>
+      </div>
+    </div>
+
+    <!-- Form tambah -->
+    <div class="kartu" style="margin-top:14px">
+      <h3>Tambah Transaksi</h3>
+      <div class="form">
+        <input type="date" id="fTgl">
+        <input id="fKet" placeholder="Keterangan">
+        <select id="fKat">
+          <option>Penjualan</option><option>Gaji</option><option>Sewa</option>
+          <option>Listrik & Air</option><option>Bahan Baku</option><option>Pemasaran</option><option>Lainnya</option>
+        </select>
+        <select id="fJenis"><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select>
+        <input type="number" id="fJumlah" placeholder="Jumlah (Rp)" min="1">
+        <button onclick="tambah()">+ Tambah</button>
+      </div>
+      <div id="pesan"></div>
+    </div>
+
+    <!-- Tabel -->
+    <div class="kartu" style="margin-top:14px">
+      <div class="atas">
+        <h3>Daftar Transaksi</h3>
+        <select id="filterJenis" onchange="render()">
+          <option value="semua">Semua jenis</option>
+          <option value="masuk">Pemasukan saja</option>
+          <option value="keluar">Pengeluaran saja</option>
+        </select>
+      </div>
+      <div class="tabel-bungkus">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Jenis</th><th class="num">Jumlah</th><th></th></tr></thead>
+          <tbody id="isiTabel"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const KUNCI = "dashboardAkuntansi";
+
+    // Data contoh (dipakai kalau belum ada data tersimpan)
+    const contoh = [
+      { id:1,  tgl:"2026-05-03", ket:"Penjualan produk A",   kat:"Penjualan",    jenis:"masuk",  jumlah:12500000 },
+      { id:2,  tgl:"2026-05-10", ket:"Sewa toko",            kat:"Sewa",         jenis:"keluar", jumlah:3000000 },
+      { id:3,  tgl:"2026-06-05", ket:"Penjualan produk B",   kat:"Penjualan",    jenis:"masuk",  jumlah:15200000 },
+      { id:4,  tgl:"2026-06-12", ket:"Gaji karyawan",        kat:"Gaji",         jenis:"keluar", jumlah:6500000 },
+      { id:5,  tgl:"2026-07-02", ket:"Penjualan online",     kat:"Penjualan",    jenis:"masuk",  jumlah:11800000 },
+      { id:6,  tgl:"2026-07-15", ket:"Bahan baku",           kat:"Bahan Baku",   jenis:"keluar", jumlah:4200000 },
+      { id:7,  tgl:"2026-08-04", ket:"Penjualan grosir",     kat:"Penjualan",    jenis:"masuk",  jumlah:18900000 },
+      { id:8,  tgl:"2026-08-20", ket:"Iklan media sosial",   kat:"Pemasaran",    jenis:"keluar", jumlah:1500000 },
+      { id:9,  tgl:"2026-09-06", ket:"Penjualan produk A",   kat:"Penjualan",    jenis:"masuk",  jumlah:14300000 },
+      { id:10, tgl:"2026-09-18", ket:"Listrik dan air",      kat:"Listrik & Air",jenis:"keluar", jumlah:950000 },
+      { id:11, tgl:"2026-10-01", ket:"Penjualan harian",     kat:"Penjualan",    jenis:"masuk",  jumlah:5400000 },
+      { id:12, tgl:"2026-10-02", ket:"Gaji karyawan",        kat:"Gaji",         jenis:"keluar", jumlah:6500000 }
+    ];
+
+    let data = muat();
+
+    function muat() {
+      try {
+        let s = localStorage.getItem(KUNCI);
+        if (s) { return JSON.parse(s); }
+      } catch (e) {}
+      return contoh;
+    }
+    function simpan() {
+      try { localStorage.setItem(KUNCI, JSON.stringify(data)); } catch (e) {}
+    }
+
+    function rupiah(n) { return "Rp " + Math.abs(n).toLocaleString("id-ID"); }
+    function aman(teks) {
+      return String(teks).replace(/[&<>"']/g, function (c) {
+        return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+      });
+    }
+    function kunciBulan(d) {
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+    }
+
+    function render() {
+      let sekarang = new Date();
+      let periode = document.getElementById("periode").value;
+      let filterJenis = document.getElementById("filterJenis").value;
+
+      // Data sesuai periode (untuk kartu ringkasan dan kategori)
+      let dataPeriode = data.filter(function (d) {
+        return periode === "semua" || d.tgl.startsWith(kunciBulan(sekarang));
+      });
+
+      // 1. Kartu ringkasan
+      let masuk = 0, keluar = 0;
+      dataPeriode.forEach(function (d) {
+        if (d.jenis === "masuk") { masuk += d.jumlah; } else { keluar += d.jumlah; }
+      });
+      let laba = masuk - keluar;
+      document.getElementById("totMasuk").innerText = rupiah(masuk);
+      document.getElementById("totKeluar").innerText = rupiah(keluar);
+      let elLaba = document.getElementById("laba");
+      elLaba.innerText = (laba < 0 ? "-" : "") + rupiah(laba);
+      elLaba.className = "angka " + (laba >= 0 ? "masuk" : "keluar");
+      document.getElementById("jumlah").innerText = dataPeriode.length;
+
+      // 2. Grafik batang 6 bulan terakhir
+      let bulan = [];
+      for (let i = 5; i >= 0; i--) {
+        let d = new Date(sekarang.getFullYear(), sekarang.getMonth() - i, 1);
+        bulan.push({ kunci: kunciBulan(d), label: d.toLocaleDateString("id-ID", { month: "short" }), masuk: 0, keluar: 0 });
+      }
+      data.forEach(function (d) {
+        bulan.forEach(function (b) {
+          if (d.tgl.startsWith(b.kunci)) { b[d.jenis] += d.jumlah; }
+        });
+      });
+      let maks = Math.max(1, ...bulan.map(function (b) { return Math.max(b.masuk, b.keluar); }));
+      document.getElementById("grafik").innerHTML = bulan.map(function (b) {
+        return '<div class="kolom"><div class="batang-grup">' +
+          '<div class="batang" style="height:' + (b.masuk / maks * 100) + '%;background:var(--hijau)" title="Pemasukan ' + rupiah(b.masuk) + '"></div>' +
+          '<div class="batang" style="height:' + (b.keluar / maks * 100) + '%;background:var(--merah)" title="Pengeluaran ' + rupiah(b.keluar) + '"></div>' +
+          '</div><div class="label">' + b.label + '</div></div>';
+      }).join("");
+
+      // 3. Pengeluaran per kategori
+      let perKat = {};
+      dataPeriode.forEach(function (d) {
+        if (d.jenis === "keluar") { perKat[d.kat] = (perKat[d.kat] || 0) + d.jumlah; }
+      });
+      let daftarKat = Object.keys(perKat).sort(function (a, b) { return perKat[b] - perKat[a]; });
+      document.getElementById("kategori").innerHTML = daftarKat.length === 0
+        ? '<div class="kosong">Belum ada pengeluaran</div>'
+        : daftarKat.map(function (k) {
+            let persen = keluar > 0 ? perKat[k] / keluar * 100 : 0;
+            return '<div class="kat">' + aman(k) + ' <b style="float:right">' + rupiah(perKat[k]) + '</b>' +
+              '<div class="bar"><div class="isi" style="width:' + persen + '%"></div></div></div>';
+          }).join("");
+
+      // 4. Tabel transaksi (urut terbaru dulu)
+      let tampil = data.filter(function (d) {
+        return filterJenis === "semua" || d.jenis === filterJenis;
+      }).sort(function (a, b) { return b.tgl.localeCompare(a.tgl); });
+
+      document.getElementById("isiTabel").innerHTML = tampil.length === 0
+        ? '<tr><td colspan="6" class="kosong">Belum ada transaksi</td></tr>'
+        : tampil.map(function (d) {
+            return "<tr><td>" + aman(d.tgl) + "</td><td>" + aman(d.ket) + "</td><td>" + aman(d.kat) + "</td>" +
+              '<td><span class="badge ' + d.jenis + '">' + (d.jenis === "masuk" ? "Masuk" : "Keluar") + "</span></td>" +
+              '<td class="num ' + d.jenis + '">' + (d.jenis === "keluar" ? "-" : "") + rupiah(d.jumlah) + "</td>" +
+              '<td><button class="hapus" onclick="hapus(' + d.id + ')" title="Hapus">🗑️</button></td></tr>';
+          }).join("");
+    }
+
+    function tambah() {
+      let tgl = document.getElementById("fTgl").value;
+      let ket = document.getElementById("fKet").value.trim();
+      let kat = document.getElementById("fKat").value;
+      let jenis = document.getElementById("fJenis").value;
+      let jumlah = Number(document.getElementById("fJumlah").value);
+      let pesan = document.getElementById("pesan");
+
+      if (tgl === "" || ket === "" || jumlah <= 0) {
+        pesan.innerText = "Lengkapi tanggal, keterangan, dan jumlah (harus lebih dari 0).";
+        return;
+      }
+      pesan.innerText = "";
+      data.push({ id: Date.now(), tgl: tgl, ket: ket, kat: kat, jenis: jenis, jumlah: jumlah });
+      simpan();
+      document.getElementById("fKet").value = "";
+      document.getElementById("fJumlah").value = "";
+      render();
+    }
+
+    function hapus(id) {
+      if (!confirm("Hapus transaksi ini?")) { return; }
+      data = data.filter(function (d) { return d.id !== id; });
+      simpan();
+      render();
+    }
+
+    // Isi tanggal form dengan hari ini, lalu tampilkan dashboard
+    document.getElementById("fTgl").value = new Date().toISOString().slice(0, 10);
+    render();
+  </script>
+</body>
+</html>
