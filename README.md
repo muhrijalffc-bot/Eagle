@@ -364,10 +364,10 @@
                 Welcome to
             </div>
 
-            <h1>UNIVERSE</h1>
+            <h1>T47</h1>
 
             <div class="subtitle">
-                HALO
+                THE NEW UNIVERSE
             </div>
 
             <p class="description">
