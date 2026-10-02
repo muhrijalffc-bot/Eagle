@@ -386,10 +386,6 @@
                 </a>
                 <a href="todolist.html" class="btn btn-primary">
                     To Do List
-                </a>
-                 <a href="ekaa.html" class="btn btn-secondary">
-                    Nilai 
-                </a>
 
             </div>
 
