@@ -381,11 +381,14 @@
                 <a href="saving.html" class="btn btn-primary">
                     Saving
                 </a>
-                <a href="kasku.html" class="btn btn-primary">
+                <a href="kasku.html" class="btn btn-secondary">
                     Arus Kas
                 </a>
-                <a href="todolist.html" class="btn btn-secondary">
+                <a href="todolist.html" class="btn btn-primary">
                     To Do List
+                </a>
+                 <a href="ekaa.html" class="btn btn-secondary">
+                    Nilai 
                 </a>
 
             </div>
