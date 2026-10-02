@@ -364,7 +364,7 @@
                 Welcome to
             </div>
 
-            <h1>EAGLE</h1>
+            <h1>UNIVERSE</h1>
 
             <div class="subtitle">
                 HALO
