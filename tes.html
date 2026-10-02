@@ -109,6 +109,7 @@ dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px
 .kotak small{display:block;color:var(--abu);margin-top:12px;font-size:11px}
 body.terkunci .app{display:none}
 .tautan{display:block;margin:12px auto 0;background:none;border:none;color:var(--utama);cursor:pointer;font-size:13px;text-decoration:underline}
+#dlgData .btn{display:block;width:100%;margin-top:10px;text-align:left}
 @media print{
 :root,[data-tema="gelap"]{--bg:#fff;--kartu:#fff;--teks:#000;--abu:#555;--garis:#ccc}
 aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!important}
@@ -249,7 +250,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
           <button class="btn" onclick="document.getElementById('fileCsv').click()">⬆ Impor CSV</button>
           <button class="btn" onclick="ekspor()">⬇ Ekspor CSV</button>
           <button class="btn" onclick="resetContoh()">↺ Kembalikan data contoh</button>
-          <button class="btn" style="color:var(--merah)" onclick="hapusSemua()">🗑️ Hapus semua data</button>
+          <button class="btn" style="color:var(--merah)" onclick="bukaBaru()">✨ Mulai data baru</button>
         </div>
         <p class="delta" id="infoData"></p>
       </div>
@@ -302,6 +303,22 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
     <div id="errLupa2" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
     <div class="baris"><button class="btn" onclick="document.getElementById('dlgLupa').close()">Batal</button><button class="btn utama" onclick="simpanLupa()">Simpan &amp; masuk</button></div>
   </div>
+</dialog>
+<dialog id="dlgData" oncancel="event.preventDefault()">
+  <h2>Mulai dengan data apa?</h2>
+  <p class="delta">Pilih data awal untuk aplikasi ini. Akun, kategori, dan pengaturan tidak terpengaruh.</p>
+  <button class="btn utama" onclick="pilihData('kosong')">✨ Data baru (kosong)</button>
+  <button class="btn" onclick="pilihData('contoh')">🧪 Data contoh (untuk mencoba)</button>
+  <button class="btn" id="btnDataAda" onclick="pilihData('ada')">📂 Pertahankan data yang sudah ada</button>
+</dialog>
+<dialog id="dlgBaru">
+  <h2>✨ Mulai data baru</h2>
+  <p class="delta">Semua transaksi akan dihapus dan kamu mulai dari data kosong. Akun pengguna, kategori, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
+  <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="baruCadangan" checked style="width:auto"> Unduh cadangan CSV dulu (disarankan)</label>
+  <label>Ketik <b>BARU</b> untuk melanjutkan</label>
+  <input id="baruKonfirm" autocomplete="off" placeholder="BARU">
+  <div id="errBaru" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
+  <div class="baris"><button class="btn" onclick="document.getElementById('dlgBaru').close()">Batal</button><button class="btn utama" style="background:var(--merah);border-color:var(--merah)" onclick="jalankanBaru()">Hapus &amp; mulai baru</button></div>
 </dialog>
 <div id="toast"></div>
 
@@ -472,7 +489,7 @@ async function kirimLogin(){
     if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
     if(pw!==$("lgPass2").value){err.innerText="Konfirmasi password tidak sama.";return}
     let u=await buatUser(nama,user,pw,"pemilik");
-    users.push(u);simpanU();masuk(u,true);return;
+    perluPilihData=true;users.push(u);simpanU();masuk(u,true);return;
   }
   if(Date.now()<kunciSampai){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.";return}
   let u=users.find(x=>x.username===user);
@@ -488,7 +505,7 @@ function masuk(u,baru){
   $("lgUser").value="";$("lgPass").value="";
   terapkanProfil();terapkanHak();
   ganti(bisa("dashboard")?"dashboard":"transaksi");
-  if(baru&&u.role==="pemilik"&&!u.pulih){bukaPulih()}
+  if(baru&&u.role==="pemilik"){if(perluPilihData){bukaData()}else if(!u.pulih){bukaPulih()}}
 }
 function keluar(){
   sesi=null;
@@ -512,6 +529,38 @@ function mulai(){
   if(u){masuk(u)}else{tampilLogin("login")}
 }
 document.getElementById("login").addEventListener("keydown",function(e){if(e.key==="Enter")kirimLogin()});
+
+// ===== Data awal / data baru =====
+let perluPilihData=false;
+function bukaData(){
+  let ada=false;try{ada=localStorage.getItem(KUNCI)!==null}catch(e){}
+  $("btnDataAda").classList.toggle("sembunyi",!ada);
+  document.getElementById("dlgData").showModal();
+}
+function pilihData(mode){
+  if(mode==="kosong"){data=[]}
+  else if(mode==="contoh"){data=JSON.parse(JSON.stringify(contoh))}
+  simpan();perluPilihData=false;
+  document.getElementById("dlgData").close();
+  render();
+  toast(mode==="kosong"?"Data baru (kosong) siap dipakai ✓":mode==="contoh"?"Data contoh dimuat":"Data lama dipertahankan");
+  let me=users.find(x=>sesi&&x.id===sesi.id);
+  if(me&&!me.pulih){bukaPulih()}
+}
+function bukaBaru(){
+  if(!bisa("pengaturan"))return;
+  $("baruKonfirm").value="";$("errBaru").innerText="";
+  $("baruCadangan").checked=data.length>0;
+  document.getElementById("dlgBaru").showModal();
+}
+function jalankanBaru(){
+  if(!bisa("pengaturan"))return;
+  if($("baruKonfirm").value.trim().toUpperCase()!=="BARU"){$("errBaru").innerText='Ketik "BARU" untuk melanjutkan.';return}
+  if($("baruCadangan").checked&&data.length>0){ekspor()}
+  data=[];simpan();
+  document.getElementById("dlgBaru").close();
+  render();toast("Data baru siap dipakai ✓");
+}
 
 // ===== Sandi pemulihan =====
 let userPulih=null,gagalP=0,kunciP=0;
@@ -727,11 +776,6 @@ function resetContoh(){
   if(!bisa("pengaturan"))return;
   if(!confirm("Ganti semua data dengan data contoh?"))return;
   data=JSON.parse(JSON.stringify(contoh));simpan();render();toast("Data contoh dikembalikan");
-}
-function hapusSemua(){
-  if(!bisa("pengaturan"))return;
-  if(!confirm("Hapus SEMUA transaksi? Tindakan ini tidak bisa dibatalkan."))return;
-  data=[];simpan();render();toast("Semua data dihapus");
 }
 
 // ===== Laporan laba rugi =====
