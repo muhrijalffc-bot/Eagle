@@ -378,12 +378,14 @@
 
             <div class="buttons">
 
-                <a href="kasku.html" class="btn btn-primary">
-                    Explore
+                <a href="saving.html" class="btn btn-primary">
+                    Saving
                 </a>
-
-                <a href="tes.html" class="btn btn-secondary">
-                    Discover
+                <a href="kasku.html" class="btn btn-primary">
+                    Arus Kas
+                </a>
+                <a href="todolist.html" class="btn btn-secondary">
+                    To Do List
                 </a>
 
             </div>
