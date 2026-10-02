@@ -108,6 +108,7 @@ dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px
 #lgErr{color:var(--merah);font-size:13px;min-height:18px;margin-top:10px}
 .kotak small{display:block;color:var(--abu);margin-top:12px;font-size:11px}
 body.terkunci .app{display:none}
+.tautan{display:block;margin:12px auto 0;background:none;border:none;color:var(--utama);cursor:pointer;font-size:13px;text-decoration:underline}
 @media print{
 :root,[data-tema="gelap"]{--bg:#fff;--kartu:#fff;--teks:#000;--abu:#555;--garis:#ccc}
 aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!important}
@@ -128,8 +129,9 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
     <div id="lgUlang" class="sembunyi"><input class="in" id="lgPass2" type="password" placeholder="Ulangi password" autocomplete="new-password"></div>
     <label class="lihat"><input type="checkbox" onchange="lihatPw(this.checked)"> Tampilkan password</label>
     <button class="btn utama" id="lgTombol" onclick="kirimLogin()">Masuk</button>
+    <button class="tautan" id="lgLupa" onclick="bukaLupa()">Lupa username / password?</button>
     <div id="lgErr"></div>
-    <small>Akun disimpan di browser ini. Lupa password? Hapus data situs di browser (semua data ikut hilang).</small>
+    <small>Akun disimpan di browser ini. Jika sandi pemulihan juga hilang, satu-satunya cara adalah menghapus data situs di browser (semua data ikut hilang).</small>
   </div>
 </div>
 <div class="app">
@@ -219,6 +221,11 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
         </div>
       </div>
       <div class="kartu" style="margin-top:16px">
+        <div class="judul"><h2>Sandi pemulihan</h2></div>
+        <p class="delta">Dipakai untuk memulihkan akunmu jika lupa username atau password. <b id="statusPulih"></b></p>
+        <button class="btn" onclick="bukaPulih()">🔑 Buat / ganti sandi pemulihan</button>
+      </div>
+      <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Pengguna &amp; hak akses</h2></div>
         <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (tambah/hapus), laporan, ekspor. <b>Kasir</b>: hanya mencatat transaksi dan melihat catatannya sendiri.</p>
         <div class="bungkus"><table>
@@ -268,6 +275,33 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
   <label>Password baru</label><input type="password" id="pwBaru" autocomplete="new-password">
   <div id="errPw" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
   <div class="baris"><button class="btn" onclick="dlgPw.close()">Batal</button><button class="btn utama" onclick="simpanPw()">Simpan</button></div>
+</dialog>
+<dialog id="dlgPulih">
+  <h2>🔑 Buat sandi pemulihan</h2>
+  <p class="delta">Sandi ini dipakai jika kamu lupa username atau password. Simpan di tempat aman (dicatat di kertas atau pengelola password). Sandi tidak akan ditampilkan lagi setelah disimpan.</p>
+  <label>Sandi pemulihan (minimal 8 karakter)</label>
+  <input id="pulihKode" autocomplete="off" placeholder="Ketik sendiri, atau buat otomatis">
+  <button class="btn" style="margin-top:8px" onclick="buatKode()">🎲 Buat otomatis</button>
+  <label style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:13px"><input type="checkbox" id="pulihOk" style="width:auto"> Saya sudah menyimpan sandi ini</label>
+  <div id="errPulih" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
+  <div class="baris"><button class="btn" onclick="lewatiPulih()">Nanti saja</button><button class="btn utama" onclick="simpanPulih()">Simpan</button></div>
+</dialog>
+<dialog id="dlgLupa">
+  <h2>Pulihkan akses</h2>
+  <div id="lupa1">
+    <p class="delta">Masukkan sandi pemulihan yang kamu buat sebelumnya. Username akan ditampilkan, lalu kamu bisa membuat password baru.</p>
+    <label>Sandi pemulihan</label>
+    <input id="lupaKode" autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX">
+    <div id="errLupa1" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
+    <div class="baris"><button class="btn" onclick="document.getElementById('dlgLupa').close()">Batal</button><button class="btn utama" onclick="cekPulih()">Verifikasi</button></div>
+  </div>
+  <div id="lupa2" class="sembunyi">
+    <p>✅ Terverifikasi. Username kamu: <b id="lupaUser"></b></p>
+    <label>Password baru</label><input type="password" id="lupaPw" autocomplete="new-password">
+    <label>Ulangi password baru</label><input type="password" id="lupaPw2" autocomplete="new-password">
+    <div id="errLupa2" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
+    <div class="baris"><button class="btn" onclick="document.getElementById('dlgLupa').close()">Batal</button><button class="btn utama" onclick="simpanLupa()">Simpan &amp; masuk</button></div>
+  </div>
 </dialog>
 <div id="toast"></div>
 
@@ -423,6 +457,7 @@ function tampilLogin(mode){
   $("lgSetup").classList.toggle("sembunyi",!setup);
   $("lgUlang").classList.toggle("sembunyi",!setup);
   $("lgTombol").innerText=setup?"Buat akun & masuk":"Masuk";
+  $("lgLupa").classList.toggle("sembunyi",setup);
   $("lgErr").innerText="";
   $("lgPass").value="";$("lgPass2").value="";
 }
@@ -437,15 +472,15 @@ async function kirimLogin(){
     if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
     if(pw!==$("lgPass2").value){err.innerText="Konfirmasi password tidak sama.";return}
     let u=await buatUser(nama,user,pw,"pemilik");
-    users.push(u);simpanU();masuk(u);return;
+    users.push(u);simpanU();masuk(u,true);return;
   }
   if(Date.now()<kunciSampai){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.";return}
   let u=users.find(x=>x.username===user);
   let h=await hash(pw,u?u.salt:"tidak-ada");
-  if(u&&h===u.hash){gagal=0;masuk(u)}
+  if(u&&h===u.hash){gagal=0;masuk(u,true)}
   else{gagal++;if(gagal>=5){kunciSampai=Date.now()+30000;gagal=0}err.innerText="Username atau password salah."}
 }
-function masuk(u){
+function masuk(u,baru){
   sesi={id:u.id,username:u.username,nama:u.nama,role:u.role};
   try{sessionStorage.setItem("kaskuSesi",String(u.id))}catch(e){}
   $("login").classList.add("sembunyi");
@@ -453,6 +488,7 @@ function masuk(u){
   $("lgUser").value="";$("lgPass").value="";
   terapkanProfil();terapkanHak();
   ganti(bisa("dashboard")?"dashboard":"transaksi");
+  if(baru&&u.role==="pemilik"&&!u.pulih){bukaPulih()}
 }
 function keluar(){
   sesi=null;
@@ -476,6 +512,71 @@ function mulai(){
   if(u){masuk(u)}else{tampilLogin("login")}
 }
 document.getElementById("login").addEventListener("keydown",function(e){if(e.key==="Enter")kirimLogin()});
+
+// ===== Sandi pemulihan =====
+let userPulih=null,gagalP=0,kunciP=0;
+function normKode(x){return String(x||"").toUpperCase().replace(/[\s-]/g,"")}
+function buatKode(){
+  let abj="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",a=crypto.getRandomValues(new Uint8Array(16)),k="";
+  for(let i=0;i<16;i++){k+=abj[a[i]%abj.length];if(i%4===3&&i<15){k+="-"}}
+  $("pulihKode").value=k;
+}
+function bukaPulih(){
+  $("pulihKode").value="";$("pulihOk").checked=false;$("errPulih").innerText="";
+  document.getElementById("dlgPulih").showModal();
+}
+function lewatiPulih(){document.getElementById("dlgPulih").close()}
+async function simpanPulih(){
+  if(!sesi)return;
+  let k=normKode($("pulihKode").value);
+  if(k.length<8){$("errPulih").innerText="Sandi pemulihan minimal 8 karakter.";return}
+  if(!$("pulihOk").checked){$("errPulih").innerText="Centang dulu setelah kamu menyimpan sandinya.";return}
+  let u=users.find(x=>x.id===sesi.id);if(!u)return;
+  let salt=acak();
+  u.pulih={salt:salt,hash:await hash(k,salt)};
+  simpanU();
+  document.getElementById("dlgPulih").close();
+  $("pulihKode").value="";
+  if(tampilan==="pengaturan")renderPengaturan();
+  toast("Sandi pemulihan disimpan ✓");
+}
+function bukaLupa(){
+  userPulih=null;
+  $("lupaKode").value="";$("lupaPw").value="";$("lupaPw2").value="";
+  $("errLupa1").innerText="";$("errLupa2").innerText="";
+  $("lupa1").classList.remove("sembunyi");$("lupa2").classList.add("sembunyi");
+  document.getElementById("dlgLupa").showModal();
+}
+async function cekPulih(){
+  let err=$("errLupa1");err.innerText="";
+  if(Date.now()<kunciP){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciP-Date.now())/1000)+" detik.";return}
+  let k=normKode($("lupaKode").value);
+  if(k.length<8){err.innerText="Masukkan sandi pemulihan dengan benar.";return}
+  let cocok=null;
+  for(let u of users){
+    if(u.pulih&&(await hash(k,u.pulih.salt))===u.pulih.hash){cocok=u;break}
+  }
+  if(!cocok){
+    gagalP++;if(gagalP>=5){kunciP=Date.now()+60000;gagalP=0}
+    err.innerText="Sandi pemulihan tidak cocok.";return;
+  }
+  gagalP=0;userPulih=cocok;
+  $("lupaUser").innerText="@"+cocok.username+" ("+cocok.nama+")";
+  $("lupa1").classList.add("sembunyi");$("lupa2").classList.remove("sembunyi");
+}
+async function simpanLupa(){
+  let err=$("errLupa2");err.innerText="";
+  if(!userPulih)return;
+  let pw=$("lupaPw").value;
+  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
+  if(pw!==$("lupaPw2").value){err.innerText="Konfirmasi password tidak sama.";return}
+  let u=users.find(x=>x.id===userPulih.id);if(!u)return;
+  u.salt=acak();u.hash=await hash(pw,u.salt);
+  delete u.pulih;            // sandi pemulihan hanya berlaku sekali
+  simpanU();userPulih=null;
+  document.getElementById("dlgLupa").close();
+  masuk(u,true);
+}
 
 // ===== Kelola pengguna (khusus Pemilik) =====
 function jumlahPemilik(){return users.filter(u=>u.role==="pemilik").length}
@@ -563,6 +664,8 @@ function hapusKat(i){
 }
 function renderPengaturan(){
   renderUser();
+  let me=users.find(x=>sesi&&x.id===sesi.id);
+  $("statusPulih").innerText=me&&me.pulih?"Status: sudah dibuat ✅":"Status: belum dibuat ⚠️";
   $("daftarKat").innerHTML=p.kategori.map((k,i)=>'<span class="tag">'+(EMOJI[k]||"🧾")+" "+aman(k)+' <button class="x" onclick="hapusKat('+i+')" title="Hapus">✕</button></span>').join("");
   $("infoData").innerText=data.length+" transaksi tersimpan di browser ini.";
 }
