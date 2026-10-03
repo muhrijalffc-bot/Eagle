@@ -91,7 +91,7 @@ const HALAMAN = [
   {ikon:"💼", nama:"Kasku",             ket:"Dashboard akuntansi: penjualan, pembelian, laporan, dan hak akses pengguna.", href:"kasku.html",    warna:"#8b7bff"},
   {ikon:"$", nama:"Saving",        ket:"Catat pemasukan dan pengeluaran harian, atur saldo awal, dan kejar target menabung.", href:"saving.html", warna:"#2dd4bf"},
   {ikon:"✅", nama:"To Do List",         ket:"To-do list bergaya pastel dengan daftar, tanggal, dan jam.",                  href:"todolist.html",     warna:"#f472b6"},
-  {ikon:"🧪", nama:"Latihan JavaScript",ket:"Halaman privasi, untuk menyimpan foto atau video anda dengan privasi.",           href:"neptune.html",  warna:"#60a5fa"}
+  {ikon:"🧪", nama:"My file",ket:"Halaman privasi, untuk menyimpan foto atau video anda dengan privasi.",           href:"neptune.html",  warna:"#60a5fa"}
 ];
 /* ================================================ */
 
