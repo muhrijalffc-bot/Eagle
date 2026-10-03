@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#05060f">
+<title>Brankas Pribadi ✦ Galaksiku</title>
+<style>
+:root{--ungu:#8b7bff;--pink:#f472b6;--teks:#eef0ff;--redup:#a9b0d6;--garis:rgba(255,255,255,.14);--kaca:rgba(14,16,40,.62);--merah:#fb7185;--hijau:#34d399}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{color:var(--teks);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#05060f;overflow-x:hidden}
+button,input,select{font:inherit;color:inherit}
+.foto{position:fixed;inset:0;z-index:0;background:#05060f url("milkyway.jpg") 50% 50%/cover no-repeat}
+.foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,13,.72),rgba(4,5,13,.62) 50%,rgba(4,5,13,.88))}
+.sembunyi{display:none!important}
+.in{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--garis);background:rgba(255,255,255,.07);outline:none;margin-top:10px}
+.in:focus{border-color:var(--ungu);box-shadow:0 0 0 3px rgba(139,123,255,.25)}
+.in::placeholder{color:#8088b3}
+.btn{padding:10px 18px;border-radius:12px;border:1px solid var(--garis);background:rgba(255,255,255,.08);cursor:pointer;transition:.2s}
+.btn:hover{border-color:var(--ungu);background:rgba(255,255,255,.14)}
+.btn.utama{border:none;font-weight:600;color:#fff;background:linear-gradient(100deg,var(--ungu),var(--pink));box-shadow:0 0 24px rgba(139,123,255,.4)}
+.btn.utama:hover{filter:brightness(1.1)}
+.btn.bahaya{color:var(--merah);border-color:rgba(251,113,133,.4)}
+.btn:disabled{opacity:.55;cursor:wait}
+.tautan{background:none;border:none;color:#b9b0ff;cursor:pointer;font-size:13px;text-decoration:underline;padding:6px}
+.tautan.bahaya{color:var(--merah)}
+.err{color:var(--merah);font-size:13px;min-height:18px;margin-top:10px}
+.kecil{font-size:12px;color:var(--redup);line-height:1.5}
+/* layar kunci */
+.tengah{position:relative;z-index:2;min-height:100vh;display:grid;place-items:center;padding:20px}
+.kotak{width:min(400px,100%);padding:32px 28px;border-radius:24px;text-align:center;background:var(--kaca);border:1px solid var(--garis);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.gembok{font-size:44px;margin-bottom:6px;filter:drop-shadow(0 0 16px rgba(139,123,255,.7))}
+.kotak h1{font-size:24px;margin-bottom:6px}
+.kotak>p{color:var(--redup);font-size:14px;line-height:1.55;margin-bottom:6px}
+.kotak .btn.utama{width:100%;margin-top:14px;padding:13px}
+.lihat{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--redup);margin-top:12px;text-align:left}
+.meter{height:6px;border-radius:6px;background:rgba(255,255,255,.12);margin-top:10px;overflow:hidden}
+.meter div{height:100%;width:0;transition:.3s}
+.baris-t{display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:6px}
+/* aplikasi */
+#app{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:18px clamp(14px,4vw,32px) 120px}
+.atas{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.atas h1{font-size:clamp(22px,4vw,30px);letter-spacing:-.01em}
+.atas h1 span{background:linear-gradient(100deg,#fff,#d8ccff,#ffb6e1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.atas small{display:block;color:var(--redup);font-size:13px;margin-top:2px}
+.aksi{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.alat{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(--garis);background:rgba(255,255,255,.05);cursor:pointer;font-size:13px;color:var(--redup)}
+.tab.aktif{background:linear-gradient(100deg,var(--ungu),var(--pink));border-color:transparent;color:#fff;font-weight:600}
+.alat .in{margin:0;width:auto;flex:1;min-width:150px;max-width:260px;padding:9px 12px}
+.alat select.in{flex:none;min-width:0;width:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tile{position:relative;aspect-ratio:1;border-radius:16px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,.07);border:1px solid var(--garis);transition:transform .2s,border-color .2s}
+.tile:hover{transform:translateY(-4px);border-color:var(--ungu)}
+.tile .th{position:absolute;inset:0;background-size:cover;background-position:center}
+.tile .ik{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-size:34px;padding:10px 10px 36px}
+.tile .ik small{display:block;font-size:12px;color:var(--redup);margin-top:4px;font-weight:600}
+.tile .nm{position:absolute;left:0;right:0;bottom:0;padding:18px 8px 6px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(transparent,rgba(0,0,0,.75));opacity:0;transition:.2s}
+.tile:hover .nm,.tile.lain .nm{opacity:1}
+.lencana{position:absolute;right:8px;top:8px;font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(0,0,0,.6)}
+.cek{position:absolute;left:8px;top:8px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.4);display:none;place-items:center;font-size:14px}
+.pilih .cek{display:grid}
+.tile.dipilih{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,114,182,.5)}
+.tile.dipilih .cek{background:var(--pink);border-color:var(--pink)}
+.kosong{grid-column:1/-1;text-align:center;padding:60px 20px;border-radius:24px;border:2px dashed var(--garis);background:rgba(255,255,255,.03)}
+.kosong .e{font-size:48px;margin-bottom:10px}
+.kosong p{color:var(--redup);margin:6px 0 18px}
+.bar-pilih{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:40px;background:rgba(14,16,40,.92);border:1px solid var(--garis);backdrop-filter:blur(14px);flex-wrap:wrap;justify-content:center}
+#tarik{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(5,6,15,.8);font-size:22px;border:3px dashed var(--ungu);pointer-events:none}
+/* unggah */
+#unggah{position:fixed;right:16px;bottom:16px;z-index:30;width:min(320px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px}
+.up{padding:10px 12px;border-radius:14px;background:rgba(14,16,40,.94);border:1px solid var(--garis);font-size:13px}
+.up .p{height:5px;border-radius:5px;background:rgba(255,255,255,.12);margin-top:6px;overflow:hidden}
+.up .p div{height:100%;width:0;background:linear-gradient(90deg,var(--ungu),var(--pink));transition:.2s}
+.up.gagal{border-color:var(--merah)}
+/* penampil */
+#viewer{position:fixed;inset:0;z-index:50;background:rgba(2,3,8,.95);display:flex;flex-direction:column}
+.vtop{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;flex-wrap:wrap}
+.vtop b{display:block;max-width:60vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtop small{color:var(--redup);font-size:12px}
+#vIsi{flex:1;min-height:0;display:grid;place-items:center;padding:0 56px 20px;text-align:center}
+#vIsi img,#vIsi video{max-width:100%;max-height:calc(100vh - 110px);border-radius:10px;background:#000}
+#vIsi audio{width:min(420px,90vw)}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--garis);background:rgba(255,255,255,.1);font-size:26px;cursor:pointer;line-height:1}
+.nav.kiri{left:8px}.nav.kanan{right:8px}
+.spin{width:38px;height:38px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:var(--pink);animation:putar 1s linear infinite;margin:0 auto 12px}
+@keyframes putar{to{transform:rotate(360deg)}}
+/* dialog */
+dialog{border:1px solid var(--garis);border-radius:22px;padding:24px;width:min(460px,94vw);color:var(--teks);background:rgba(14,16,40,.97);box-shadow:0 20px 60px rgba(0,0,0,.6);max-height:92vh;overflow:auto}
+dialog::backdrop{background:rgba(2,3,8,.75)}
+dialog h2{margin-bottom:6px;font-size:19px}
+dialog h3{font-size:14px;margin:20px 0 4px;color:#d8ccff}
+dialog .btn{margin-top:10px}
+.kode{font-family:ui-monospace,Consolas,monospace;font-size:20px;letter-spacing:.06em;text-align:center;padding:16px 10px;border-radius:14px;background:rgba(255,255,255,.08);border:1px dashed var(--ungu);margin:14px 0;user-select:all;word-break:break-all}
+.peringatan{padding:10px 12px;border-radius:12px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35);color:#fde68a;font-size:13px;line-height:1.5;margin-top:12px}
+#toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-12px);z-index:80;background:rgba(14,16,40,.96);border:1px solid var(--garis);padding:10px 18px;border-radius:30px;opacity:0;transition:.3s;pointer-events:none;font-size:14px}
+#toast.tampil{opacity:1;transform:translateX(-50%)}
+@media(max-width:600px){#vIsi{padding:0 8px 16px}.nav{top:auto;bottom:14px;transform:none}.grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="foto" aria-hidden="true"></div>
+
+<!-- ========== LAYAR KUNCI ========== -->
+<div id="kunci" class="tengah">
+  <div class="kotak">
+    <div class="gembok">🔐</div>
+    <h1 id="kJudul">Brankas Pribadi</h1>
+    <p id="kSub"></p>
+    <input class="in sembunyi" type="text" id="kKode" placeholder="Kode pemulihan (XXXX-XXXX-XXXX-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <input class="in" type="password" id="kSandi" placeholder="Password" autocomplete="current-password">
+    <div id="kMeterBox" class="sembunyi"><div class="meter"><div id="kMeter"></div></div><div class="kecil" id="kMeterTeks" style="text-align:left;margin-top:4px"></div></div>
+    <input class="in sembunyi" type="password" id="kSandi2" placeholder="Ulangi password" autocomplete="new-password">
+    <label class="lihat"><input type="checkbox" id="kLihat"> Tampilkan password</label>
+    <button class="btn utama" id="kTombol">Buka brankas</button>
+    <div class="err" id="kErr"></div>
+    <div class="baris-t">
+      <button class="tautan" id="kLupa">Lupa password?</button>
+      <button class="tautan sembunyi" id="kKembali">← Kembali</button>
+      <button class="tautan bahaya" id="kHapus">Hapus brankas &amp; mulai baru</button>
+    </div>
+    <p class="kecil" style="margin-top:14px">File dienkripsi (AES-256) di perangkat ini dan disimpan hanya di browser ini. Tidak ada yang dikirim ke server.</p>
+  </div>
+</div>
+
+<!-- ========== APLIKASI ========== -->
+<div id="app" class="sembunyi">
+  <div class="atas">
+    <div><h1>🔐 <span>Brankas Pribadi</span></h1><small id="ringkas"></small></div>
+    <div class="aksi">
+      <button class="btn utama" id="bTambah">＋ Tambah file</button>
+      <button class="btn" id="bPilih">☑ Pilih</button>
+      <button class="btn" id="bSet">⚙ Pengaturan</button>
+      <button class="btn" id="bKunci">🔒 Kunci</button>
+    </div>
+  </div>
+  <div class="alat">
+    <div id="tabs" class="aksi"></div>
+    <input class="in" id="cari" placeholder="🔍 Cari nama file">
+    <select class="in" id="urut">
+      <option value="baru">Terbaru</option><option value="lama">Terlama</option>
+      <option value="nama">Nama A–Z</option><option value="besar">Terbesar</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+  <input type="file" id="berkas" multiple class="sembunyi">
+</div>
+
+<div class="bar-pilih sembunyi" id="barPilih">
+  <b id="nPilih">0 dipilih</b>
+  <button class="btn" id="bSemua">Pilih semua</button>
+  <button class="btn" id="bUnduhP">⬇ Unduh</button>
+  <button class="btn bahaya" id="bHapusP">🗑 Hapus</button>
+  <button class="btn" id="bBatalP">Batal</button>
+</div>
+<div id="unggah"></div>
+<div id="tarik" class="sembunyi">📥 Lepaskan file di sini untuk dienkripsi</div>
+
+<!-- Penampil -->
+<div id="viewer" class="sembunyi">
+  <div class="vtop">
+    <div><b id="vNama"></b><small id="vInfo"></small></div>
+    <div class="aksi">
+      <button class="btn" id="vUnduh">⬇ Unduh</button>
+      <button class="btn bahaya" id="vHapus">🗑 Hapus</button>
+      <button class="btn" id="vTutup">✕ Tutup</button>
+    </div>
+  </div>
+  <button class="nav kiri" id="vKiri" aria-label="Sebelumnya">‹</button>
+  <div id="vIsi"></div>
+  <button class="nav kanan" id="vKanan" aria-label="Berikutnya">›</button>
+</div>
+
+<!-- Dialog kode pemulihan -->
+<dialog id="dlgKode">
+  <h2>🔑 Kode pemulihan</h2>
+  <p class="kecil">Simpan kode ini di tempat aman (catat di kertas atau pengelola password). Kode hanya ditampilkan sekarang dan dipakai jika kamu lupa password.</p>
+  <div class="kode" id="kodeTeks"></div>
+  <button class="btn" id="kodeSalin">📋 Salin kode</button>
+  <div class="peringatan">Tanpa password <b>dan</b> kode pemulihan ini, file di brankas <b>tidak bisa dibuka lagi oleh siapa pun</b>, termasuk aku.</div>
+  <label class="lihat"><input type="checkbox" id="kodeOk"> Saya sudah menyimpan kode ini</label>
+  <button class="btn utama" id="kodeSelesai" disabled style="width:100%">Selesai</button>
+</dialog>
+
+<!-- Dialog pengaturan -->
+<dialog id="dlgSet">
+  <h2>⚙ Pengaturan brankas</h2>
+  <p class="kecil" id="sInfo"></p>
+
+  <h3>Kunci otomatis</h3>
+  <select class="in" id="sMenit">
+    <option value="1">Setelah 1 menit tidak aktif</option><option value="5">Setelah 5 menit tidak aktif</option>
+    <option value="15">Setelah 15 menit tidak aktif</option><option value="30">Setelah 30 menit tidak aktif</option>
+    <option value="0">Jangan kunci otomatis</option>
+  </select>
+  <label class="lihat"><input type="checkbox" id="sSembunyi"> Kunci saat tab ditinggalkan / layar mati</label>
+
+  <h3>Ganti password</h3>
+  <input class="in" type="password" id="sLama" placeholder="Password saat ini" autocomplete="current-password">
+  <input class="in" type="password" id="sBaru" placeholder="Password baru (min. 8 karakter)" autocomplete="new-password">
+  <input class="in" type="password" id="sBaru2" placeholder="Ulangi password baru" autocomplete="new-password">
+  <div class="err" id="sErr1"></div>
+  <button class="btn" id="sGanti">Ganti password</button>
+
+  <h3>Kode pemulihan baru</h3>
+  <p class="kecil">Membuat kode baru membuat kode lama tidak berlaku lagi.</p>
+  <input class="in" type="password" id="sKodePw" placeholder="Password saat ini" autocomplete="current-password">
+  <div class="err" id="sErr2"></div>
+  <button class="btn" id="sKodeBaru">Buat kode pemulihan baru</button>
+
+  <h3>Zona berbahaya</h3>
+  <button class="btn bahaya" id="sHapusSemua" style="width:100%">🗑 Hapus seluruh isi brankas</button>
+
+  <div class="peringatan">Brankas ada di <b>browser perangkat ini saja</b>. Membersihkan data situs menghapusnya, dan file tidak ikut ke perangkat lain. Simpan salinan file aslimu di tempat lain.</div>
+  <button class="btn" id="sTutup" style="width:100%">Tutup</button>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ================== Konstanta & util ================== */
+const NAMA_DB="brankas-pribadi", ITER=250000, CHUNK=4*1024*1024;
+const PERINGATAN_BESAR=300*1024*1024, MAKS_FILE=2*1024*1024*1024;
+const enc=new TextEncoder(), dec=new TextDecoder();
+const $=id=>document.getElementById(id);
+const aman=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function b64(buf){const b=new Uint8Array(buf);let s="";for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(s)}
+function ub64(s){const bin=atob(s),b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b}
+function ukuran(n){if(!(n>0))return "0 B";const s=["B","KB","MB","GB"];let i=Math.min(3,Math.floor(Math.log(n)/Math.log(1024)));return (n/Math.pow(1024,i)).toFixed(i?1:0)+" "+s[i]}
+function waktu(ms){return new Date(ms).toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})+" "+new Date(ms).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")}
+function durasi(s){s=Math.round(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+let tT=0;function toast(t){const e=$("toast");e.innerText=t;e.classList.add("tampil");clearTimeout(tT);tT=setTimeout(()=>e.classList.remove("tampil"),2400)}
+function ekstensi(n){const m=/\.([A-Za-z0-9]{1,5})$/.exec(n);return m?m[1].toUpperCase():"FILE"}
+
+/* ================== IndexedDB ================== */
+let db=null;
+function bukaDB(){return new Promise((res,rej)=>{
+  const r=indexedDB.open(NAMA_DB,1);
+  r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore("meta",{keyPath:"k"});d.createObjectStore("items",{keyPath:"id"});d.createObjectStore("chunks",{keyPath:"k"})};
+  r.onsuccess=()=>{r.result.onversionchange=()=>r.result.close();res(r.result)};
+  r.onerror=()=>rej(r.error);
+})}
+function tx(store,mode,fn){return new Promise((res,rej)=>{
+  const t=db.transaction(store,mode),out=fn(t.objectStore(store));
+  t.oncomplete=()=>res(out?out.result:undefined);
+  t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error||new Error("Penyimpanan dibatalkan"));
+})}
+const dbGet=(s,k)=>tx(s,"readonly",o=>o.get(k));
+const dbPut=(s,v)=>tx(s,"readwrite",o=>o.put(v));
+const dbDel=(s,k)=>tx(s,"readwrite",o=>o.delete(k));
+const dbAll=s=>tx(s,"readonly",o=>o.getAll());
+
+/* ================== Kripto ================== */
+let KEY=null;   // kunci data (hanya ada di memori saat terbuka)
+async function turunkan(sandi,salt,iter){
+  const base=await crypto.subtle.importKey("raw",enc.encode(sandi),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function bungkus(raw,kek){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},kek,raw);return {iv:b64(iv),ct:b64(ct)}}
+function bukaBungkus(w,kek){return crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(w.iv)},kek,ub64(w.ct))}   // gagal = password/kode salah
+const kunciDariRaw=raw=>crypto.subtle.importKey("raw",raw,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+async function enkripBuf(buf){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},KEY,buf);return {iv:iv,ct:ct}}
+const dekripBuf=(iv,ct)=>crypto.subtle.decrypt({name:"AES-GCM",iv:iv},KEY,ct);
+
+const ABJ="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // 32 karakter, tanpa 0/O/1/I
+function buatKode(){const a=crypto.getRandomValues(new Uint8Array(20));let k="";for(let i=0;i<20;i++){k+=ABJ[a[i]%32];if(i%4===3&&i<19)k+="-"}return k}
+const normKode=x=>String(x||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+
+async function buatBrankas(sandi){
+  const raw=crypto.getRandomValues(new Uint8Array(32)).buffer;
+  const salt=crypto.getRandomValues(new Uint8Array(16)),saltR=crypto.getRandomValues(new Uint8Array(16));
+  const kode=buatKode();
+  const kekP=await turunkan(sandi,salt,ITER),kekR=await turunkan(normKode(kode),saltR,ITER);
+  await dbPut("meta",{k:"cfg",v:1,iterP:ITER,iterR:ITER,salt:b64(salt),wP:await bungkus(raw,kekP),saltR:b64(saltR),wR:await bungkus(raw,kekR),dibuat:Date.now()});
+  KEY=await kunciDariRaw(raw);
+  return kode;
+}
+async function bukaBrankas(sandi){
+  const cfg=await dbGet("meta","cfg");
+  try{KEY=await kunciDariRaw(await bukaBungkus(cfg.wP,await turunkan(sandi,ub64(cfg.salt),cfg.iterP)));return true}catch(e){return false}
+}
+async function pulihkan(kode,baru){
+  const cfg=await dbGet("meta","cfg");let raw;
+  try{raw=await bukaBungkus(cfg.wR,await turunkan(normKode(kode),ub64(cfg.saltR),cfg.iterR))}catch(e){return false}
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  cfg.salt=b64(salt);cfg.iterP=ITER;cfg.wP=await bungkus(raw,await turunkan(baru,salt,ITER));
+  await dbPut("meta",cfg);KEY=await kunciDariRaw(raw);return true;
+}
+
+/* ================== Pembatas percobaan ================== */
+function infoGagal(){try{return JSON.parse(localStorage.getItem("brankasGagal")||"{}")}catch(e){return {}}}
+function catatGagal(){const g=infoGagal();g.n=(g.n||0)+1;if(g.n%5===0)g.sampai=Date.now()+Math.min(300000,30000*Math.pow(2,g.n/5-1));try{localStorage.setItem("brankasGagal",JSON.stringify(g))}catch(e){}}
+function resetGagal(){try{localStorage.removeItem("brankasGagal")}catch(e){}}
+function sisaKunci(){return Math.max(0,Math.ceil(((infoGagal().sampai||0)-Date.now())/1000))}
+
+/* ================== Layar kunci ================== */
+let modeK="login";
+const TEKS_TOMBOL={setup:"Buat brankas",login:"Buka brankas",lupa:"Pulihkan & buka"};
+function kekuatan(p){
+  let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(p.length>=16)s++;
+  if([/[a-z]/,/[A-Z]/,/[0-9]/,/[^A-Za-z0-9]/].filter(r=>r.test(p)).length>=3)s++;
+  return Math.min(4,s);
+}
+function meterIsi(id,txt,p){
+  const k=p?kekuatan(p):0,w=["#fb7185","#fb7185","#fbbf24","#34d399","#34d399"][k],n=["","Lemah","Cukup","Baik","Kuat"][k];
+  $(id).style.width=(p?(k||1)*25:0)+"%";$(id).style.background=w;
+  $(txt).innerText=p?"Kekuatan password: "+n+(k<3?" (disarankan 12+ karakter, campur huruf dan angka)":""):"";
+}
+function tampilKunci(mode){
+  modeK=mode;
+  $("kunci").classList.remove("sembunyi");$("app").classList.add("sembunyi");
+  ["kSandi","kSandi2","kKode"].forEach(i=>$(i).value="");
+  $("kErr").innerText="";$("kLihat").checked=false;aturLihat(false);meterIsi("kMeter","kMeterTeks","");
+  const setup=mode==="setup",lupa=mode==="lupa";
+  $("kJudul").innerText=setup?"Buat brankas":lupa?"Pulihkan akses":"Brankas Pribadi";
+  $("kSub").innerText=setup?"Pilih password yang kuat untuk melindungi foto, video, dan file pribadimu.":lupa?"Masukkan kode pemulihan, lalu buat password baru.":"Masukkan password untuk membuka.";
+  $("kKode").classList.toggle("sembunyi",!lupa);
+  $("kSandi").placeholder=setup?"Buat password (min. 8 karakter)":lupa?"Password baru (min. 8 karakter)":"Password";
+  $("kSandi").autocomplete=setup||lupa?"new-password":"current-password";
+  $("kMeterBox").classList.toggle("sembunyi",!(setup||lupa));
+  $("kSandi2").classList.toggle("sembunyi",!(setup||lupa));
+  $("kLupa").classList.toggle("sembunyi",mode!=="login");
+  $("kKembali").classList.toggle("sembunyi",mode!=="lupa");
+  $("kHapus").classList.toggle("sembunyi",setup);
+  $("kTombol").innerText=TEKS_TOMBOL[mode];$("kTombol").disabled=false;
+  setTimeout(()=>(lupa?$("kKode"):$("kSandi")).focus(),50);
+}
+function aturLihat(v){["kSandi","kSandi2","kKode"].forEach(i=>$(i).type=v?"text":"password")}
+$("kLihat").onchange=e=>aturLihat(e.target.checked);
+$("kSandi").oninput=()=>{if(modeK!=="login")meterIsi("kMeter","kMeterTeks",$("kSandi").value)};
+$("kLupa").onclick=()=>tampilKunci("lupa");
+$("kKembali").onclick=()=>tampilKunci("login");
+$("kHapus").onclick=()=>hapusBrankasUI(true);
+document.getElementById("kunci").addEventListener("keydown",e=>{if(e.key==="Enter")kirim()});
+$("kTombol").onclick=kirim;
+
+async function kirim(){
+  const err=$("kErr");err.innerText="";
+  if($("kTombol").disabled)return;
+  if(modeK!=="setup"){const s=sisaKunci();if(s>0){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+s+" detik.";return}}
+  $("kTombol").disabled=true;
+  try{
+    if(modeK==="setup"){
+      const a=$("kSandi").value;
+      if(a.length<8){err.innerText="Password minimal 8 karakter.";return}
+      if(a!==$("kSandi2").value){err.innerText="Konfirmasi password tidak sama.";return}
+      $("kTombol").innerText="Menyiapkan…";
+      const kode=await buatBrankas(a);
+      modeK="login";await masukApp();tampilKode(kode);
+    }else if(modeK==="login"){
+      const a=$("kSandi").value;if(!a){err.innerText="Masukkan password.";return}
+      $("kTombol").innerText="Membuka…";
+      if(!(await bukaBrankas(a))){catatGagal();const s=sisaKunci();err.innerText=s>0?"Password salah. Dikunci "+s+" detik.":"Password salah.";return}
+      resetGagal();await masukApp();
+    }else{
+      const kd=$("kKode").value,a=$("kSandi").value;
+      if(normKode(kd).length<20){err.innerText="Kode pemulihan tidak lengkap.";return}
+      if(a.length<8){err.innerText="Password baru minimal 8 karakter.";return}
+      if(a!==$("kSandi2").value){err.innerText="Konfirmasi password tidak sama.";return}
+      $("kTombol").innerText="Memulihkan…";
+      if(!(await pulihkan(kd,a))){catatGagal();err.innerText="Kode pemulihan tidak cocok.";return}
+      resetGagal();modeK="login";await masukApp();toast("Password baru disimpan ✓");
+    }
+  }catch(e){err.innerText="Terjadi kesalahan: "+(e&&e.message?e.message:e)}
+  finally{$("kTombol").disabled=false;$("kTombol").innerText=TEKS_TOMBOL[modeK]}
+}
+
+/* ================== Data & tampilan ================== */
+let ITEMS=[],TAMPIL=[],THUMBS=new Map(),filter="semua",pilihMode=false,dipilih=new Set();
+async function muatItem(){
+  const rows=await dbAll("items");ITEMS=[];
+  for(const r of rows){try{const m=JSON.parse(dec.decode(await dekripBuf(r.iv,r.ct)));ITEMS.push(Object.assign({id:r.id,thumb:r.thumb,thumbIv:r.thumbIv},m))}catch(e){}}
+}
+async function masukApp(){
+  await muatItem();
+  ["kSandi","kSandi2","kKode"].forEach(i=>$(i).value="");
+  $("kunci").classList.add("sembunyi");$("app").classList.remove("sembunyi");
+  render();aturKunciOtomatis();
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+}
+function urutkan(a){
+  const m=$("urut").value;
+  return a.sort(m==="lama"?(x,y)=>x.tgl-y.tgl:m==="nama"?(x,y)=>x.nama.localeCompare(y.nama,"id"):m==="besar"?(x,y)=>y.ukuran-x.ukuran:(x,y)=>y.tgl-x.tgl);
+}
+function render(){
+  const q=$("cari").value.trim().toLowerCase();
+  const hit={semua:ITEMS.length,foto:0,video:0,lain:0};ITEMS.forEach(i=>hit[i.jenis]++);
+  const total=ITEMS.reduce((a,i)=>a+i.ukuran,0);
+  $("ringkas").innerText=ITEMS.length+" file · "+ukuran(total)+" (terenkripsi)";
+  $("tabs").innerHTML=[["semua","Semua"],["foto","🖼 Foto"],["video","🎬 Video"],["lain","📄 Lainnya"]].map(t=>'<button class="tab'+(filter===t[0]?" aktif":"")+'" data-f="'+t[0]+'">'+t[1]+" ("+hit[t[0]]+")</button>").join("");
+  $("tabs").querySelectorAll(".tab").forEach(b=>b.onclick=()=>{filter=b.dataset.f;render()});
+  TAMPIL=urutkan(ITEMS.filter(i=>(filter==="semua"||i.jenis===filter)&&(!q||i.nama.toLowerCase().includes(q))));
+  const g=$("grid");g.classList.toggle("pilih",pilihMode);
+  if(TAMPIL.length===0){
+    g.innerHTML='<div class="kosong"><div class="e">'+(ITEMS.length?"🔎":"🌌")+'</div><b>'+(ITEMS.length?"Tidak ada file yang cocok":"Brankasmu masih kosong")+'</b><p>'+(ITEMS.length?"Coba ganti kata kunci atau filter.":"Tambahkan foto, video, atau file pribadi. Semuanya dienkripsi sebelum disimpan.")+'</p>'+(ITEMS.length?"":'<button class="btn utama" id="bKosong">＋ Tambah file</button>')+"</div>";
+    const bk=$("bKosong");if(bk)bk.onclick=()=>$("berkas").click();
+  }else{
+    g.innerHTML=TAMPIL.map((it,i)=>'<div class="tile'+(it.jenis==="lain"?" lain":"")+(dipilih.has(it.id)?" dipilih":"")+'" data-i="'+i+'">'+
+      (it.thumb?'<div class="th"></div>':'<div class="ik"><div>'+(it.jenis==="foto"?"🖼":it.jenis==="video"?"🎬":"📄")+"<small>"+aman(ekstensi(it.nama))+"</small></div></div>")+
+      (it.jenis==="video"?'<span class="lencana">▶ '+(it.durasi?durasi(it.durasi):"video")+"</span>":"")+'<span class="cek">'+(dipilih.has(it.id)?"✓":"")+'</span><div class="nm">'+aman(it.nama)+"</div></div>").join("");
+    g.querySelectorAll(".tile").forEach(t=>{
+      const it=TAMPIL[+t.dataset.i];t.onclick=()=>klikTile(it);
+      if(it.thumb)thumbUrl(it).then(u=>{const th=t.querySelector(".th");if(u&&th)th.style.backgroundImage='url("'+u+'")'});
+    });
+  }
+  $("barPilih").classList.toggle("sembunyi",!pilihMode);$("nPilih").innerText=dipilih.size+" dipilih";
+  $("bPilih").innerText=pilihMode?"✕ Selesai memilih":"☑ Pilih";
+}
+async function thumbUrl(it){
+  if(THUMBS.has(it.id))return THUMBS.get(it.id);if(!it.thumb||!KEY)return null;
+  try{const u=URL.createObjectURL(new Blob([await dekripBuf(it.thumbIv,it.thumb)],{type:"image/jpeg"}));THUMBS.set(it.id,u);return u}catch(e){return null}
+}
+function klikTile(it){
+  if(pilihMode){dipilih.has(it.id)?dipilih.delete(it.id):dipilih.add(it.id);render()}
+  else bukaViewer(TAMPIL.indexOf(it));
+}
+$("cari").oninput=render;$("urut").onchange=render;
+$("bTambah").onclick=()=>$("berkas").click();
+$("bPilih").onclick=()=>{pilihMode=!pilihMode;dipilih.clear();render()};
+$("bBatalP").onclick=()=>{pilihMode=false;dipilih.clear();render()};
+$("bSemua").onclick=()=>{TAMPIL.forEach(i=>dipilih.add(i.id));render()};
+$("bUnduhP").onclick=async()=>{const l=ITEMS.filter(i=>dipilih.has(i.id));if(!l.length)return;for(const it of l){await unduh(it);await new Promise(r=>setTimeout(r,400))}};
+$("bHapusP").onclick=async()=>{
+  const l=ITEMS.filter(i=>dipilih.has(i.id));if(!l.length)return;
+  if(!confirm("Hapus "+l.length+" file dari brankas? Tindakan ini tidak bisa dibatalkan."))return;
+  for(const it of l)await hapusItem(it);
+  dipilih.clear();pilihMode=false;render();toast(l.length+" file dihapus");
+};
+
+/* ================== Tambah file ================== */
+$("berkas").onchange=e=>{const f=Array.from(e.target.files);e.target.value="";prosesFile(f)};
+let antre=Promise.resolve();
+function prosesFile(files){files.forEach(f=>{antre=antre.then(()=>unggahSatu(f))})}
+async function unggahSatu(file){
+  if(!KEY)return;
+  const row=document.createElement("div");row.className="up";
+  row.innerHTML='<div>🔒 <span class="s">Mengenkripsi</span> <b>'+aman(file.name)+'</b></div><div class="p"><div></div></div>';
+  $("unggah").appendChild(row);const bar=row.querySelector(".p div"),st=row.querySelector(".s");
+  try{
+    if(file.size>MAKS_FILE)throw new Error("terlalu besar (maksimal 2 GB per file)");
+    if(file.size>PERINGATAN_BESAR&&!confirm(file.name+" berukuran "+ukuran(file.size)+". File besar bisa lambat atau gagal di HP. Lanjutkan?"))throw new Error("dibatalkan");
+    await tambahFile(file,p=>{bar.style.width=p+"%"});
+    bar.style.width="100%";st.innerText="Tersimpan:";
+    setTimeout(()=>row.remove(),1800);render();
+  }catch(e){
+    row.classList.add("gagal");st.innerText="Gagal ("+(e&&e.name==="QuotaExceededError"?"penyimpanan penuh":(e&&e.message)||"kesalahan")+"):";
+    setTimeout(()=>row.remove(),6000);
+  }
+}
+async function hapusChunks(id,n){for(let i=0;i<n;i++){try{await dbDel("chunks",id+":"+i)}catch(e){}}}
+async function tambahFile(file,lapor){
+  const id=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(16).slice(2);
+  const n=Math.max(1,Math.ceil(file.size/CHUNK));
+  try{
+    for(let i=0;i<n;i++){
+      const buf=await file.slice(i*CHUNK,(i+1)*CHUNK).arrayBuffer();
+      const e=await enkripBuf(buf);
+      await dbPut("chunks",{k:id+":"+i,iv:e.iv,ct:e.ct});
+      lapor((i+1)/n*90);
+    }
+    const jenis=file.type.startsWith("image/")?"foto":file.type.startsWith("video/")?"video":"lain";
+    const th=jenis==="lain"?null:await buatThumb(file,jenis);
+    const meta={nama:file.name,tipe:file.type||"application/octet-stream",ukuran:file.size,tgl:Date.now(),jenis:jenis,n:n,durasi:th?th.durasi:0};
+    const m=await enkripBuf(enc.encode(JSON.stringify(meta)));
+    const rec={id:id,iv:m.iv,ct:m.ct,thumb:null,thumbIv:null};
+    if(th&&th.blob){const t=await enkripBuf(await th.blob.arrayBuffer());rec.thumb=t.ct;rec.thumbIv=t.iv}
+    await dbPut("items",rec);
+    ITEMS.unshift(Object.assign({id:id,thumb:rec.thumb,thumbIv:rec.thumbIv},meta));
+  }catch(e){await hapusChunks(id,n);throw e}
+}
+function buatThumb(file,jenis){
+  return new Promise(res=>{
+    const url=URL.createObjectURL(file),MAX=360;let selesaiFlag=false;
+    const selesai=(blob,d)=>{if(selesaiFlag)return;selesaiFlag=true;URL.revokeObjectURL(url);res({blob:blob,durasi:d||0})};
+    const gambar=(el,w,h,d)=>{
+      try{const s=Math.min(1,MAX/Math.max(w,h)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*s));c.height=Math.max(1,Math.round(h*s));
+        c.getContext("2d").drawImage(el,0,0,c.width,c.height);c.toBlob(b=>selesai(b,d),"image/jpeg",0.72)}catch(e){selesai(null,0)}
+    };
+    setTimeout(()=>selesai(null,0),10000);
+    if(jenis==="foto"){const im=new Image();im.onload=()=>gambar(im,im.naturalWidth,im.naturalHeight,0);im.onerror=()=>selesai(null,0);im.src=url}
+    else{
+      const v=document.createElement("video");v.muted=true;v.preload="metadata";v.playsInline=true;let ok=false;
+      v.onloadedmetadata=()=>{v.currentTime=Math.min(1,(v.duration||2)*0.1)};
+      v.onseeked=()=>{if(ok)return;ok=true;gambar(v,v.videoWidth||320,v.videoHeight||180,v.duration||0)};
+      v.onerror=()=>selesai(null,0);v.src=url;
+    }
+  });
+}
+// seret & lepas
+let dragN=0;
+addEventListener("dragenter",e=>{if(!KEY||!e.dataTransfer||!Array.from(e.dataTransfer.types||[]).includes("Files"))return;e.preventDefault();dragN++;$("tarik").classList.remove("sembunyi")});
+addEventListener("dragover",e=>{if(KEY)e.preventDefault()});
+addEventListener("dragleave",()=>{dragN=Math.max(0,dragN-1);if(!dragN)$("tarik").classList.add("sembunyi")});
+addEventListener("drop",e=>{e.preventDefault();dragN=0;$("tarik").classList.add("sembunyi");if(KEY&&e.dataTransfer&&e.dataTransfer.files.length)prosesFile(Array.from(e.dataTransfer.files))});
+
+/* ================== Buka, unduh, hapus ================== */
+async function dekripFile(it,lapor){
+  const bagian=[];
+  for(let i=0;i<it.n;i++){
+    const c=await dbGet("chunks",it.id+":"+i);if(!c)throw new Error("bagian file hilang");
+    bagian.push(await dekripBuf(c.iv,c.ct));if(lapor)lapor((i+1)/it.n);
+  }
+  return new Blob(bagian,{type:it.tipe});
+}
+async function unduh(it){
+  try{
+    toast("Mendekripsi "+it.nama+"…");
+    const u=URL.createObjectURL(await dekripFile(it)),a=document.createElement("a");
+    a.href=u;a.download=it.nama;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),60000);
+  }catch(e){toast("Gagal membuka file: "+(e.message||e))}
+}
+async function hapusItem(it){
+  await hapusChunks(it.id,it.n);await dbDel("items",it.id);
+  ITEMS=ITEMS.filter(x=>x.id!==it.id);
+  const u=THUMBS.get(it.id);if(u){URL.revokeObjectURL(u);THUMBS.delete(it.id)}
+}
+let vIdx=-1,vUrl=null,vToken=0;
+function bersihViewer(){if(vUrl){URL.revokeObjectURL(vUrl);vUrl=null}$("vIsi").innerHTML=""}
+async function bukaViewer(i){
+  if(i<0||i>=TAMPIL.length)return;
+  vIdx=i;const it=TAMPIL[i],tk=++vToken;
+  $("viewer").classList.remove("sembunyi");bersihViewer();
+  $("vNama").innerText=it.nama;$("vInfo").innerText=ukuran(it.ukuran)+" · ditambahkan "+waktu(it.tgl)+" · "+(i+1)+"/"+TAMPIL.length;
+  $("vKiri").style.visibility=i>0?"visible":"hidden";$("vKanan").style.visibility=i<TAMPIL.length-1?"visible":"hidden";
+  $("vIsi").innerHTML='<div><div class="spin"></div><span class="kecil" id="vPct">Mendekripsi…</span></div>';
+  try{
+    const blob=await dekripFile(it,p=>{if(tk===vToken){const e=$("vPct");if(e)e.innerText="Mendekripsi… "+Math.round(p*100)+"%"}});
+    if(tk!==vToken)return;
+    vUrl=URL.createObjectURL(blob);const box=$("vIsi");
+    if(it.tipe.startsWith("image/")){
+      box.innerHTML='<img alt="">';const im=box.firstChild;
+      im.onerror=()=>{box.innerHTML='<div><div style="font-size:48px">🖼</div><p class="kecil" style="margin:8px 0 14px">Format ini tidak bisa ditampilkan di browser.<br>Gunakan tombol Unduh untuk membukanya.</p></div>'};
+      im.src=vUrl;
+    }else if(it.tipe.startsWith("video/")){
+      box.innerHTML='<video controls playsinline></video>';const v=box.firstChild;
+      v.onerror=()=>{box.innerHTML='<div><div style="font-size:48px">🎬</div><p class="kecil" style="margin:8px 0 14px">Format video ini tidak bisa diputar di browser.<br>Gunakan tombol Unduh untuk membukanya.</p></div>'};
+      v.src=vUrl;
+    }else if(it.tipe.startsWith("audio/")){
+      box.innerHTML='<div><div style="font-size:48px;margin-bottom:12px">🎵</div><audio controls></audio></div>';box.querySelector("audio").src=vUrl;
+    }else{
+      box.innerHTML='<div><div style="font-size:56px">📄</div><p style="margin:8px 0">'+aman(it.nama)+'</p><p class="kecil">Pratinjau tidak tersedia untuk jenis file ini.<br>Gunakan tombol Unduh untuk membukanya.</p></div>';
+    }
+  }catch(e){if(tk===vToken)$("vIsi").innerHTML='<div class="err">Gagal membuka file: '+aman(e.message||e)+"</div>"}
+}
+function tutupViewer(){vToken++;vIdx=-1;$("viewer").classList.add("sembunyi");bersihViewer()}
+function geserV(d){if(vIdx>=0)bukaViewer(vIdx+d)}
+$("vTutup").onclick=tutupViewer;$("vKiri").onclick=()=>geserV(-1);$("vKanan").onclick=()=>geserV(1);
+$("vUnduh").onclick=()=>{if(vIdx>=0)unduh(TAMPIL[vIdx])};
+$("vHapus").onclick=async()=>{
+  if(vIdx<0)return;const it=TAMPIL[vIdx];
+  if(!confirm('Hapus "'+it.nama+'" dari brankas? Tindakan ini tidak bisa dibatalkan.'))return;
+  const next=vIdx;tutupViewer();await hapusItem(it);render();toast("File dihapus");
+  if(TAMPIL.length&&false)bukaViewer(Math.min(next,TAMPIL.length-1));
+};
+addEventListener("keydown",e=>{
+  if(!KEY||vIdx<0)return;
+  if(e.key==="Escape")tutupViewer();else if(e.key==="ArrowLeft")geserV(-1);else if(e.key==="ArrowRight")geserV(1);
+});
+
+/* ================== Kode pemulihan ================== */
+function tampilKode(kode){
+  $("kodeTeks").innerText=kode;$("kodeOk").checked=false;$("kodeSelesai").disabled=true;
+  const d=$("dlgKode");if(!d.open)d.showModal();
+}
+$("dlgKode").addEventListener("cancel",e=>e.preventDefault());
+$("kodeOk").onchange=e=>$("kodeSelesai").disabled=!e.target.checked;
+$("kodeSelesai").onclick=()=>{$("dlgKode").close();$("kodeTeks").innerText=""};
+$("kodeSalin").onclick=async()=>{try{await navigator.clipboard.writeText($("kodeTeks").innerText);toast("Kode disalin")}catch(e){toast("Tidak bisa menyalin. Catat kodenya secara manual.")}};
+
+/* ================== Pengaturan ================== */
+function pref(){try{return Object.assign({menit:5,sembunyi:false},JSON.parse(localStorage.getItem("brankasPref")||"{}"))}catch(e){return {menit:5,sembunyi:false}}}
+function simpanPref(p){try{localStorage.setItem("brankasPref",JSON.stringify(p))}catch(e){}}
+async function bukaSet(){
+  const p=pref();$("sMenit").value=String(p.menit);$("sSembunyi").checked=p.sembunyi;
+  ["sLama","sBaru","sBaru2","sKodePw"].forEach(i=>$(i).value="");$("sErr1").innerText="";$("sErr2").innerText="";
+  let info=ITEMS.length+" file · "+ukuran(ITEMS.reduce((a,i)=>a+i.ukuran,0))+".";
+  try{const e=await navigator.storage.estimate();info+=" Penyimpanan browser: "+ukuran(e.usage)+" terpakai dari ±"+ukuran(e.quota)+" (perkiraan)."}catch(x){}
+  $("sInfo").innerText=info;$("dlgSet").showModal();
+}
+$("bSet").onclick=bukaSet;$("sTutup").onclick=()=>$("dlgSet").close();
+$("sMenit").onchange=()=>{const p=pref();p.menit=+$("sMenit").value;simpanPref(p);aturKunciOtomatis();toast("Pengaturan disimpan")};
+$("sSembunyi").onchange=()=>{const p=pref();p.sembunyi=$("sSembunyi").checked;simpanPref(p);toast("Pengaturan disimpan")};
+$("sGanti").onclick=async()=>{
+  const e=$("sErr1");e.innerText="";const lama=$("sLama").value,baru=$("sBaru").value;
+  if(baru.length<8){e.innerText="Password baru minimal 8 karakter.";return}
+  if(baru!==$("sBaru2").value){e.innerText="Konfirmasi password baru tidak sama.";return}
+  $("sGanti").disabled=true;
+  try{
+    const cfg=await dbGet("meta","cfg");let raw;
+    try{raw=await bukaBungkus(cfg.wP,await turunkan(lama,ub64(cfg.salt),cfg.iterP))}catch(x){e.innerText="Password saat ini salah.";return}
+    const salt=crypto.getRandomValues(new Uint8Array(16));
+    cfg.salt=b64(salt);cfg.iterP=ITER;cfg.wP=await bungkus(raw,await turunkan(baru,salt,ITER));
+    await dbPut("meta",cfg);["sLama","sBaru","sBaru2"].forEach(i=>$(i).value="");toast("Password berhasil diganti ✓");
+  }finally{$("sGanti").disabled=false}
+};
+$("sKodeBaru").onclick=async()=>{
+  const e=$("sErr2");e.innerText="";$("sKodeBaru").disabled=true;
+  try{
+    const cfg=await dbGet("meta","cfg");let raw;
+    try{raw=await bukaBungkus(cfg.wP,await turunkan($("sKodePw").value,ub64(cfg.salt),cfg.iterP))}catch(x){e.innerText="Password saat ini salah.";return}
+    const saltR=crypto.getRandomValues(new Uint8Array(16)),kode=buatKode();
+    cfg.saltR=b64(saltR);cfg.iterR=ITER;cfg.wR=await bungkus(raw,await turunkan(normKode(kode),saltR,ITER));
+    await dbPut("meta",cfg);$("sKodePw").value="";$("dlgSet").close();tampilKode(kode);
+  }finally{$("sKodeBaru").disabled=false}
+};
+$("sHapusSemua").onclick=()=>hapusBrankasUI(false);
+
+async function hapusBrankasUI(dariKunci){
+  const t=prompt(dariKunci?"Ini MENGHAPUS SELURUH isi brankas dan tidak bisa dibatalkan. Gunakan hanya jika password dan kode pemulihan sama-sama hilang.\n\nKetik HAPUS untuk melanjutkan:":"Semua file di brankas akan dihapus permanen.\n\nKetik HAPUS untuk melanjutkan:");
+  if(t===null)return;if(t.trim()!=="HAPUS"){toast("Dibatalkan: kata konfirmasi tidak cocok");return}
+  try{
+    tutupViewer();$("dlgSet").close();
+    db.close();
+    await new Promise((res,rej)=>{const r=indexedDB.deleteDatabase(NAMA_DB);r.onsuccess=()=>res();r.onerror=()=>rej(r.error);r.onblocked=()=>rej(new Error("Tutup tab lain yang membuka brankas ini lalu coba lagi"))});
+    db=await bukaDB();resetGagal();
+    KEY=null;ITEMS=[];dipilih.clear();pilihMode=false;THUMBS.forEach(u=>URL.revokeObjectURL(u));THUMBS.clear();
+    clearTimeout(timer);tampilKunci("setup");toast("Brankas dihapus. Buat brankas baru.");
+  }catch(e){try{db=await bukaDB()}catch(x){}toast("Gagal menghapus: "+(e.message||e))}
+}
+
+/* ================== Kunci (manual & otomatis) ================== */
+let timer=null;
+function kunci(alasan){
+  KEY=null;ITEMS=[];TAMPIL=[];dipilih.clear();pilihMode=false;clearTimeout(timer);
+  THUMBS.forEach(u=>URL.revokeObjectURL(u));THUMBS.clear();
+  tutupViewer();["dlgSet","dlgKode"].forEach(i=>{const d=$(i);if(d.open)d.close()});
+  $("grid").innerHTML="";$("unggah").innerHTML="";$("barPilih").classList.add("sembunyi");$("cari").value="";
+  tampilKunci("login");if(alasan)toast(alasan);
+}
+$("bKunci").onclick=()=>kunci("Brankas terkunci 🔒");
+function aturKunciOtomatis(){
+  clearTimeout(timer);const m=pref().menit;
+  if(KEY&&m>0)timer=setTimeout(()=>kunci("Terkunci otomatis karena tidak aktif"),m*60000);
+}
+["pointerdown","keydown","touchstart","scroll"].forEach(ev=>addEventListener(ev,()=>{if(KEY)aturKunciOtomatis()},{passive:true}));
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&KEY&&pref().sembunyi)kunci("Terkunci otomatis")});
+
+/* ================== Mulai ================== */
+(async function mulai(){
+  if(!window.indexedDB){$("kSub").innerText="Browser ini tidak mendukung penyimpanan lokal (IndexedDB). Coba keluar dari mode privat atau pakai browser lain.";$("kTombol").disabled=true;return}
+  if(!(window.crypto&&crypto.subtle)){$("kSub").innerText="Enkripsi membutuhkan koneksi aman (https). Buka halaman ini lewat alamat https.";$("kTombol").disabled=true;return}
+  try{db=await bukaDB();const cfg=await dbGet("meta","cfg");tampilKunci(cfg?"login":"setup")}
+  catch(e){$("kSub").innerText="Penyimpanan tidak bisa dibuka: "+(e.message||e);$("kTombol").disabled=true}
+})();
+</script>
+</body>
+</html>
