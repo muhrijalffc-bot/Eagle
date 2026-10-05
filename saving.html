@@ -78,6 +78,7 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 .seg button.aktif{background:var(--utama);border-color:var(--utama);color:#fff;font-weight:600}
 .baris{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 .err{color:var(--merah);font-size:13px;min-height:16px;margin-top:10px}
+#btnCloud.ok{border-color:var(--hijau);color:var(--hijau)}#btnCloud.gagal{border-color:var(--merah);color:var(--merah)}
 #toast{position:fixed;bottom:24px;right:24px;background:var(--sisi);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:50}
 #toast.tampil{opacity:1;transform:none}
 @media(max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:12px}nav{display:flex;gap:6px;overflow-x:auto}nav a{white-space:nowrap}.logo{padding-bottom:10px}.dua{grid-template-columns:1fr}.isi{padding:0 16px 40px}.dompet{grid-template-columns:40px 1fr 36px}.dompet input{grid-column:1/3}}
@@ -99,6 +100,7 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
     <div class="topbar">
       <div><h1 id="judul">Dashboard</h1><p id="sub"></p></div>
       <div class="aksi">
+        <button class="btn" id="btnCloud" onclick="bukaCloud()">☁ Masuk</button>
         <button class="btn" onclick="ekspor()">⬇ Ekspor CSV</button>
         <button class="btn" onclick="tema()" title="Ganti tema">🌓</button>
         <button class="btn utama" onclick="bukaT('keluar')">+ Catat transaksi</button>
@@ -200,6 +202,26 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
   <div class="err" id="errG"></div>
   <div class="baris"><button class="btn" onclick="document.getElementById('dlgTarget').close()">Batal</button><button class="btn utama" onclick="simpanTarget()">Simpan</button></div>
 </dialog>
+<dialog id="dlgCloud">
+  <h2>☁ Sinkronisasi antar perangkat</h2>
+  <div id="cloudOut">
+    <p class="delta">Masuk dengan email agar data Tabunganku tersambung di HP dan laptop. Perangkat baru cukup masuk dengan akun yang sama. Tanpa masuk, data tetap tersimpan hanya di browser ini.</p>
+    <label>Email</label><input class="in" type="email" id="cEmail" autocomplete="email">
+    <label>Password (minimal 6 karakter)</label><input class="in" type="password" id="cPass" autocomplete="current-password">
+    <div class="err" id="errC"></div>
+    <div class="baris" style="flex-wrap:wrap">
+      <button class="btn" onclick="cloudLupa()">Lupa password</button>
+      <button class="btn" onclick="cloudMasuk('daftar')">Daftar baru</button>
+      <button class="btn utama" onclick="cloudMasuk('masuk')">Masuk</button>
+    </div>
+  </div>
+  <div id="cloudIn" class="sembunyi">
+    <p>Masuk sebagai <b id="cAkun"></b></p>
+    <p class="delta" id="cStatus"></p>
+    <p class="delta">Perubahan di perangkat mana pun otomatis muncul di perangkat lain yang sedang terbuka.</p>
+    <div class="baris"><button class="btn" style="color:var(--merah)" onclick="cloudKeluar()">Keluar</button><button class="btn utama" onclick="document.getElementById('dlgCloud').close()">Tutup</button></div>
+  </div>
+</dialog>
 <div id="toast"></div>
 
 <script>
@@ -215,7 +237,7 @@ const pad=n=>String(n).padStart(2,"0");
 function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function salin(o){return JSON.parse(JSON.stringify(o))}
 function muat(){try{let x=localStorage.getItem(KUNCI);if(x)return Object.assign(salin(BAWAAN),JSON.parse(x))}catch(e){}return salin(BAWAAN)}
-function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}}
+function simpan(){S._ubah=Date.now();try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}if(window.dorongCloud)window.dorongCloud()}
 let S=muat(),tampil="dashboard",jenisAktif="keluar",targetAwal="";
 
 function rp(n){return "Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID")}
@@ -430,7 +452,145 @@ function tema(){
 }
 try{document.documentElement.dataset.tema=localStorage.getItem("temaTabungan")||""}catch(e){}
 
+// ---------- Penghubung ke layanan cloud (diisi oleh skrip modul di bawah) ----------
+function gabung(a,b){
+  let baru=(a._ubah||0)>=(b._ubah||0)?a:b,lama=baru===a?b:a,r=salin(baru);
+  ["dompet","target","trx"].forEach(k=>{let ada=new Set((r[k]||[]).map(x=>x.id));(lama[k]||[]).forEach(x=>{if(!ada.has(x.id))r[k].push(x)})});
+  ["katMasuk","katKeluar"].forEach(k=>{(lama[k]||[]).forEach(x=>{if(!r[k].includes(x))r[k].push(x)})});
+  r.siap=!!(a.siap||b.siap);
+  return r;
+}
+window.ambilS=()=>S;
+window.terapkanCloud=function(c){
+  S=Object.assign(salin(BAWAAN),c);
+  try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}
+  render();
+};
+window.gabungS=function(c){S=gabung(S,c);simpan();render()};
+window.cloudStatus=function(st,pesan){
+  let b=$("btnCloud"),t={keluar:"☁ Masuk",proses:"☁ Menyinkronkan…",ok:"☁ Tersinkron ✓",offline:"☁ Offline",gagal:"☁ Gagal"}[st]||"☁";
+  b.innerText=t;b.className="btn"+(st==="ok"?" ok":st==="gagal"?" gagal":"");
+  window.statusCloud=st;
+  $("cStatus").innerText=pesan||({ok:"Semua perubahan sudah tersimpan di cloud.",proses:"Mengirim perubahan…",offline:"Sedang offline. Perubahan akan dikirim saat tersambung.",keluar:""})[st]||"";
+};
+function bukaCloud(){$("errC").innerText="";$("dlgCloud").showModal()}
+function belumTermuat(){$("errC").innerText="Layanan cloud belum termuat. Periksa internet lalu muat ulang halaman."}
+window.cloudMasuk=belumTermuat;window.cloudLupa=belumTermuat;window.cloudKeluar=belumTermuat;
+
 ganti(S.siap?"dashboard":"saldo");
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyCCD80eM6w_Lsv6adAsy7jIprV2lBlBNwQ",
+  authDomain:"benevolent-saber.firebaseapp.com",
+  projectId:"benevolent-saber",
+  storageBucket:"benevolent-saber.firebasestorage.app",
+  messagingSenderId:"618752593746",
+  appId:"1:618752593746:web:2cc9a88c34bd45069f348b"
+};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+const $=id=>document.getElementById(id);
+const FLAG="tabunganTerhubung";
+let user=null,lepas=null,timer=null;
+
+const PESAN={
+  "auth/invalid-credential":"Email atau password salah.",
+  "auth/wrong-password":"Email atau password salah.",
+  "auth/user-not-found":"Email atau password salah.",
+  "auth/email-already-in-use":"Email ini sudah terdaftar. Klik Masuk.",
+  "auth/weak-password":"Password terlalu pendek (minimal 6 karakter).",
+  "auth/invalid-email":"Format email tidak valid.",
+  "auth/missing-password":"Isi password.",
+  "auth/network-request-failed":"Tidak ada koneksi internet.",
+  "auth/too-many-requests":"Terlalu banyak percobaan. Coba lagi beberapa menit lagi.",
+  "auth/operation-not-allowed":"Login Email/Password belum diaktifkan di Firebase (Authentication → Sign-in method).",
+  "auth/unauthorized-domain":"Domain situs ini belum ditambahkan di Firebase (Authentication → Settings → Authorized domains).",
+  "permission-denied":"Aturan keamanan Firestore belum dipasang atau menolak akses."
+};
+const pesan=e=>PESAN[e&&e.code]||("Terjadi kesalahan ("+((e&&e.code)||"tidak diketahui")+").");
+
+const ref=()=>doc(db,"users",user.uid,"data","tabunganku");
+
+async function dorong(){
+  try{
+    const S=window.ambilS();
+    await setDoc(ref(),{isi:JSON.stringify(S),ubah:S._ubah||Date.now()});
+  }catch(e){window.cloudStatus("gagal",pesan(e))}
+}
+window.dorongCloud=function(){
+  if(!user)return;
+  window.cloudStatus("proses");
+  clearTimeout(timer);timer=setTimeout(dorong,600);
+};
+
+function pantau(){
+  lepas=onSnapshot(ref(),function(snap){
+    if(!user)return;
+    if(snap.metadata.hasPendingWrites)return;
+    const offline=snap.metadata.fromCache;
+    if(!snap.exists()){
+      if(offline){window.cloudStatus("offline");return}
+      localStorage.setItem(FLAG,user.uid);dorong();return;
+    }
+    let c;try{c=JSON.parse(snap.data().isi)}catch(e){window.cloudStatus("gagal","Data di cloud rusak.");return}
+    const lokal=window.ambilS(),terhubung=localStorage.getItem(FLAG)===user.uid;
+    if(!terhubung){
+      // Pertama kali perangkat ini tersambung: gabungkan data lokal dan cloud
+      localStorage.setItem(FLAG,user.uid);window.gabungS(c);return;
+    }
+    const a=c._ubah||0,b=lokal._ubah||0;
+    if(a>b){window.terapkanCloud(c)}
+    else if(a<b){window.dorongCloud();return}
+    window.cloudStatus(offline?"offline":"ok");
+  },function(e){window.cloudStatus("gagal",pesan(e))});
+}
+
+onAuthStateChanged(auth,function(u){
+  if(lepas){lepas();lepas=null}
+  user=u;
+  if(u){
+    $("cloudOut").classList.add("sembunyi");$("cloudIn").classList.remove("sembunyi");
+    $("cAkun").innerText=u.email;
+    window.cloudStatus("proses");
+    pantau();
+  }else{
+    $("cloudOut").classList.remove("sembunyi");$("cloudIn").classList.add("sembunyi");
+    window.cloudStatus("keluar");
+  }
+});
+
+window.cloudMasuk=async function(mode){
+  const email=$("cEmail").value.trim(),pass=$("cPass").value;
+  $("errC").innerText="";
+  if(!email||!pass){$("errC").innerText="Isi email dan password.";return}
+  try{
+    if(mode==="daftar")await createUserWithEmailAndPassword(auth,email,pass);
+    else await signInWithEmailAndPassword(auth,email,pass);
+    $("cPass").value="";
+  }catch(e){$("errC").innerText=pesan(e)}
+};
+window.cloudLupa=async function(){
+  const email=$("cEmail").value.trim();
+  if(!email){$("errC").innerText="Isi email dulu, lalu klik Lupa password.";return}
+  try{await sendPasswordResetEmail(auth,email);$("errC").innerText="Tautan reset dikirim ke email (cek juga folder spam)."}
+  catch(e){$("errC").innerText=pesan(e)}
+};
+window.cloudKeluar=async function(){
+  const belum=window.statusCloud!=="ok"?"\n\nPERHATIAN: masih ada perubahan yang belum terkirim ke cloud dan akan hilang.":"";
+  if(!confirm("Keluar? Data di perangkat ini dihapus agar tidak tercampur dengan akun lain. Data tetap aman di cloud dan muncul lagi saat kamu masuk."+belum))return;
+  try{
+    clearTimeout(timer);
+    await signOut(auth);
+    localStorage.removeItem("tabunganku");localStorage.removeItem(FLAG);
+    location.reload();
+  }catch(e){$("errC").innerText=pesan(e)}
+};
 </script>
 </body>
 </html>
