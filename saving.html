@@ -471,7 +471,7 @@ window.cloudStatus=function(st,pesan){
   let b=$("btnCloud"),t={keluar:"☁ Masuk",proses:"☁ Menyinkronkan…",ok:"☁ Tersinkron ✓",offline:"☁ Offline",gagal:"☁ Gagal"}[st]||"☁";
   b.innerText=t;b.className="btn"+(st==="ok"?" ok":st==="gagal"?" gagal":"");
   window.statusCloud=st;
-  $("cStatus").innerText=pesan||({ok:"Semua perubahan sudah tersimpan di cloud.",proses:"Mengirim perubahan…",offline:"Sedang offline. Perubahan akan dikirim saat tersambung.",keluar:""})[st]||"";
+  $("cStatus").innerText=pesan||({ok:"Semua perubahan sudah tersimpan di cloud.",proses:"Mengirim perubahan…",offline:"Belum bisa menghubungi database Firestore. Pastikan database sudah dibuat dan Rules sudah di-Publish, atau coba ganti jaringan. Perubahan disimpan di perangkat dan dikirim saat tersambung.",keluar:""})[st]||"";
 };
 function bukaCloud(){$("errC").innerText="";$("dlgCloud").showModal()}
 function belumTermuat(){$("errC").innerText="Layanan cloud belum termuat. Periksa internet lalu muat ulang halaman."}
@@ -494,7 +494,7 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
-const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()}),experimentalAutoDetectLongPolling:true});
 const $=id=>document.getElementById(id);
 const FLAG="tabunganTerhubung";
 let user=null,lepas=null,timer=null;
@@ -530,7 +530,7 @@ window.dorongCloud=function(){
 };
 
 function pantau(){
-  lepas=onSnapshot(ref(),function(snap){
+  lepas=onSnapshot(ref(),{includeMetadataChanges:true},function(snap){
     if(!user)return;
     if(snap.metadata.hasPendingWrites)return;
     const offline=snap.metadata.fromCache;
