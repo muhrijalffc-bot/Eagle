@@ -233,7 +233,7 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 const KUNCI="tabunganku";
 const WARNA=["#0d9488","#f43f5e","#f59e0b","#6366f1","#06b6d4","#8b5cf6","#94a3b8"];
 const BAWAAN={siap:false,batasHarian:0,
-  dompet:[{id:1,nama:"Tunai",saldoAwal:0,ikon:"💵"}],target:[],trx:[],
+  dompet:[{id:1,nama:"Tunai",saldoAwal:0,ikon:"💵"}],target:[],trx:[],hapus:{},
   katMasuk:["Gaji","Uang saku","Bonus","Lainnya"],
   katKeluar:["Makan","Transport","Belanja","Tagihan","Hiburan","Kesehatan","Lainnya"]};
 const IKON={masuk:"💰",keluar:"💸",tabung:"🐷"};
@@ -241,6 +241,7 @@ const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");
 function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function salin(o){return JSON.parse(JSON.stringify(o))}
+function tandaHapus(id){if(!S.hapus)S.hapus={};S.hapus[id]=Date.now()}
 function muat(){try{let x=localStorage.getItem(KUNCI);if(x)return Object.assign(salin(BAWAAN),JSON.parse(x))}catch(e){}return salin(BAWAAN)}
 function simpan(){S._ubah=Date.now();try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}if(window.dorongCloud)window.dorongCloud()}
 let S=muat(),tampil="dashboard",jenisAktif="keluar",targetAwal="";
@@ -372,7 +373,7 @@ function hapusTarget(id){
   let n=S.trx.filter(t=>t.targetId===id).length;
   if(!confirm(n>0?"Target ini punya "+n+" setoran. Setoran dipindah ke Tabungan umum. Lanjut hapus?":"Hapus target ini?"))return;
   S.trx.forEach(t=>{if(t.targetId===id)t.targetId=""});
-  S.target=S.target.filter(g=>g.id!==id);simpan();render();toast("Target dihapus");
+  S.target=S.target.filter(g=>g.id!==id);tandaHapus(id);simpan();render();toast("Target dihapus");
 }
 
 // ---------- Saldo awal ----------
@@ -399,13 +400,13 @@ function hapusDompet(id){
   if(S.dompet.length<=1){toast("Minimal harus ada 1 dompet");return}
   if(S.trx.some(t=>t.dompetId===id)){toast("Dompet masih dipakai transaksi");return}
   if(!confirm("Hapus dompet ini?"))return;
-  S.dompet=S.dompet.filter(d=>d.id!==id);simpan();render();
+  S.dompet=S.dompet.filter(d=>d.id!==id);tandaHapus(id);simpan();render();
 }
 function ubahBatas(v){v=Number(v);S.batasHarian=v>0?v:0;simpan();toast("Batas harian disimpan ✓")}
 function mulaiPakai(){S.siap=true;simpan();ganti("dashboard");toast("Selamat menabung! 🐷")}
 function resetSemua(){
   if(prompt("Ketik HAPUS untuk menghapus semua data:")!=="HAPUS")return;
-  S=salin(BAWAAN);simpan();ganti("saldo");toast("Semua data dihapus");
+  let lama=S;S=salin(BAWAAN);S.hapus=Object.assign({},lama.hapus);["dompet","target","trx"].forEach(k=>lama[k].forEach(x=>{S.hapus[x.id]=Date.now()}));S.dompet[0].id=Date.now();simpan();ganti("saldo");toast("Semua data dihapus");
 }
 
 // ---------- Form transaksi ----------
@@ -438,7 +439,7 @@ function simpanT(){
 }
 function hapusT(id){
   if(!confirm("Hapus transaksi ini?"))return;
-  S.trx=S.trx.filter(t=>t.id!==id);simpan();render();toast("Transaksi dihapus");
+  S.trx=S.trx.filter(t=>t.id!==id);tandaHapus(id);simpan();render();toast("Transaksi dihapus");
 }
 
 // ---------- Ekspor & tema ----------
@@ -461,9 +462,15 @@ try{document.documentElement.dataset.tema=localStorage.getItem("temaTabungan")||
 // ---------- Penghubung ke layanan cloud (diisi oleh skrip modul di bawah) ----------
 function gabung(a,b){
   let baru=(a._ubah||0)>=(b._ubah||0)?a:b,lama=baru===a?b:a,r=salin(baru);
-  ["dompet","target","trx"].forEach(k=>{let ada=new Set((r[k]||[]).map(x=>x.id));(lama[k]||[]).forEach(x=>{if(!ada.has(x.id))r[k].push(x)})});
+  let h=Object.assign({},a.hapus||{},b.hapus||{});
+  ["dompet","target","trx"].forEach(k=>{
+    let ada=new Set((r[k]||[]).map(x=>x.id));
+    (lama[k]||[]).forEach(x=>{if(!ada.has(x.id)&&!h[x.id])r[k].push(salin(x))});
+    r[k]=r[k].filter(x=>!h[x.id]).sort((p,q)=>p.id-q.id);
+  });
   ["katMasuk","katKeluar"].forEach(k=>{(lama[k]||[]).forEach(x=>{if(!r[k].includes(x))r[k].push(x)})});
-  r.siap=!!(a.siap||b.siap);
+  if(!r.dompet.length)r.dompet=[{id:1,nama:"Tunai",saldoAwal:0,ikon:"💵"}];
+  r.hapus=h;r.siap=!!(a.siap||b.siap);r._ubah=Math.max(a._ubah||0,b._ubah||0);
   return r;
 }
 window.ambilS=()=>S;
@@ -472,7 +479,20 @@ window.terapkanCloud=function(c){
   try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}
   render();
 };
-window.gabungS=function(c){S=gabung(S,c);simpan();render()};
+window.hitungGabung=c=>gabung(S,c);
+window.pasangS=function(m){S=m;try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}render()};
+window.kanon=function(o){
+  let u=salin(o);delete u._ubah;
+  ["dompet","target","trx"].forEach(k=>{u[k]=(u[k]||[]).slice().sort((p,q)=>p.id-q.id)});
+  ["katMasuk","katKeluar"].forEach(k=>{u[k]=(u[k]||[]).slice().sort()});
+  let h={};Object.keys(u.hapus||{}).sort().forEach(x=>h[x]=1);u.hapus=h;
+  function est(v){
+    if(Array.isArray(v))return "["+v.map(est).join(",")+"]";
+    if(v&&typeof v==="object")return "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+est(v[k])).join(",")+"}";
+    return JSON.stringify(v);
+  }
+  return est(u);
+};
 function ringkas(o){return o?((o.trx||[]).length+" transaksi · "+(o.dompet||[]).length+" dompet · "+(o.target||[]).length+" target"):"kosong"}
 window.perbaruiInfo=function(c){$("cLokal").innerText=ringkas(S);if(c!==undefined)$("cCloud").innerText=c===null?"belum ada data":ringkas(c)};
 window.tandaiBaru=function(){simpan();window.perbaruiInfo()};
@@ -491,7 +511,7 @@ ganti(S.siap?"dashboard":"saldo");
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,setDoc,onSnapshot,runTransaction} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig={
   apiKey:"AIzaSyCCD80eM6w_Lsv6adAsy7jIprV2lBlBNwQ",
@@ -526,11 +546,28 @@ const pesan=e=>PESAN[e&&e.code]||("Terjadi kesalahan ("+((e&&e.code)||"tidak dik
 
 const ref=()=>doc(db,"users",user.uid,"data","tabunganku");
 
-async function dorong(){
+async function dorong(paksa){
   try{
-    const S=window.ambilS();
-    await setDoc(ref(),{isi:JSON.stringify(S),ubah:S._ubah||Date.now()});
-  }catch(e){window.cloudStatus("gagal",pesan(e))}
+    if(paksa){
+      const S0=window.ambilS();
+      await setDoc(ref(),{isi:JSON.stringify(S0),ubah:S0._ubah||Date.now()});
+      return;
+    }
+    // Gabungkan dengan isi cloud di dalam transaksi, supaya tidak menimpa perubahan perangkat lain
+    const m=await runTransaction(db,async function(tx){
+      const snap=await tx.get(ref());
+      const lokal=window.ambilS();
+      let hasil=lokal;
+      if(snap.exists()){
+        try{hasil=window.hitungGabung(JSON.parse(snap.data().isi))}catch(e){hasil=lokal}
+      }
+      tx.set(ref(),{isi:JSON.stringify(hasil),ubah:hasil._ubah||Date.now()});
+      return hasil;
+    });
+    if(window.kanon(m)!==window.kanon(window.ambilS()))window.pasangS(m);
+  }catch(e){
+    window.cloudStatus(e&&e.code==="unavailable"?"offline":"gagal",e&&e.code==="unavailable"?undefined:pesan(e));
+  }
 }
 window.dorongCloud=function(){
   if(!user)return;
@@ -550,14 +587,13 @@ function pantau(){
     }
     let c;try{c=JSON.parse(snap.data().isi)}catch(e){window.cloudStatus("gagal","Data di cloud rusak.");return}
     terakhir=c;window.perbaruiInfo(c);
-    const lokal=window.ambilS(),terhubung=localStorage.getItem(FLAG)===user.uid;
-    if(!terhubung){
-      // Pertama kali perangkat ini tersambung: gabungkan data lokal dan cloud
-      localStorage.setItem(FLAG,user.uid);window.gabungS(c);return;
+    localStorage.setItem(FLAG,user.uid);
+    if(window.kanon(window.ambilS())!==window.kanon(c)){
+      // Ada perbedaan: gabungkan, lalu kirim hasilnya jika cloud belum memuatnya
+      const m=window.hitungGabung(c);
+      window.pasangS(m);
+      if(window.kanon(m)!==window.kanon(c)){window.cloudStatus("proses");dorong();return}
     }
-    const a=c._ubah||0,b=lokal._ubah||0;
-    if(a>b){window.terapkanCloud(c)}
-    else if(a<b){window.dorongCloud();return}
     window.cloudStatus(offline?"offline":"ok");
   },function(e){window.cloudStatus("gagal",pesan(e))});
 }
@@ -590,6 +626,7 @@ window.cloudPaksaKirim=function(){
   if(!user)return;
   if(!confirm("Timpa data di cloud dengan data perangkat ini?"))return;
   window.tandaiBaru();
+  dorong(true);
 };
 window.cloudPaksaAmbil=function(){
   if(!user)return;
