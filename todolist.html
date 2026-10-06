@@ -6,15 +6,23 @@
 <title>Pengingat — To-Do List</title>
 <style>
 :root{--bg:#f2f2f7;--grup:#fff;--teks:#111;--abu:#8e8e93;--garis:#e5e5ea;--aksen:#e8648f;--merah:#ff3b30}
+/* gaya (warna aksen) */
+[data-gaya="baja"]{--aksen:#3b82f6}
+[data-gaya="hutan"]{--aksen:#3f9b63}
+/* mode gelap */
 [data-tema="gelap"]{--bg:#000;--grup:#1c1c1e;--teks:#f2f2f7;--garis:#2c2c2e}
+[data-gaya="baja"][data-tema="gelap"]{--bg:#0b0f17;--grup:#161c28;--garis:#252d3d}
+[data-gaya="hutan"][data-tema="gelap"]{--bg:#0a0f0b;--grup:#151d17;--garis:#243027}
+[data-gaya="baja"]:not([data-tema="gelap"]){--bg:#eef1f6}
+[data-gaya="hutan"]:not([data-tema="gelap"]){--bg:#eef2ee}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--teks);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;font-size:16px}
 .app{max-width:520px;margin:0 auto;padding:16px 16px 110px;min-height:100vh}
 button,input,select,textarea{font:inherit;color:inherit}
 .bar{display:flex;gap:10px;align-items:center;margin-bottom:18px}
 .cari{flex:1;border:none;background:var(--grup);border-radius:12px;padding:11px 14px;outline:none}
-.ibtn{border:none;background:var(--grup);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px}
-/* kotak (tiles) */
+.ibtn{border:none;background:var(--grup);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;position:relative}
+.ibtn .lencana{position:absolute;right:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#34c759;border:2px solid var(--bg)}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tile{border-radius:16px;padding:12px 14px;color:#fff;cursor:pointer;min-height:84px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 8px #00000022;transition:transform .15s}
 .tile:active{transform:scale(.97)}
@@ -22,7 +30,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .tik{width:32px;height:32px;border-radius:50%;background:#ffffffcc;display:grid;place-items:center;font-size:17px}
 .tc{font-size:30px;font-weight:700;line-height:1;text-shadow:0 1px 3px #00000022}
 .tn{font-weight:600;font-size:15px;text-shadow:0 1px 3px #00000022;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* daftar saya */
 .sec{font-size:22px;font-weight:700;margin:26px 4px 10px}
 .grup{background:var(--grup);border-radius:14px;overflow:hidden}
 .row{display:flex;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--garis)}
@@ -32,7 +39,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .row .jm{color:var(--abu)}
 .row .pnh{color:var(--abu);opacity:.6}
 .kosong{text-align:center;color:var(--abu);padding:28px 10px}
-/* detail */
 .dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .back{background:none;border:none;color:var(--aksen);font-size:17px;cursor:pointer;padding:6px 0}
 .more{background:var(--grup);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;color:var(--aksen)}
@@ -51,13 +57,12 @@ button,input,select,textarea{font:inherit;color:inherit}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
 .aksen{background:none;border:none;color:var(--aksen);cursor:pointer;padding:8px 4px;font-size:15px}
 .kecil{color:var(--abu);font-size:13px;text-align:center;margin-top:30px}
-/* dock */
 .dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 40%);display:flex;justify-content:space-between;max-width:520px;margin:0 auto}
 .dock button{border:none;background:none;color:var(--aksen);font-weight:600;font-size:16px;cursor:pointer;padding:10px 4px}
-/* dialog */
-dialog{border:none;border-radius:20px;padding:20px;width:min(440px,94vw);background:var(--grup);color:var(--teks);box-shadow:0 20px 60px #00000066}
+dialog{border:none;border-radius:20px;padding:20px;width:min(440px,94vw);max-height:90vh;background:var(--grup);color:var(--teks);box-shadow:0 20px 60px #00000066}
 dialog::backdrop{background:#0008}
 dialog h2{margin:0 0 12px;font-size:18px}
+dialog h3{margin:18px 0 8px;font-size:14px;color:var(--abu);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 .in{width:100%;border:1px solid var(--garis);background:var(--bg);border-radius:10px;padding:10px;outline:none}
 .in:focus{border-color:var(--aksen)}
@@ -76,8 +81,19 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 .b.utama{background:var(--aksen);color:#fff;font-weight:600}
 .b.bahaya{color:var(--merah)}
 .err{color:var(--merah);font-size:13px;min-height:16px;margin-top:8px}
+.info{color:var(--abu);font-size:13px;margin:6px 0 0;line-height:1.4}
+.ok{color:#34c759}
 .sembunyi{display:none!important}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(10px);background:#000c;color:#fff;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;font-size:14px}
+/* pemilih gaya */
+.gaya{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gaya button{border:2px solid var(--garis);background:var(--bg);border-radius:14px;padding:10px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px}
+.gaya button.pilih{border-color:var(--aksen)}
+.gaya .sw{display:flex;gap:3px}
+.gaya .sw i{width:16px;height:16px;border-radius:50%;display:block}
+.seg{display:flex;background:var(--bg);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:none;background:none;padding:8px;border-radius:8px;cursor:pointer;font-size:14px}
+.seg button.pilih{background:var(--grup);box-shadow:0 1px 3px #0003;font-weight:600}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(10px);background:#000c;color:#fff;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;font-size:14px;z-index:99}
 #toast.tampil{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
@@ -85,7 +101,7 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 <div class="app">
   <div class="bar" id="bar">
     <input class="cari" id="cari" placeholder="🔍 Cari pengingat" oninput="render()">
-    <button class="ibtn" onclick="tema()" title="Ganti tema">🌓</button>
+    <button class="ibtn" onclick="bukaPengaturan()" title="Pengaturan & akun">⚙️<span class="lencana sembunyi" id="lencana"></span></button>
   </div>
   <div id="main"></div>
 </div>
@@ -94,6 +110,20 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
   <button onclick="bukaTugas()">⊕ Pengingat Baru</button>
   <button onclick="bukaDaftar()">Tambah Daftar</button>
 </div>
+
+<!-- Pengaturan: tema + akun -->
+<dialog id="dlgP">
+  <h2>Pengaturan</h2>
+  <h3>Gaya tampilan</h3>
+  <div class="gaya" id="pGaya"></div>
+  <h3>Mode</h3>
+  <div class="seg" id="pMode"></div>
+
+  <h3>Akun &amp; sinkronisasi</h3>
+  <div id="pAkun"></div>
+
+  <div class="baris"><span class="sp"></span><button class="b utama" onclick="document.getElementById('dlgP').close()">Selesai</button></div>
+</dialog>
 
 <dialog id="dlgT">
   <h2 id="tJudulDlg">Pengingat baru</h2>
@@ -136,10 +166,25 @@ dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 <div id="toast"></div>
 
 <script>
+/* =====================================================================
+   PENGATURAN FIREBASE — isi dengan config Web app dari proyek Firebase-mu
+   (Project settings → Your apps → Web app → firebaseConfig).
+   Selama masih "ISI_...", aplikasi tetap jalan tanpa login (data lokal saja).
+   ===================================================================== */
+const FIREBASE_CONFIG={
+  apiKey:"ISI_API_KEY",
+  authDomain:"ISI_PROJECT_ID.firebaseapp.com",
+  projectId:"ISI_PROJECT_ID",
+  appId:"ISI_APP_ID"
+};
+
 const KUNCI="todoku";
-const WARNA={
-  pink:["#f7a8c4","#e8648f"],rose:["#f2b8c6","#d4778f"],peach:["#fbc7ad","#ee9270"],beige:["#d9cab9","#ad9a86"],
-  lavender:["#cfbbf0","#9a80d2"],gray:["#c6c9d1","#8c909b"],mauve:["#d9aac5","#a86a90"],sage:["#c0d9c1","#7ea882"]};
+/* Warna daftar disimpan sebagai nama kunci (pink, rose, ...); nilai hex-nya mengikuti gaya aktif */
+const GAYA={
+  pink:{nama:"Pink",palet:{pink:["#f7a8c4","#e8648f"],rose:["#f2b8c6","#d4778f"],peach:["#fbc7ad","#ee9270"],beige:["#d9cab9","#ad9a86"],lavender:["#cfbbf0","#9a80d2"],gray:["#c6c9d1","#8c909b"],mauve:["#d9aac5","#a86a90"],sage:["#c0d9c1","#7ea882"]}},
+  baja:{nama:"Biru Baja",palet:{pink:["#6fa8f0","#2f6fd0"],rose:["#8195b3","#3e5578"],peach:["#e8aa62","#b9722a"],beige:["#a9b3be","#69747f"],lavender:["#8d93dc","#4f56b8"],gray:["#8f9aa6","#545e6a"],mauve:["#5fb9bd","#2a8186"],sage:["#82b690","#3f7d55"]}},
+  hutan:{nama:"Hutan",palet:{pink:["#7cc79a","#2f8a55"],rose:["#8fa88f","#4a6a4d"],peach:["#d9a35f","#a8691f"],beige:["#c2b49a","#847657"],lavender:["#7fa3b8","#3f6a85"],gray:["#9aa59e","#5c675f"],mauve:["#b88a6a","#85583a"],sage:["#a6c46f","#68842a"]}}
+};
 const EMOJI=["🎀","⭐","📚","🛒","💼","🏠","💃","🧺","☁️","🕯️","🌸","🍓","💻","✈️","🎵","🧹","💡","🌷","🍰","🏃"];
 const SMART=[{id:"hariini",nama:"Hari Ini",ikon:"📅",warna:"pink"},{id:"terjadwal",nama:"Terjadwal",ikon:"🗓️",warna:"rose"},{id:"semua",nama:"Semua",ikon:"📥",warna:"gray"}];
 const HARI=["Min","Sen","Sel","Rab","Kam","Jum","Sab"],BLN=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
@@ -150,10 +195,11 @@ function hariIni(){return iso(new Date())}
 function geser(n){let d=new Date();d.setDate(d.getDate()+n);return iso(d)}
 function aman(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),1800)}
+function W(k){let p=(GAYA[S.gaya]||GAYA.pink).palet;return p[k]||p.pink}
 
 function seed(){
   let h=hariIni(),b=geser(1);
-  return {tema:"",lists:[
+  return {tema:"",gaya:"pink",lists:[
     {id:1,nama:"Kuliah",ikon:"📚",warna:"pink",pin:true},
     {id:2,nama:"Pribadi",ikon:"🎀",warna:"rose",pin:true},
     {id:3,nama:"Belanja",ikon:"🛒",warna:"beige",pin:true},
@@ -170,8 +216,9 @@ function seed(){
     {id:16,listId:5,judul:"Minum air putih",catatan:"",tgl:"",jam:"",selesai:true},
     {id:17,listId:6,judul:"Piknik ke pantai",catatan:"",tgl:"",jam:"",selesai:false}]};
 }
-function muat(){try{let x=localStorage.getItem(KUNCI);if(x)return JSON.parse(x)}catch(e){}return seed()}
-function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}}
+function muat(){try{let x=localStorage.getItem(KUNCI);if(x){let d=JSON.parse(x);if(!d.gaya)d.gaya="pink";return d}}catch(e){}return seed()}
+function simpanLokal(){try{localStorage.setItem(KUNCI,JSON.stringify(S))}catch(e){}}
+function simpan(){S.t=Date.now();simpanLokal();jadwalDorong()}
 let S=muat(),view="home",tampilSelesai=false,editT=null,editL=null,ikonP=EMOJI[0],warnaP="pink";
 
 // ---------- Data ----------
@@ -199,16 +246,20 @@ function labelTgl(t){
   return HARI[d.getDay()]+", "+d.getDate()+" "+BLN[d.getMonth()]+(d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():"");
 }
 
-// ---------- Tampilan ----------
-function tema(){
-  let g=document.documentElement.dataset.tema==="gelap";
-  document.documentElement.dataset.tema=g?"":"gelap";S.tema=g?"":"gelap";simpan();
+// ---------- Tema ----------
+function terapkanTema(){
+  let mode=S.tema;
+  if(mode==="auto"||mode===undefined)mode=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"gelap":"";
+  document.documentElement.dataset.tema=mode;
+  document.documentElement.dataset.gaya=S.gaya||"pink";
 }
+function setGaya(g){S.gaya=g;simpan();terapkanTema();render();gambarPengaturan()}
+function setMode(m){S.tema=m;simpan();terapkanTema();gambarPengaturan()}
 function buka(id){view=id;$("cari").value="";window.scrollTo(0,0);render()}
 function pulang(){view="home";render()}
 
 function tile(l){
-  let w=WARNA[l.warna]||WARNA.pink;
+  let w=W(l.warna);
   return '<div class="tile" style="background:linear-gradient(145deg,'+w[0]+','+w[1]+')" onclick="buka('+(typeof l.id==="number"?l.id:"'"+l.id+"'")+')"><div class="tp"><span class="tik">'+l.ikon+'</span><b class="tc">'+ambil(l.id,false).length+'</b></div><div class="tn">'+aman(l.nama)+"</div></div>";
 }
 function renderHome(){
@@ -217,7 +268,7 @@ function renderHome(){
   h+='<div class="sec">Daftar Saya</div>';
   h+=lain.length===0?'<div class="grup"><div class="kosong">Belum ada daftar lain.<br>Ketuk "Tambah Daftar" di bawah.</div></div>':
     '<div class="grup">'+lain.map(function(l){
-      let w=WARNA[l.warna]||WARNA.pink;
+      let w=W(l.warna);
       return '<div class="row" onclick="buka('+l.id+')"><span class="ik" style="background:'+w[0]+'66">'+l.ikon+'</span><span class="nm">'+aman(l.nama)+'</span><span class="jm">'+ambil(l.id,false).length+'</span><span class="pnh">›</span></div>';
     }).join("")+"</div>";
   h+='<div class="kecil"><button class="aksen" onclick="resetSemua()">Hapus semua data</button></div>';
@@ -228,7 +279,7 @@ function renderCari(q){
   return '<div class="sec" style="margin-top:6px">Hasil pencarian</div>'+(hasil.length===0?'<div class="grup"><div class="kosong">Tidak ada pengingat yang cocok.</div></div>':'<div class="grup">'+hasil.map(t=>barisT(t,true)).join("")+"</div>");
 }
 function barisT(t,tunjukDaftar){
-  let l=daftar(t.listId)||{nama:"-",warna:"pink"},w=WARNA[l.warna]||WARNA.pink,tel=terlambat(t);
+  let l=daftar(t.listId)||{nama:"-",warna:"pink"},w=W(l.warna),tel=terlambat(t);
   let info=[];
   if(tunjukDaftar)info.push('<span class="dot" style="background:'+w[1]+'"></span>'+aman(l.nama));
   if(t.tgl)info.push(labelTgl(t.tgl)+(t.jam?", "+t.jam:""));
@@ -238,7 +289,7 @@ function barisT(t,tunjukDaftar){
 function renderDetail(){
   let smart=SMART.find(s=>s.id===view),l=smart||daftar(view);
   if(!l){view="home";return renderHome()}
-  let w=WARNA[l.warna]||WARNA.pink,aktif=ambil(view,false).sort(urut),selesai=ambil(view,true).sort(urut);
+  let w=W(l.warna),aktif=ambil(view,false).sort(urut),selesai=ambil(view,true).sort(urut);
   let tunjuk=!!smart;
   let h='<div class="dh"><button class="back" onclick="pulang()">‹ Daftar</button>'+(smart?"":'<button class="more" onclick="bukaDaftar('+l.id+')">⋯</button>')+"</div>";
   h+='<div class="jh"><h1 class="jd" style="color:'+w[1]+'">'+aman(l.nama)+'</h1><div class="cnt" style="color:'+w[1]+'">'+aktif.length+"</div></div>";
@@ -301,7 +352,7 @@ function hapusTugas(){
 // ---------- Aksi daftar ----------
 function gambarPilihan(){
   $("lIkon").innerHTML=EMOJI.map(e=>'<button class="'+(e===ikonP?"pilih":"")+'" onclick="pilihIkon(\''+e+'\')">'+e+"</button>").join("");
-  $("lWarna").innerHTML=Object.keys(WARNA).map(k=>'<button class="'+(k===warnaP?"pilih":"")+'" style="background:linear-gradient(145deg,'+WARNA[k][0]+","+WARNA[k][1]+')" onclick="pilihWarna(\''+k+'\')"></button>').join("");
+  $("lWarna").innerHTML=Object.keys(GAYA.pink.palet).map(k=>{let w=W(k);return '<button class="'+(k===warnaP?"pilih":"")+'" style="background:linear-gradient(145deg,'+w[0]+","+w[1]+')" onclick="pilihWarna(\''+k+'\')"></button>'}).join("");
 }
 function pilihIkon(e){ikonP=e;gambarPilihan()}
 function pilihWarna(k){warnaP=k;gambarPilihan()}
@@ -332,11 +383,101 @@ function hapusDaftar(){
 }
 function resetSemua(){
   if(!confirm("Hapus semua daftar dan pengingat? Tindakan ini tidak bisa dibatalkan."))return;
-  S={tema:S.tema,lists:[],tugas:[]};simpan();render();toast("Semua data dihapus");
+  S={tema:S.tema,gaya:S.gaya,lists:[],tugas:[]};simpan();render();toast("Semua data dihapus");
 }
 
-document.documentElement.dataset.tema=S.tema||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"gelap":"");
+// ---------- Pengaturan ----------
+function bukaPengaturan(){gambarPengaturan();$("dlgP").showModal()}
+function gambarPengaturan(){
+  $("pGaya").innerHTML=Object.keys(GAYA).map(k=>{
+    let p=GAYA[k].palet;
+    return '<button class="'+(S.gaya===k?"pilih":"")+'" onclick="setGaya(\''+k+'\')"><span class="sw"><i style="background:'+p.pink[1]+'"></i><i style="background:'+p.peach[1]+'"></i><i style="background:'+p.mauve[1]+'"></i></span>'+GAYA[k].nama+'</button>';
+  }).join("");
+  let m=S.tema===undefined?"auto":S.tema;
+  $("pMode").innerHTML=[["","☀️ Terang"],["gelap","🌙 Gelap"],["auto","Otomatis"]].map(x=>'<button class="'+(m===x[0]?"pilih":"")+'" onclick="setMode(\''+x[0]+'\')">'+x[1]+'</button>').join("");
+  gambarAkun();
+}
+
+// ---------- Akun & sinkronisasi (Firebase) ----------
+let fbAuth=null,fbDb=null,user=null,unsub=null,tundaDorong=null,pertama=true,fbSiap=false,fbPesan="";
+function fbDiatur(){return FIREBASE_CONFIG.apiKey&&FIREBASE_CONFIG.apiKey.indexOf("ISI_")!==0}
+function muatSkrip(src){return new Promise(function(ok,gagal){let s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=gagal;document.head.appendChild(s)})}
+async function initFirebase(){
+  if(!fbDiatur()){fbPesan="Firebase belum diatur. Isi FIREBASE_CONFIG di file ini untuk mengaktifkan login.";return}
+  try{
+    const v="10.12.2",b="https://www.gstatic.com/firebasejs/"+v+"/";
+    await muatSkrip(b+"firebase-app-compat.js");
+    await muatSkrip(b+"firebase-auth-compat.js");
+    await muatSkrip(b+"firebase-firestore-compat.js");
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbAuth=firebase.auth();fbDb=firebase.firestore();fbSiap=true;
+    fbAuth.onAuthStateChanged(function(u){
+      user=u;
+      if(unsub){unsub();unsub=null}
+      $("lencana").classList.toggle("sembunyi",!u);
+      if(u){pertama=true;mulaiSinkron()}
+      gambarAkun();
+    });
+  }catch(e){fbPesan="Tidak bisa memuat Firebase (cek koneksi internet).";gambarAkun()}
+}
+function refDoc(){return fbDb.collection("todo").doc(user.uid)}
+function mulaiSinkron(){
+  unsub=refDoc().onSnapshot(function(snap){
+    if(snap.metadata.hasPendingWrites)return;
+    if(snap.exists){
+      let d=snap.data(),awal=pertama;
+      if(d.isi&&(awal||(d.t||0)>(S.t||0))){
+        try{S=JSON.parse(d.isi);if(!S.gaya)S.gaya="pink";simpanLokal();terapkanTema();render();gambarPengaturan();if(!awal)toast("Disinkronkan dari perangkat lain")}catch(e){}
+      }else if((d.t||0)<(S.t||0)){dorong()}
+    }else{dorong()}
+    pertama=false;
+  },function(err){fbPesan="Sinkronisasi gagal: "+err.code;gambarAkun()});
+}
+function jadwalDorong(){
+  if(!user||!fbSiap)return;
+  clearTimeout(tundaDorong);tundaDorong=setTimeout(dorong,600);
+}
+function dorong(){
+  if(!user||!fbSiap)return;
+  refDoc().set({isi:JSON.stringify(S),t:S.t||Date.now()}).catch(function(e){fbPesan="Gagal menyimpan ke cloud: "+e.code;gambarAkun()});
+}
+function pesanGalat(e){
+  const m={"auth/invalid-email":"Format email tidak valid.","auth/user-not-found":"Akun tidak ditemukan.","auth/wrong-password":"Password salah.","auth/invalid-credential":"Email atau password salah.","auth/email-already-in-use":"Email sudah terdaftar, silakan masuk.","auth/weak-password":"Password minimal 6 karakter.","auth/network-request-failed":"Tidak ada koneksi internet.","auth/too-many-requests":"Terlalu banyak percobaan, coba lagi nanti.","auth/operation-not-allowed":"Login email/password belum diaktifkan di Firebase."};
+  return m[e.code]||("Gagal: "+(e.code||e.message));
+}
+function ambilForm(){return {e:($("aEmail").value||"").trim(),p:$("aPass").value||""}}
+async function masuk(){
+  let f=ambilForm();if(!f.e||!f.p){$("errA").innerText="Isi email dan password.";return}
+  try{await fbAuth.signInWithEmailAndPassword(f.e,f.p);toast("Berhasil masuk")}catch(e){$("errA").innerText=pesanGalat(e)}
+}
+async function daftarAkun(){
+  let f=ambilForm();if(!f.e||!f.p){$("errA").innerText="Isi email dan password.";return}
+  try{await fbAuth.createUserWithEmailAndPassword(f.e,f.p);toast("Akun dibuat")}catch(e){$("errA").innerText=pesanGalat(e)}
+}
+async function lupaPass(){
+  let f=ambilForm();if(!f.e){$("errA").innerText="Isi email dulu, lalu ketuk Lupa password.";return}
+  try{await fbAuth.sendPasswordResetEmail(f.e);$("errA").innerText="";toast("Email reset password dikirim")}catch(e){$("errA").innerText=pesanGalat(e)}
+}
+async function keluar(){
+  if(!confirm("Keluar dari akun? Data tetap tersimpan di perangkat ini dan di cloud."))return;
+  try{await fbAuth.signOut();toast("Sudah keluar")}catch(e){}
+}
+function gambarAkun(){
+  let el=$("pAkun");if(!el)return;
+  if(!fbDiatur()||(!fbSiap&&fbPesan)){
+    el.innerHTML='<div class="info">'+aman(fbPesan||"Memuat…")+'</div>';return;
+  }
+  if(!fbSiap){el.innerHTML='<div class="info">Memuat…</div>';return}
+  if(user){
+    el.innerHTML='<div class="info">Masuk sebagai <b>'+aman(user.email)+'</b><br><span class="ok">● Tersinkron</span> — perubahan otomatis muncul di perangkat lain yang masuk dengan akun ini.</div>'+(fbPesan?'<div class="err">'+aman(fbPesan)+'</div>':'')+'<div class="baris"><button class="b" onclick="dorong();toast(\'Disimpan ke cloud\')">Sinkron sekarang</button><button class="b bahaya" onclick="keluar()">Keluar</button></div>';
+  }else{
+    el.innerHTML='<label>Email</label><input class="in" type="email" id="aEmail" autocomplete="email" placeholder="nama@email.com"><label>Password</label><input class="in" type="password" id="aPass" autocomplete="current-password" placeholder="Minimal 6 karakter"><div class="err" id="errA"></div><div class="baris" style="margin-top:8px"><button class="aksen" onclick="lupaPass()">Lupa password</button><span class="sp"></span><button class="b" onclick="daftarAkun()">Daftar</button><button class="b utama" onclick="masuk()">Masuk</button></div><div class="info">Masuk agar data pengingat sama di HP dan laptop.</div>';
+  }
+}
+
+terapkanTema();
 render();
+initFirebase();
 </script>
 </body>
 </html>
