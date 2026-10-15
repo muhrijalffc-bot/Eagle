@@ -1,0 +1,1171 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bengkel JavaScript</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  /* Layout: menu modul di kiri, satu pelajaran di kanan; blok kode gelap adalah satu-satunya area kontras tinggi */
+  --bg:#f2f5f7; --panel:#ffffff; --ink:#13222c; --ink2:#52646f; --garis:#d5dfe5;
+  --aksen:#0b7a8f; --aksen-ink:#ffffff; --aksen-lembut:#e0f1f5;
+  --kode-bg:#10202a; --kode-ink:#d9e9ef;
+  --ok:#157a4b; --ok-bg:#dff3e8; --salah:#b4322f; --salah-bg:#fbe3e1; --peringatan:#8a5a00;
+  --php:#5a49b8; --php-bg:#e9e6fa; --js:#8a5a00; --js-bg:#fdf0d2;
+  --f-tampil:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-isi:"Source Sans 3",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-kode:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1418; --panel:#141e24; --ink:#e5eef2; --ink2:#94a9b4; --garis:#26363f;
+  --aksen:#4cc2d9; --aksen-ink:#04222a; --aksen-lembut:#14323a;
+  --kode-bg:#0a1116; --kode-ink:#d4e6ec;
+  --ok:#5fd49a; --ok-bg:#12301f; --salah:#ff8a84; --salah-bg:#3a1816; --peringatan:#f0b44a;
+  --php:#a99bf0; --php-bg:#231f45; --js:#f0b44a; --js-bg:#36290a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1418; --panel:#141e24; --ink:#e5eef2; --ink2:#94a9b4; --garis:#26363f;
+  --aksen:#4cc2d9; --aksen-ink:#04222a; --aksen-lembut:#14323a;
+  --kode-bg:#0a1116; --kode-ink:#d4e6ec;
+  --ok:#5fd49a; --ok-bg:#12301f; --salah:#ff8a84; --salah-bg:#3a1816; --peringatan:#f0b44a;
+  --php:#a99bf0; --php-bg:#231f45; --js:#f0b44a; --js-bg:#36290a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-isi);font-size:17px;line-height:1.6}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--aksen);outline-offset:2px}
+.wrap{padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);gap:36px;max-width:1160px;margin:0 auto}
+.app>*{min-width:0}
+
+/* menu */
+nav.menu{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;display:flex;flex-direction:column;gap:14px}
+.merek{font:800 22px/1.1 var(--f-tampil);letter-spacing:-.01em;margin:0}
+.merek small{display:block;font:400 14px/1.4 var(--f-isi);color:var(--ink2);margin-top:4px;letter-spacing:0}
+.kemajuan{font-size:14px;color:var(--ink2)}
+.bar{height:6px;border-radius:3px;background:var(--garis);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--aksen);width:0;transition:width .4s}
+.daftar-nav{display:flex;flex-direction:column;gap:2px}
+.ni{display:flex;gap:10px;align-items:center;text-align:left;width:100%;padding:8px 10px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--ink);cursor:pointer}
+.ni:hover{background:var(--aksen-lembut)}
+.ni[aria-current="page"]{background:var(--aksen-lembut);border-color:var(--aksen)}
+.ni .no{font:600 12px var(--f-kode);color:var(--ink2);width:20px;flex:none}
+.ni .jd{flex:1;min-width:0;font-size:15px;line-height:1.3}
+.ni .st{display:flex;gap:4px;flex:none}
+.pt{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink2)}
+.pt.ya{background:var(--ok);border-color:var(--ok)}
+.pisah{border:0;border-top:1px solid var(--garis);margin:6px 0;width:100%}
+
+/* isi */
+.eyebrow{font:600 12px var(--f-kode);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+.kepala{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
+.nomor{font:800 clamp(56px,11vw,100px)/.9 var(--f-tampil);color:transparent;-webkit-text-stroke:1.5px var(--aksen);letter-spacing:-.03em}
+.kepala h1{margin:0;font:800 clamp(28px,4.4vw,42px)/1.1 var(--f-tampil);letter-spacing:-.02em;text-wrap:balance;flex:1;min-width:min(100%,260px)}
+.tujuan{color:var(--ink2);max-width:62ch;margin:10px 0 0}
+h2.lg{font:700 22px/1.2 var(--f-tampil);margin:40px 0 12px;display:flex;flex-direction:column;gap:2px;text-wrap:balance}
+h2.lg small{font:600 12px var(--f-kode);letter-spacing:.1em;text-transform:uppercase;color:var(--aksen)}
+h3{font:700 18px/1.3 var(--f-tampil);margin:26px 0 8px}
+p,ul,ol{max-width:68ch}
+li{margin:3px 0}
+code{font-family:var(--f-kode);font-size:.88em;background:var(--aksen-lembut);padding:1px 5px;border-radius:4px}
+pre{margin:0;background:var(--kode-bg);color:var(--kode-ink);padding:12px 14px;border-radius:8px;overflow-x:auto;font:13.5px/1.6 var(--f-kode)}
+pre code{background:none;padding:0;font-size:inherit}
+.gulung{overflow-x:auto;max-width:100%;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{text-align:left;font:600 12px var(--f-kode);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);padding:8px 10px;border-bottom:2px solid var(--garis);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--garis);vertical-align:top}
+.banding{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:12px;margin:14px 0}
+.banding>div{min-width:0;display:flex;flex-direction:column;gap:6px}
+.lbl{align-self:flex-start;font:600 11px var(--f-kode);letter-spacing:.08em;padding:2px 8px;border-radius:4px}
+.lbl.php{background:var(--php-bg);color:var(--php)}
+.lbl.js{background:var(--js-bg);color:var(--js)}
+.catatan{background:var(--aksen-lembut);padding:12px 14px;border-radius:8px;margin:16px 0;max-width:68ch}
+.catatan b{display:block;font:600 11px var(--f-kode);letter-spacing:.1em;text-transform:uppercase;color:var(--aksen);margin-bottom:2px}
+.catatan p{margin:0}
+
+/* tombol */
+.btn{padding:9px 14px;border-radius:8px;border:1px solid var(--garis);background:var(--panel);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--aksen)}
+.btn.utama{background:var(--aksen);border-color:var(--aksen);color:var(--aksen-ink);font-weight:700}
+.btn.kecil{padding:5px 10px;font-size:14px}
+.btn[disabled]{opacity:.5;cursor:default}
+
+/* lab kode */
+.lab{border:1px solid var(--garis);border-radius:10px;overflow:hidden;background:var(--panel);margin:14px 0}
+.lab-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--garis)}
+.tagbhs{font:600 11px var(--f-kode);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.sp{flex:1}
+.tip{font-size:13px;color:var(--ink2)}
+textarea.kode{display:block;width:100%;background:var(--kode-bg);color:var(--kode-ink);border:0;padding:12px 14px;font:13.5px/1.6 var(--f-kode);resize:vertical;min-height:110px;tab-size:2;white-space:pre;overflow:auto;border-radius:0}
+textarea.kode:focus-visible{outline-offset:-2px}
+iframe.prev{display:block;width:100%;height:230px;border:0;border-top:1px solid var(--garis);background:#fff}
+.out{border-top:1px solid var(--garis);padding:10px 12px;font:13.5px/1.55 var(--f-kode);min-height:42px}
+.out .kosong{color:var(--ink2);font-family:var(--f-isi);font-size:14px}
+.log .l{white-space:pre-wrap;word-break:break-word}
+.log .l.error{color:var(--salah)}
+.log .l.warn{color:var(--peringatan)}
+.hasiltes{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:6px;font-family:var(--f-isi);font-size:15px;max-width:none}
+.hasiltes li{display:flex;gap:8px;margin:0}
+.hasiltes .m{font-weight:700;width:16px;flex:none}
+.hasiltes small{display:block;color:var(--ink2);font-family:var(--f-kode);font-size:12px}
+.ringkas{font:700 15px var(--f-isi);margin:0 0 8px}
+.ok{color:var(--ok)} .gagal{color:var(--salah)}
+
+/* kuis */
+.soal{margin:0 0 22px}
+.tanya{margin:0 0 8px;font-weight:600}
+.opsi{display:grid;gap:8px;max-width:68ch}
+.opsi button{text-align:left;padding:10px 12px;border:1px solid var(--garis);border-radius:8px;background:var(--panel);color:var(--ink);cursor:pointer}
+.opsi button:hover:not([disabled]){border-color:var(--aksen)}
+.opsi button.benar{background:var(--ok-bg);border-color:var(--ok)}
+.opsi button.salah{background:var(--salah-bg);border-color:var(--salah)}
+.opsi button[disabled]{cursor:default;color:var(--ink)}
+.penjelasan{margin:8px 0 0;color:var(--ink2);font-size:15px}
+.skor{font-weight:700;margin:4px 0 10px}
+.petunjuk{margin:10px 0;color:var(--ink2);font-size:15px}
+details.kunci{margin-top:12px;max-width:68ch}
+details.kunci summary{cursor:pointer;color:var(--aksen);font-weight:600}
+details.kunci pre{margin-top:8px}
+.lulus{display:inline-block;font:600 12px var(--f-kode);letter-spacing:.06em;padding:3px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);margin-left:8px;vertical-align:middle}
+.kaki{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:44px;padding-top:18px;border-top:1px solid var(--garis)}
+
+/* beranda & kamus */
+.hero h1{font:800 clamp(34px,6vw,58px)/1.05 var(--f-tampil);letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance}
+.langkah-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;list-style:none;padding:0;margin:12px 0;max-width:none;counter-reset:l}
+.langkah-list li{counter-increment:l;margin:0;padding:12px 14px;background:var(--panel);border:1px solid var(--garis);border-radius:8px}
+.langkah-list li::before{content:counter(l);font:800 22px var(--f-tampil);color:var(--aksen);display:block}
+.langkah-list b{display:block}
+.kartu-modul{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;margin:12px 0}
+.km{min-width:0;text-align:left;padding:14px;border:1px solid var(--garis);border-radius:10px;background:var(--panel);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.km:hover{border-color:var(--aksen)}
+.km .k1{font:600 12px var(--f-kode);color:var(--ink2)}
+.km .k2{font:700 17px/1.25 var(--f-tampil)}
+.km .k3{font-size:14px;color:var(--ink2)}
+.cari{width:100%;max-width:420px;padding:9px 12px;border:1px solid var(--garis);border-radius:8px;background:var(--panel);color:var(--ink);font:inherit}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.chip{padding:5px 12px;border-radius:999px;border:1px solid var(--garis);background:transparent;color:var(--ink2);cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--aksen-lembut);border-color:var(--aksen);color:var(--ink);font-weight:600}
+.kamus{display:flex;flex-direction:column}
+.ki{display:grid;grid-template-columns:minmax(150px,210px) minmax(0,1fr);gap:4px 16px;padding:12px 0;border-bottom:1px solid var(--garis)}
+.ki>*{min-width:0}
+.ki .nm{font:600 14px var(--f-kode);color:var(--aksen);word-break:break-word}
+.ki .kt{font:600 11px var(--f-kode);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);display:block;margin-top:2px}
+.ki p{margin:0;max-width:none}
+.ki pre{margin-top:6px;font-size:13px}
+.ki .ph{font-size:14px;color:var(--ink2);margin-top:6px}
+
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);gap:18px}
+  nav.menu{position:static;max-height:none}
+  .daftar-nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  .ni{width:auto;flex:none;border-color:var(--garis);padding:6px 10px}
+  .ni .jd{display:none}
+  .ni .no{width:auto}
+  .pisah{display:none}
+  .ki{grid-template-columns:minmax(0,1fr)}
+  .tip{display:none}
+}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<div class="wrap"><div class="app">
+  <nav class="menu" aria-label="Daftar modul">
+    <h1 class="merek">Bengkel JavaScript<small>Untuk yang sudah kenal PHP</small></h1>
+    <div class="kemajuan"><span id="kemTeks"></span><div class="bar"><i id="kemBar"></i></div></div>
+    <div class="daftar-nav" id="daftarNav"></div>
+  </nav>
+  <main id="main"></main>
+</div></div>
+
+<!-- ============ ISI MODUL ============ -->
+
+<template id="t-m1">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Halaman web dibuat dari tiga bahasa yang tugasnya berbeda. Cara mengingatnya: HTML adalah kerangka rumah, CSS adalah cat dan tata ruangnya, JavaScript adalah listrik dan saklarnya.</p>
+<table>
+<thead><tr><th>Bahasa</th><th>Menjawab</th><th>Contoh</th></tr></thead>
+<tbody>
+<tr><td><b>HTML</b></td><td>Ada apa saja di halaman?</td><td><code>&lt;button&gt;</code> <code>&lt;table&gt;</code></td></tr>
+<tr><td><b>CSS</b></td><td>Bagaimana tampilannya?</td><td><code>color: red;</code></td></tr>
+<tr><td><b>JavaScript</b></td><td>Apa yang terjadi saat diklik, dan bagaimana data diolah?</td><td><code>addEventListener</code></td></tr>
+</tbody></table>
+<div class="catatan"><b>Beda dengan PHP</b><p>PHP berjalan di server dan hasilnya berupa HTML yang dikirim ke browser. JavaScript berjalan di browser setelah halaman sampai, jadi bisa bereaksi pada klik tanpa memuat ulang halaman.</p></div>
+<p>Penghubung ketiganya adalah <code>id</code> dan <code>class</code>. HTML memberi nama pada elemen, CSS dan JavaScript memakai nama itu untuk menunjuknya.</p>
+<p>Di file sungguhan, JavaScript biasanya dipasang di akhir halaman, atau dengan <code>defer</code> supaya elemen sudah ada saat kode berjalan:</p>
+<pre><code>&lt;script src="script.js" defer&gt;&lt;/script&gt;</code></pre>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<p>Editor di bawah berisi halaman kecil lengkap dengan HTML, CSS, dan JavaScript. Hasilnya tampil langsung di bawah editor. Klik tombol di pratinjau, lalu ubah kodenya.</p>
+<textarea class="lat" data-mode="html">
+<style>
+  h1 { color: #0b7a8f; }
+  button { padding: 8px 14px; }
+</style>
+
+<h1 id="judul">Halo, dunia</h1>
+<button id="tombol">Klik aku</button>
+
+<script>
+  const judul = document.getElementById("judul");
+  const tombol = document.getElementById("tombol");
+
+  tombol.addEventListener("click", function () {
+    judul.textContent = "Tombol sudah diklik";
+  });
+</script>
+</textarea>
+<h3>Eksperimen</h3>
+<ul>
+<li>Ganti <code>#0b7a8f</code> dengan <code>tomato</code>, lalu tekan Jalankan.</li>
+<li>Ubah teks di dalam tanda kutip pada <code>textContent</code>.</li>
+<li>Tambahkan tombol kedua dengan id lain dan buat klik-nya mengubah judul menjadi teks berbeda.</li>
+</ul>
+<div class="catatan"><b>Bila halaman macet</b><p>Perulangan yang tidak pernah berhenti bisa membekukan halaman ini. Muat ulang halaman bila itu terjadi.</p></div>
+</template>
+
+<template id="t-m2">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Variabel adalah kotak bernama untuk menyimpan nilai. Di JavaScript tidak ada tanda <code>$</code>, tetapi kamu harus memilih <code>const</code> atau <code>let</code> saat membuatnya.</p>
+<div class="banding">
+<div><span class="lbl php">PHP</span><pre><code>$nama = "Rina";
+$umur = 21;
+echo "Halo " . $nama;</code></pre></div>
+<div><span class="lbl js">JAVASCRIPT</span><pre><code>const nama = "Rina";
+let umur = 21;
+console.log("Halo " + nama);</code></pre></div>
+</div>
+<ul>
+<li><code>const</code>: nilainya tidak boleh diganti. Jadikan ini pilihan awal.</li>
+<li><code>let</code>: nilainya boleh berubah. Pakai bila memang perlu diubah.</li>
+<li><code>var</code>: cara lama. Sebaiknya dihindari.</li>
+</ul>
+<p>Untuk menyisipkan variabel ke dalam teks, pakai backtick dan <code>${...}</code>. Ini padanan <code>"Halo $nama"</code> di PHP.</p>
+<table>
+<thead><tr><th>Tipe</th><th>Contoh</th><th>Catatan</th></tr></thead>
+<tbody>
+<tr><td>string</td><td><code>"teks"</code></td><td>Boleh tanda kutip ganda, tunggal, atau backtick</td></tr>
+<tr><td>number</td><td><code>42</code> <code>3.14</code></td><td>Bilangan bulat dan desimal sama-sama number</td></tr>
+<tr><td>boolean</td><td><code>true</code> <code>false</code></td><td>Huruf kecil semua</td></tr>
+<tr><td>null / undefined</td><td><code>null</code></td><td><code>undefined</code> berarti belum diberi nilai</td></tr>
+<tr><td>object / array</td><td><code>{ a: 1 }</code> <code>[1, 2]</code></td><td>Array termasuk object. Object mirip array asosiatif PHP</td></tr>
+</tbody></table>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<p>Tebak dulu hasil tiap baris sebelum menekan Jalankan, lalu cocokkan.</p>
+<textarea class="lat" data-mode="js">
+const nama = "Rina";
+let umur = 21;
+umur = umur + 1;
+
+console.log(nama, umur);
+console.log(typeof nama);
+console.log(typeof umur);
+console.log(`Halo, ${nama}! Tahun depan kamu ${umur + 1}.`);
+
+// Tiga hal yang sering mengejutkan
+console.log("5" + 3);
+console.log("5" - 3);
+console.log(0.1 + 0.2);
+</textarea>
+<p>Satu lagi, tentang nilai kosong dan tipe object:</p>
+<textarea class="lat" data-mode="js">
+let a;
+const b = null;
+const orang = { nama: "Rina", umur: 21 };
+
+console.log(a);
+console.log(b);
+console.log(orang.nama);
+console.log(orang.alamat);
+console.log(typeof [1, 2, 3]);
+console.log(Array.isArray([1, 2, 3]));
+</textarea>
+<div class="catatan"><b>Beda dengan PHP</b><p>Tanda <code>+</code> di JavaScript menjumlahkan angka sekaligus menggabungkan teks. PHP memakai <code>.</code> untuk menggabungkan. Saat salah satu sisinya teks, hasilnya digabung: <code>"5" + 3</code> menjadi <code>"53"</code>.</p></div>
+</template>
+
+<template id="t-m3">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Kondisi memilih jalan, perulangan mengulang pekerjaan. Bentuknya mirip PHP, dengan beberapa perbedaan kecil.</p>
+<div class="banding">
+<div><span class="lbl php">PHP</span><pre><code>if ($n >= 80) {
+} elseif ($n >= 70) {
+} else {
+}
+
+foreach ($buah as $b) {
+}</code></pre></div>
+<div><span class="lbl js">JAVASCRIPT</span><pre><code>if (n >= 80) {
+} else if (n >= 70) {
+} else {
+}
+
+for (const b of buah) {
+}</code></pre></div>
+</div>
+<p>Untuk membandingkan, pakai <code>===</code> (sama nilai dan tipe), bukan <code>==</code>. Operator <code>==</code> mengubah tipe diam-diam dan sering memberi hasil tak terduga.</p>
+<p>Bentuk singkat untuk memilih antara dua nilai disebut ternary: <code>nilai &gt;= 75 ? "Lulus" : "Remedi"</code>.</p>
+<div class="catatan"><b>Beda dengan PHP</b><p>Nilai yang dianggap salah (falsy) di JavaScript: <code>false</code>, <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>. Teks <code>"0"</code> dan array kosong <code>[]</code> dianggap benar. Di PHP keduanya dianggap salah.</p></div>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<textarea class="lat" data-mode="js">
+const nilai = 74;
+
+if (nilai >= 80) {
+  console.log("A");
+} else if (nilai >= 70) {
+  console.log("B");
+} else {
+  console.log("C");
+}
+
+for (let i = 1; i <= 3; i++) {
+  console.log("Putaran ke-" + i);
+}
+
+const buah = ["apel", "jeruk", "mangga"];
+for (const b of buah) {
+  console.log(b.toUpperCase());
+}
+
+console.log(nilai >= 75 ? "Lulus" : "Remedi");
+</textarea>
+<p>Sekarang uji tebakanmu soal perbandingan dan nilai benar atau salah:</p>
+<textarea class="lat" data-mode="js">
+console.log(0 == "0");
+console.log(0 === "0");
+console.log(Boolean("0"));
+console.log(Boolean([]));
+console.log(Boolean(""));
+console.log(null ?? "cadangan");
+</textarea>
+<h3>Eksperimen</h3>
+<ul>
+<li>Ubah <code>nilai</code> menjadi 85, lalu 55, dan amati hasilnya.</li>
+<li>Ubah <code>i &lt;= 3</code> menjadi <code>i &lt;= 6</code>.</li>
+<li>Operator <code>??</code> memberi nilai cadangan hanya bila sisi kirinya <code>null</code> atau <code>undefined</code>. Coba isi sisi kirinya dengan <code>0</code>.</li>
+</ul>
+</template>
+
+<template id="t-m4">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Fungsi adalah blok kode yang diberi nama supaya bisa dipakai berulang. Ada dua cara menulisnya.</p>
+<div class="banding">
+<div><span class="lbl php">PHP</span><pre><code>function tambah($a, $b) {
+  return $a + $b;
+}
+
+$kali = fn($a, $b) => $a * $b;</code></pre></div>
+<div><span class="lbl js">JAVASCRIPT</span><pre><code>function tambah(a, b) {
+  return a + b;
+}
+
+const kali = (a, b) => a * b;</code></pre></div>
+</div>
+<ul>
+<li><b>Deklarasi biasa</b>: <code>function nama() {}</code>.</li>
+<li><b>Arrow function</b>: <code>(a, b) =&gt; a * b</code>. Bila hanya satu ekspresi, <code>return</code> boleh dihilangkan. Ini bentuk yang paling sering muncul di <code>map</code>, <code>filter</code>, dan event.</li>
+<li><b>Parameter bawaan</b>: <code>function sapa(nama = "teman")</code> dipakai bila argumen tidak diberikan.</li>
+<li>Fungsi tanpa <code>return</code> menghasilkan <code>undefined</code>.</li>
+</ul>
+<p>Hal yang membuat JavaScript terasa berbeda: fungsi adalah nilai biasa. Fungsi boleh disimpan di variabel dan dikirim ke fungsi lain. Fungsi yang dikirim itu sering disebut <i>callback</i>.</p>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<textarea class="lat" data-mode="js">
+function tambah(a, b) {
+  return a + b;
+}
+const kali = (a, b) => a * b;
+const sapa = (nama = "teman") => "Halo, " + nama + "!";
+
+console.log(tambah(2, 3));
+console.log(kali(4, 5));
+console.log(sapa());
+console.log(sapa("Rina"));
+</textarea>
+<p>Fungsi sebagai nilai, dan variabel di luar fungsi:</p>
+<textarea class="lat" data-mode="js">
+function hitungPajak(harga, hitung) {
+  return hitung(harga);
+}
+const pajak10 = (harga) => harga * 0.1;
+console.log(hitungPajak(100000, pajak10));
+
+let total = 0;
+function tambahTotal(x) {
+  total = total + x;
+}
+tambahTotal(5);
+tambahTotal(7);
+console.log(total);
+</textarea>
+<div class="catatan"><b>Pola yang akan sering kamu lihat</b><p><code>data.filter((d) =&gt; d.jenis === "masuk")</code> mengirim sebuah fungsi kecil sebagai callback. Modul berikutnya memakainya terus.</p></div>
+</template>
+
+<template id="t-m5">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Hampir semua data nyata berbentuk daftar objek, misalnya daftar transaksi atau daftar tugas. Object menyimpan pasangan nama dan nilai, array menyimpan urutan. Di PHP, object mirip array asosiatif.</p>
+<table>
+<thead><tr><th>Method</th><th>Fungsinya</th><th>Padanan PHP</th></tr></thead>
+<tbody>
+<tr><td><code>push(x)</code></td><td>Tambah di akhir</td><td><code>$a[] = $x</code></td></tr>
+<tr><td><code>map(fn)</code></td><td>Ubah tiap item, hasilnya array baru</td><td><code>array_map</code></td></tr>
+<tr><td><code>filter(fn)</code></td><td>Ambil item yang memenuhi syarat</td><td><code>array_filter</code></td></tr>
+<tr><td><code>find(fn)</code></td><td>Ambil satu item pertama yang cocok</td><td>loop + <code>break</code></td></tr>
+<tr><td><code>reduce(fn, awal)</code></td><td>Gabungkan jadi satu nilai, misalnya total</td><td><code>array_reduce</code></td></tr>
+<tr><td><code>includes(x)</code></td><td>Apakah x ada di array?</td><td><code>in_array</code></td></tr>
+<tr><td><code>join(", ")</code></td><td>Gabung jadi teks</td><td><code>implode</code></td></tr>
+</tbody></table>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<p>Daftar transaksi kecil, mirip data di aplikasi Kasku. Perhatikan bahwa <code>map</code>, <code>filter</code>, dan <code>find</code> tidak mengubah array aslinya.</p>
+<textarea class="lat" data-mode="js">
+const transaksi = [
+  { ket: "Penjualan A", jenis: "masuk", jumlah: 12500 },
+  { ket: "Sewa toko", jenis: "keluar", jumlah: 3000 },
+  { ket: "Penjualan B", jenis: "masuk", jumlah: 15200 }
+];
+
+const nama = transaksi.map((t) => t.ket);
+const pemasukan = transaksi.filter((t) => t.jenis === "masuk");
+const total = pemasukan.reduce((jumlah, t) => jumlah + t.jumlah, 0);
+const sewa = transaksi.find((t) => t.ket === "Sewa toko");
+
+console.log(nama);
+console.log(pemasukan.length);
+console.log(total);
+console.log(sewa);
+</textarea>
+<textarea class="lat" data-mode="js">
+const angka = [5, 3, 10, 1];
+angka.push(7);
+angka.sort((a, b) => a - b);
+console.log(angka);
+console.log(angka.includes(10));
+console.log(angka.join(" | "));
+
+const { ket, jumlah } = { ket: "Kopi", jumlah: 15000 };
+console.log(ket, jumlah);
+
+const baru = [...angka, 99];
+console.log(baru);
+</textarea>
+<div class="catatan"><b>Jebakan</b><p><code>sort()</code> tanpa fungsi pembanding mengurutkan sebagai teks, jadi <code>[10, 9, 1]</code> menjadi <code>[1, 10, 9]</code>. Untuk angka, selalu pakai <code>sort((a, b) =&gt; a - b)</code>.</p></div>
+<h3>Eksperimen</h3>
+<ul>
+<li>Hapus <code>(a, b) =&gt; a - b</code> dari <code>sort</code> dan lihat urutan yang salah.</li>
+<li>Buat <code>filter</code> untuk transaksi dengan jumlah di atas 10000.</li>
+<li>Ganti <code>0</code> di <code>reduce</code> menjadi <code>1000</code>. Apa yang berubah?</li>
+</ul>
+</template>
+
+<template id="t-m6">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>DOM adalah gambaran halaman HTML yang bisa diubah oleh JavaScript. Hampir semua aplikasi web memakai pola yang sama: ambil elemen, pasang event, ubah elemen saat event terjadi.</p>
+<table>
+<thead><tr><th>Kebutuhan</th><th>Kode</th></tr></thead>
+<tbody>
+<tr><td>Ambil satu elemen</td><td><code>document.querySelector("#id")</code></td></tr>
+<tr><td>Ambil banyak elemen</td><td><code>document.querySelectorAll(".kelas")</code></td></tr>
+<tr><td>Ubah teks</td><td><code>el.textContent = "..."</code></td></tr>
+<tr><td>Baca isi kolom input</td><td><code>input.value</code></td></tr>
+<tr><td>Tambah atau cabut class</td><td><code>el.classList.toggle("aktif")</code></td></tr>
+<tr><td>Membuat elemen baru</td><td><code>document.createElement("li")</code>, lalu <code>induk.appendChild(li)</code></td></tr>
+<tr><td>Bereaksi pada aksi</td><td><code>el.addEventListener("click", fungsi)</code></td></tr>
+</tbody></table>
+<div class="catatan"><b>Aman atau tidak</b><p><code>textContent</code> memperlakukan isinya sebagai teks biasa. <code>innerHTML</code> memperlakukannya sebagai HTML, sehingga berbahaya bila isinya berasal dari pengguna. Itu sebabnya Kasku memakai fungsi <code>aman()</code> sebelum memasukkan teks ke <code>innerHTML</code>.</p></div>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<p>Daftar belanja kecil. Ketik barang, tekan Tambah, lalu klik sebuah barang untuk menandainya.</p>
+<textarea class="lat" data-mode="html">
+<style>
+  body { font-family: system-ui, sans-serif; }
+  li { margin: 4px 0; cursor: pointer; }
+  .merah { color: #c0392b; font-weight: 700; }
+</style>
+
+<h2>Daftar belanja</h2>
+<input id="isi" placeholder="Tulis barang...">
+<button id="tambah">Tambah</button>
+<ul id="daftar"></ul>
+
+<script>
+  const isi = document.querySelector("#isi");
+  const daftar = document.querySelector("#daftar");
+
+  document.querySelector("#tambah").addEventListener("click", () => {
+    const teks = isi.value.trim();
+    if (teks === "") return;
+
+    const li = document.createElement("li");
+    li.textContent = teks;
+    li.addEventListener("click", () => li.classList.toggle("merah"));
+    daftar.appendChild(li);
+    isi.value = "";
+  });
+</script>
+</textarea>
+<h3>Eksperimen</h3>
+<ul>
+<li>Tambahkan tombol Hapus semua yang mengosongkan <code>daftar.innerHTML</code>.</li>
+<li>Ubah class <code>merah</code> menjadi warna lain di CSS.</li>
+<li>Tampilkan jumlah barang di sebuah <code>&lt;p&gt;</code> yang diperbarui setiap kali barang ditambah.</li>
+</ul>
+</template>
+
+<template id="t-m7">
+<h2 class="lg"><small>Langkah 1</small>Baca</h2>
+<p>Tiga hal terakhir yang membuat aplikasi seperti Kasku bisa bekerja:</p>
+<ul>
+<li><b>JSON</b>: format teks untuk data. <code>JSON.stringify(data)</code> mengubah data menjadi teks (seperti <code>json_encode</code>), <code>JSON.parse(teks)</code> mengembalikannya (seperti <code>json_decode</code>).</li>
+<li><b>localStorage</b>: penyimpanan kecil di browser. Hanya bisa menyimpan teks, jadi datanya dibungkus JSON.</li>
+<li><b>async / await</b>: cara menunggu pekerjaan yang butuh waktu tanpa membekukan halaman.</li>
+</ul>
+<p><code>JSON.parse</code> akan melempar error bila teksnya rusak, jadi dibungkus <code>try / catch</code>. Pola ini persis ada di fungsi <code>muat()</code> milik Kasku.</p>
+
+<h2 class="lg"><small>Langkah 2</small>Coba sendiri</h2>
+<textarea class="lat" data-mode="js">
+const data = [{ ket: "Kopi", jumlah: 15000 }];
+const teks = JSON.stringify(data);
+console.log(teks);
+console.log(typeof teks);
+
+const kembali = JSON.parse(teks);
+console.log(kembali[0].ket);
+
+try {
+  JSON.parse("bukan json{");
+} catch (e) {
+  console.log("Gagal membaca:", e.name);
+}
+</textarea>
+<div class="catatan"><b>Tentang penyimpanan di sini</b><p>Di area latihan ini, <code>localStorage</code> hanya bertahan selama satu kali Jalankan. Di situs milikmu sendiri, datanya tersimpan sampai dihapus.</p></div>
+<textarea class="lat" data-mode="js">
+localStorage.setItem("kasku", JSON.stringify([1, 2, 3]));
+const isi = JSON.parse(localStorage.getItem("kasku"));
+console.log(isi);
+console.log(localStorage.getItem("tidak-ada"));
+</textarea>
+<p>Urutan pada <code>async</code> sering membingungkan. Perhatikan baris mana yang muncul lebih dulu:</p>
+<textarea class="lat" data-mode="js">
+function tunggu(ms) {
+  return new Promise((selesai) => setTimeout(selesai, ms));
+}
+
+async function main() {
+  console.log("mulai");
+  await tunggu(800);
+  console.log("800 ms kemudian");
+}
+
+main();
+console.log("baris ini muncul lebih dulu");
+</textarea>
+
+<h3>Proyek penutup: pencatat tugas</h3>
+<p>Ini semua pola dari modul sebelumnya dalam satu aplikasi kecil: muat, simpan, tampilkan, dengarkan event. Baca urutannya dari atas, lalu ubah-ubah.</p>
+<textarea class="lat" data-mode="html">
+<style>
+  body { font-family: system-ui, sans-serif; }
+  li { margin: 4px 0; cursor: pointer; }
+  .selesai { text-decoration: line-through; color: #777; }
+</style>
+
+<h2>Tugas</h2>
+<input id="isi" placeholder="Tugas baru">
+<button id="tambah">Tambah</button>
+<ul id="daftar"></ul>
+
+<script>
+  const KUNCI = "tugas";
+
+  // 1. Muat data (aman bila kosong atau rusak)
+  function muat() {
+    try { return JSON.parse(localStorage.getItem(KUNCI)) || []; }
+    catch (e) { return []; }
+  }
+  let tugas = muat();
+
+  // 2. Simpan data
+  function simpan() {
+    localStorage.setItem(KUNCI, JSON.stringify(tugas));
+  }
+
+  // 3. Tampilkan data ke halaman
+  function render() {
+    const daftar = document.getElementById("daftar");
+    daftar.innerHTML = "";
+    tugas.forEach((t) => {
+      const li = document.createElement("li");
+      li.textContent = t.teks;
+      li.className = t.selesai ? "selesai" : "";
+      li.addEventListener("click", () => {
+        t.selesai = !t.selesai;
+        simpan();
+        render();
+      });
+      daftar.appendChild(li);
+    });
+  }
+
+  // 4. Dengarkan event, ubah data, simpan, tampilkan ulang
+  document.getElementById("tambah").addEventListener("click", () => {
+    const isi = document.getElementById("isi");
+    if (isi.value.trim() === "") return;
+    tugas.push({ teks: isi.value.trim(), selesai: false });
+    simpan();
+    render();
+    isi.value = "";
+  });
+
+  render();
+</script>
+</textarea>
+<h3>Tambahan untuk dicoba sendiri</h3>
+<ul>
+<li>Tombol hapus untuk tiap tugas, memakai <code>filter</code> untuk membuang satu item.</li>
+<li>Penghitung "3 dari 5 selesai", memakai <code>filter</code> dan <code>length</code>.</li>
+<li>Tombol yang hanya menampilkan tugas yang belum selesai.</li>
+</ul>
+</template>
+
+<!-- ============ SKRIP ============ -->
+<script>
+(function(){
+"use strict";
+
+/* ---------- Data modul ---------- */
+const MODUL=[
+{id:"m1",judul:"Tiga bahasa, satu halaman",waktu:"20 menit",
+ tujuan:"Membedakan tugas HTML, CSS, dan JavaScript, lalu mengubah ketiganya dalam satu halaman kecil.",
+ kuis:[
+  {t:`Bagian mana yang mengatur warna dan jarak di halaman?`,o:["HTML","CSS","JavaScript"],b:1,j:`CSS mengatur tampilan. HTML menentukan isi, JavaScript menentukan perilaku.`},
+  {t:`Di mana kode JavaScript halaman web biasanya berjalan?`,o:["Di server, seperti PHP","Di browser pengguna","Di database"],b:1,j:`JavaScript berjalan di browser setelah halaman sampai. PHP berjalan di server sebelum halaman dikirim.`},
+  {t:`Apa yang dipakai CSS dan JavaScript untuk menunjuk sebuah elemen HTML?`,o:[`<code>id</code> atau <code>class</code>`,"Nomor baris","Nama file"],b:0,j:`id dan class adalah nama panggilan elemen. Keduanya bisa dipakai oleh CSS maupun JavaScript.`}
+ ],
+ tantangan:{judul:"Merah dan menyapa",mode:"html",
+  perintah:`Buat judul <code>h1</code> berwarna merah dengan CSS, lalu isi paragraf <code>#sapa</code> dengan teks <code>Halo, belajar!</code> lewat JavaScript.`,
+  mulai:`<style>
+  /* 1. Buat judul menjadi merah */
+  h1 { }
+</style>
+
+<h1>Latihan pertama</h1>
+<p id="sapa"></p>
+
+<script>
+  // 2. Isi paragraf #sapa dengan teks: Halo, belajar!
+<\/script>`,
+  petunjuk:`Di CSS, tulis <code>color: red;</code> di dalam kurung kurawal. Di JavaScript, ambil elemennya dengan <code>document.getElementById("sapa")</code> lalu isi <code>textContent</code>-nya.`,
+  kunci:`h1 { color: red; }
+
+document.getElementById("sapa").textContent = "Halo, belajar!";`,
+  tes:`cek("Judul h1 berwarna merah",function(){return getComputedStyle(document.querySelector("h1")).color==="rgb(255, 0, 0)"});
+cek('Paragraf #sapa berisi "Halo, belajar!"',function(){return document.getElementById("sapa").textContent.trim()==="Halo, belajar!"});`}},
+
+{id:"m2",judul:"Variabel dan tipe data",waktu:"25 menit",
+ tujuan:"Memakai const dan let, mengenali tipe data, dan menyusun teks dengan template literal.",
+ kuis:[
+  {t:`Mana yang tidak boleh diberi nilai baru setelah dibuat?`,o:[`<code>let</code>`,`<code>const</code>`,`Keduanya boleh`],b:1,j:`const mengunci nilainya. Pakai const sebagai pilihan awal, let hanya bila nilai memang akan berubah.`},
+  {t:`Apa hasil <code>"5" + 3</code>?`,o:[`<code>8</code>`,`<code>"53"</code>`,`Error`],b:1,j:`Bila salah satu sisi berupa teks, tanda + menggabungkan. Hasilnya teks "53".`},
+  {t:`Cara menyisipkan variabel <code>nama</code> ke dalam teks, padanan <code>"Halo $nama"</code> di PHP:`,o:[`<code>"Halo $nama"</code>`,"`Halo, ${nama}`",`<code>"Halo " . nama</code>`],b:1,j:`Template literal memakai backtick dan \${...}. Tanda $ saja tidak berfungsi di tanda kutip biasa.`}
+ ],
+ tantangan:{judul:"Perkenalan diri",mode:"js",
+  perintah:`Lengkapi fungsi <code>perkenalan(nama, umur)</code> agar mengembalikan teks seperti <code>Halo, Rina! Umur kamu 21 tahun.</code>`,
+  mulai:`function perkenalan(nama, umur) {
+  // kembalikan teks sesuai contoh
+}
+
+console.log(perkenalan("Rina", 21));`,
+  petunjuk:`Pakai template literal dengan backtick dan <code>\${nama}</code>, lalu <code>return</code> hasilnya. Spasi dan tanda baca harus sama persis.`,
+  kunci:`function perkenalan(nama, umur) {
+  return \`Halo, \${nama}! Umur kamu \${umur} tahun.\`;
+}`,
+  tes:`cek('perkenalan("Rina", 21) menghasilkan teks yang benar',function(){return perkenalan("Rina",21)==="Halo, Rina! Umur kamu 21 tahun."});
+cek('perkenalan("Budi", 30) menghasilkan teks yang benar',function(){return perkenalan("Budi",30)==="Halo, Budi! Umur kamu 30 tahun."});`}},
+
+{id:"m3",judul:"Kondisi dan perulangan",waktu:"25 menit",
+ tujuan:"Memilih jalan dengan if, mengulang dengan for, dan memahami perbedaan === dengan ==.",
+ kuis:[
+  {t:`Operator perbandingan yang disarankan:`,o:[`<code>==</code>`,`<code>===</code>`,`<code>=</code>`],b:1,j:`=== membandingkan nilai dan tipe sekaligus. == mengubah tipe diam-diam. = adalah penugasan, bukan perbandingan.`},
+  {t:`Mana yang dianggap benar (truthy) di JavaScript?`,o:[`<code>0</code>`,`<code>""</code>`,`<code>"0"</code>`],b:2,j:`Teks "0" tidak kosong, jadi dianggap benar. Ini berbeda dari PHP, tempat "0" dianggap salah.`},
+  {t:`Cara menjalankan perulangan untuk setiap isi array <code>buah</code>:`,o:[`<code>foreach ($buah as $b)</code>`,`<code>for (const b of buah)</code>`,`<code>for b in buah do</code>`],b:1,j:`for...of mengambil tiap nilai dari array. foreach adalah milik PHP.`}
+ ],
+ tantangan:{judul:"Nilai huruf",mode:"js",
+  perintah:`Lengkapi <code>nilaiHuruf(n)</code>: 80 ke atas menghasilkan <code>"A"</code>, 70 sampai 79 <code>"B"</code>, 60 sampai 69 <code>"C"</code>, di bawah 60 <code>"D"</code>.`,
+  mulai:`function nilaiHuruf(n) {
+  // kembalikan "A", "B", "C", atau "D"
+}
+
+console.log(nilaiHuruf(74));`,
+  petunjuk:`Periksa dari yang tertinggi: <code>if (n &gt;= 80) return "A";</code> lalu lanjutkan dengan <code>else if</code> untuk batas berikutnya.`,
+  kunci:`function nilaiHuruf(n) {
+  if (n >= 80) return "A";
+  if (n >= 70) return "B";
+  if (n >= 60) return "C";
+  return "D";
+}`,
+  tes:`var kasus=[[95,"A"],[80,"A"],[79,"B"],[70,"B"],[69,"C"],[60,"C"],[59,"D"],[0,"D"]];
+kasus.forEach(function(k){cek("nilaiHuruf("+k[0]+') menghasilkan "'+k[1]+'"',function(){return nilaiHuruf(k[0])===k[1]})});`}},
+
+{id:"m4",judul:"Fungsi",waktu:"25 menit",
+ tujuan:"Menulis fungsi dengan dua cara, memakai parameter bawaan, dan memahami fungsi sebagai nilai.",
+ kuis:[
+  {t:`Arrow function yang setara dengan <code>function kali(a, b) { return a * b; }</code>:`,o:[`<code>const kali = (a, b) =&gt; a * b;</code>`,`<code>const kali = a, b =&gt; a * b;</code>`,`<code>kali(a, b) =&gt; a * b</code>`],b:0,j:`Parameter ditulis dalam kurung, diikuti =>, lalu ekspresinya. Untuk satu ekspresi, return boleh dihilangkan.`},
+  {t:`Apa yang dikembalikan fungsi yang tidak punya <code>return</code>?`,o:[`<code>0</code>`,`<code>null</code>`,`<code>undefined</code>`],b:2,j:`Tanpa return, fungsi menghasilkan undefined. Lupa menulis return adalah salah satu kesalahan paling umum.`},
+  {t:`Untuk apa <code>diskon = 0</code> pada <code>function hitung(harga, diskon = 0)</code>?`,o:["Memaksa diskon selalu 0",`Memberi nilai bawaan bila argumen tidak diisi`,`Mengunci agar diskon tidak bisa diganti`],b:1,j:`Parameter bawaan dipakai hanya bila argumen tidak dikirim atau bernilai undefined.`}
+ ],
+ tantangan:{judul:"Hitung total belanja",mode:"js",
+  perintah:`Lengkapi <code>hitungTotal(harga, jumlah, diskon = 0)</code>. Totalnya adalah harga dikali jumlah, dikurangi diskon dalam persen.`,
+  mulai:`function hitungTotal(harga, jumlah, diskon = 0) {
+  // harga x jumlah, lalu kurangi diskon (dalam persen)
+}
+
+console.log(hitungTotal(10000, 3, 10));`,
+  petunjuk:`Hitung dulu <code>const kotor = harga * jumlah;</code>, lalu hasilnya <code>kotor - kotor * diskon / 100</code>.`,
+  kunci:`function hitungTotal(harga, jumlah, diskon = 0) {
+  const kotor = harga * jumlah;
+  return kotor - kotor * diskon / 100;
+}`,
+  tes:`cek("hitungTotal(10000, 3) tanpa diskon = 30000",function(){return hitungTotal(10000,3)===30000});
+cek("hitungTotal(10000, 3, 10) = 27000",function(){return hitungTotal(10000,3,10)===27000});
+cek("hitungTotal(2500, 4, 50) = 5000",function(){return hitungTotal(2500,4,50)===5000});`}},
+
+{id:"m5",judul:"Array dan object",waktu:"30 menit",
+ tujuan:"Mengolah daftar data dengan map, filter, find, dan reduce, seperti yang dilakukan Kasku pada daftar transaksi.",
+ kuis:[
+  {t:`Method mana yang mengubah tiap item dan menghasilkan array baru?`,o:[`<code>filter</code>`,`<code>map</code>`,`<code>find</code>`],b:1,j:`map mengubah tiap item. filter menyaring item, find mengambil satu item.`},
+  {t:`Untuk apa angka <code>0</code> pada <code>reduce((j, t) =&gt; j + t.jumlah, 0)</code>?`,o:["Nilai awal penjumlahan","Jumlah item yang diambil","Indeks item pertama"],b:0,j:`Argumen kedua reduce adalah nilai awal. Tanpa itu, array kosong akan menimbulkan error.`},
+  {t:`Apa hasil <code>filter</code> bila tidak ada item yang cocok?`,o:[`<code>null</code>`,`<code>undefined</code>`,`Array kosong <code>[]</code>`],b:2,j:`filter selalu mengembalikan array. Bila tidak ada yang cocok, array itu kosong. Sebaliknya find mengembalikan undefined.`}
+ ],
+ tantangan:{judul:"Total pemasukan",mode:"js",
+  perintah:`Lengkapi <code>totalPemasukan(daftar)</code> agar menjumlahkan <code>jumlah</code> dari transaksi berjenis <code>"masuk"</code> saja.`,
+  mulai:`function totalPemasukan(daftar) {
+  // saring yang "masuk", lalu jumlahkan
+}
+
+const contoh = [
+  { jenis: "masuk", jumlah: 12500 },
+  { jenis: "keluar", jumlah: 3000 },
+  { jenis: "masuk", jumlah: 15200 }
+];
+console.log(totalPemasukan(contoh));`,
+  petunjuk:`Gabungkan dua method: <code>daftar.filter(...)</code> dilanjutkan <code>.reduce(..., 0)</code>.`,
+  kunci:`function totalPemasukan(daftar) {
+  return daftar
+    .filter((t) => t.jenis === "masuk")
+    .reduce((jumlah, t) => jumlah + t.jumlah, 0);
+}`,
+  tes:`var a=[{jenis:"masuk",jumlah:12500},{jenis:"keluar",jumlah:3000},{jenis:"masuk",jumlah:15200}];
+cek("Contoh tiga transaksi menghasilkan 27700",function(){return totalPemasukan(a)===27700});
+cek("Array kosong menghasilkan 0",function(){return totalPemasukan([])===0});
+cek("Hanya pengeluaran menghasilkan 0",function(){return totalPemasukan([{jenis:"keluar",jumlah:500}])===0});
+cek("Array asli tidak berubah",function(){totalPemasukan(a);return a.length===3});`}},
+
+{id:"m6",judul:"DOM dan event",waktu:"30 menit",
+ tujuan:"Mengambil elemen, memasang event klik, dan mengubah isi halaman dari JavaScript.",
+ kuis:[
+  {t:`Mana yang aman dipakai untuk menampilkan teks yang diketik pengguna?`,o:[`<code>textContent</code>`,`<code>innerHTML</code>`,`Keduanya sama aman`],b:0,j:`textContent memperlakukan isinya sebagai teks biasa. innerHTML memproses HTML sehingga bisa disusupi kode berbahaya.`},
+  {t:`Argumen pertama <code>addEventListener</code> untuk klik adalah:`,o:[`<code>"onclick"</code>`,`<code>"click"</code>`,`<code>"press"</code>`],b:1,j:`Nama event ditulis tanpa awalan "on": click, input, submit, keydown.`},
+  {t:`<code>document.querySelectorAll(".chip")</code> mengembalikan:`,o:["Satu elemen","Kumpulan elemen yang bisa di-loop","Teks"],b:1,j:`Hasilnya berupa daftar elemen. Gunakan forEach atau for...of untuk memprosesnya satu per satu.`}
+ ],
+ tantangan:{judul:"Penghitung klik",mode:"html",
+  perintah:`Setiap klik pada tombol <b>Tambah</b> harus menaikkan angka di <code>#angka</code> sebanyak satu.`,
+  mulai:`<button id="tambah">Tambah</button>
+<p>Hitungan: <span id="angka">0</span></p>
+
+<script>
+  const tombol = document.getElementById("tambah");
+  const angka = document.getElementById("angka");
+  let hitungan = 0;
+
+  // Saat tombol diklik: tambah hitungan, lalu tampilkan di #angka
+<\/script>`,
+  petunjuk:`Pasang <code>tombol.addEventListener("click", () =&gt; { ... })</code>. Di dalamnya, naikkan <code>hitungan</code> lalu isi <code>angka.textContent</code>.`,
+  kunci:`tombol.addEventListener("click", () => {
+  hitungan++;
+  angka.textContent = hitungan;
+});`,
+  tes:`var t=document.getElementById("tambah"),a=document.getElementById("angka");
+cek("Awalnya angka menunjukkan 0",function(){return a.textContent.trim()==="0"});
+t.click();t.click();t.click();
+cek("Setelah 3 klik, angka menunjukkan 3",function(){return a.textContent.trim()==="3"});`}},
+
+{id:"m7",judul:"JSON, penyimpanan, dan async",waktu:"35 menit",
+ tujuan:"Menyimpan data sebagai JSON, membacanya dengan aman, dan memahami urutan kode async. Ditutup dengan satu aplikasi kecil.",
+ kuis:[
+  {t:`<code>JSON.stringify(data)</code> menghasilkan:`,o:["Object baru","Teks","Array"],b:1,j:`stringify mengubah data menjadi teks, setara json_encode di PHP. Teks inilah yang bisa disimpan di localStorage.`},
+  {t:`Mengapa <code>JSON.parse</code> dibungkus <code>try / catch</code>?`,o:["Supaya lebih cepat","Karena teks yang rusak akan menimbulkan error","Karena wajib secara sintaks"],b:1,j:`Bila teksnya bukan JSON yang sah, parse melempar error. try/catch memungkinkan aplikasi memakai nilai cadangan.`},
+  {t:`Apa arti <code>await</code> di dalam fungsi <code>async</code>?`,o:["Menunggu hasil tanpa membekukan halaman","Menghentikan seluruh program","Mengulang fungsi"],b:0,j:`await menjeda fungsi itu saja sampai hasilnya siap. Bagian lain dari halaman tetap berjalan.`}
+ ],
+ tantangan:{judul:"Baca JSON dengan aman",mode:"js",
+  perintah:`Lengkapi <code>muatAman(teks, cadangan)</code>: kembalikan hasil <code>JSON.parse(teks)</code>. Bila teks rusak, atau hasilnya <code>null</code>, kembalikan <code>cadangan</code>.`,
+  mulai:`function muatAman(teks, cadangan) {
+  // pakai try / catch
+}
+
+console.log(muatAman('[1,2]', []));`,
+  petunjuk:`Taruh <code>JSON.parse</code> di dalam <code>try</code>. Di <code>catch</code>, kembalikan cadangan. Jangan lupa kasus hasil <code>null</code> (misalnya teks <code>"null"</code> atau <code>null</code> itu sendiri).`,
+  kunci:`function muatAman(teks, cadangan) {
+  try {
+    const hasil = JSON.parse(teks);
+    return hasil === null ? cadangan : hasil;
+  } catch (e) {
+    return cadangan;
+  }
+}`,
+  tes:`cek("Teks sah dibaca dengan benar",function(){return JSON.stringify(muatAman('{"a":1}',{}))==='{"a":1}'});
+cek("Array sah dibaca dengan benar",function(){return JSON.stringify(muatAman('[1,2]',[]))==='[1,2]'});
+cek("Teks rusak mengembalikan cadangan",function(){return JSON.stringify(muatAman('rusak{',["x"]))==='["x"]'});
+cek("Nilai null mengembalikan cadangan",function(){return JSON.stringify(muatAman(null,["x"]))==='["x"]'});`}}
+];
+
+/* ---------- Kamus ---------- */
+const KAMUS=[
+["DOM",'document.querySelector("#id")',"Ambil satu elemen pertama yang cocok dengan selector CSS.",'const t = document.querySelector("#tombol");',"getElementById, tidak ada padanan langsung"],
+["DOM","document.querySelectorAll(sel)","Ambil semua elemen yang cocok. Hasilnya bisa di-loop.",'document.querySelectorAll(".chip").forEach((c) => c.classList.remove("aktif"));',""],
+["DOM","el.textContent","Baca atau ubah teks elemen sebagai teks biasa. Aman untuk input pengguna.",'el.textContent = "Halo";',"echo htmlspecialchars($x)"],
+["DOM","el.innerHTML","Baca atau ubah isi elemen sebagai HTML. Jangan isi dengan input pengguna tanpa dibersihkan.",'el.innerHTML = "<b>Tebal</b>";',"echo $html"],
+["DOM","el.classList.add / remove / toggle","Menambah, mencabut, atau membalik class CSS.",'el.classList.toggle("aktif");',""],
+["DOM","el.addEventListener(event, fn)","Menjalankan fungsi setiap kali event terjadi.",'tombol.addEventListener("click", () => { ... });',""],
+["DOM","document.createElement(tag)","Membuat elemen baru. Pasang ke halaman dengan appendChild.",'const li = document.createElement("li");\nlist.appendChild(li);',""],
+["DOM","input.value","Isi kolom input atau select, selalu berupa teks.",'const n = Number(input.value);',"$_POST['nama']"],
+["Array","arr.push(x)","Tambah item di akhir array.",'daftar.push({ ket: "Kopi" });',"$a[] = $x;  array_push"],
+["Array","arr.map(fn)","Ubah tiap item dan hasilkan array baru.",'angka.map((n) => n * 2);',"array_map"],
+["Array","arr.filter(fn)","Ambil item yang memenuhi syarat. Hasilnya selalu array.",'angka.filter((n) => n > 5);',"array_filter"],
+["Array","arr.find(fn)","Ambil item pertama yang cocok, atau undefined.",'daftar.find((d) => d.id === 3);',"loop + break"],
+["Array","arr.reduce(fn, awal)","Gabungkan semua item menjadi satu nilai.",'angka.reduce((a, n) => a + n, 0);',"array_reduce, array_sum"],
+["Array","arr.forEach(fn)","Jalankan sesuatu untuk tiap item. Tidak menghasilkan nilai.",'daftar.forEach((d) => console.log(d.ket));',"foreach"],
+["Array","arr.sort(fn)","Urutkan array. Untuk angka wajib beri fungsi pembanding.",'angka.sort((a, b) => a - b);',"sort, usort"],
+["Array","arr.includes(x)","Apakah x ada di array?",'["a", "b"].includes("a");',"in_array"],
+["Array","arr.join(pemisah)","Gabungkan item menjadi satu teks.",'["a", "b"].join(", ");',"implode"],
+["Array","arr.slice(awal, akhir)","Ambil sebagian array tanpa mengubah aslinya.",'daftar.slice(0, 6);',"array_slice"],
+["Array","arr.length","Jumlah item di array.",'daftar.length;',"count($a)"],
+["Teks","str.length","Jumlah karakter.",'"halo".length;',"strlen"],
+["Teks","str.includes(x)","Apakah teks memuat x?",'"penjualan".includes("jual");',"str_contains"],
+["Teks","str.split(pemisah)","Pecah teks menjadi array.",'"a,b,c".split(",");',"explode"],
+["Teks","str.trim()","Buang spasi di awal dan akhir.",'"  halo ".trim();',"trim"],
+["Teks","str.toUpperCase() / toLowerCase()","Ubah huruf besar atau kecil.",'"halo".toUpperCase();',"strtoupper, strtolower"],
+["Teks","str.replace(a, b)","Ganti kemunculan pertama a dengan b.",'"a-b".replace("-", " ");',"str_replace"],
+["Teks","str.padStart(n, isi)","Tambah karakter di depan sampai panjangnya n.",'String(7).padStart(2, "0");',"str_pad"],
+["Angka","Number(x) / parseInt / parseFloat","Ubah teks menjadi angka.",'Number("42");',"intval, floatval"],
+["Angka","n.toFixed(d)","Bulatkan ke d desimal, hasilnya teks.",'(3.14159).toFixed(2);',"number_format"],
+["Angka","n.toLocaleString(\"id-ID\")","Format angka sesuai kebiasaan lokal.",'(1250000).toLocaleString("id-ID");',"number_format"],
+["Angka","Math.round / floor / ceil","Pembulatan.",'Math.round(2.5);',"round, floor, ceil"],
+["Angka","Math.max / Math.min","Nilai terbesar atau terkecil.",'Math.max(3, 9, 4);',"max, min"],
+["Angka","Math.random()","Angka acak antara 0 dan 1.",'Math.floor(Math.random() * 10);',"rand, random_int"],
+["Lain-lain","console.log(...)","Tampilkan nilai di Console untuk memeriksa kode.",'console.log(data);',"var_dump, echo"],
+["Lain-lain","JSON.stringify(x)","Ubah data menjadi teks JSON.",'JSON.stringify({ a: 1 });',"json_encode"],
+["Lain-lain","JSON.parse(teks)","Ubah teks JSON menjadi data. Error bila teks rusak.",'JSON.parse("[1,2]");',"json_decode"],
+["Lain-lain","localStorage.setItem / getItem","Simpan dan baca teks di browser. Dibungkus JSON untuk data kompleks.",'localStorage.setItem("k", "v");\nlocalStorage.getItem("k");',"$_SESSION, cookie"],
+["Lain-lain","setTimeout(fn, ms) / setInterval","Jalankan fungsi sekali setelah jeda, atau berulang.",'setTimeout(() => console.log("hi"), 500);',"sleep (berbeda sifatnya)"],
+["Lain-lain","fetch(url)","Mengambil data dari server atau API. Mengembalikan Promise.",'const res = await fetch(url);\nconst data = await res.json();',"file_get_contents, curl"],
+["Lain-lain","Object.keys(obj)","Daftar nama properti sebuah object.",'Object.keys({ a: 1, b: 2 });',"array_keys"],
+["Lain-lain","new Date()","Tanggal dan waktu saat ini.",'new Date().getFullYear();',"date(), time()"]
+];
+
+const PETA=[
+["echo $x","console.log(x)"],["$nama = \"a\"","const nama = \"a\""],["\"a\" . \"b\"","\"a\" + \"b\"  atau  `a${b}`"],
+["foreach ($a as $x)","for (const x of a)"],["elseif","else if"],["count($a)","a.length"],
+["in_array($x, $a)","a.includes(x)"],["implode(\", \", $a)","a.join(\", \")"],["explode(\",\", $s)","s.split(\",\")"],
+["json_encode / json_decode","JSON.stringify / JSON.parse"],["array asosiatif ['a' => 1]","object { a: 1 }"],["null","null atau undefined"]
+];
+
+/* ---------- Util ---------- */
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+function h(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+/* ---------- Kemajuan (localStorage opsional) ---------- */
+let S={};
+try{S=JSON.parse(localStorage.getItem("bengkelJS")||"{}")||{}}catch(e){S={}}
+function simpanS(){try{localStorage.setItem("bengkelJS",JSON.stringify(S))}catch(e){}}
+function st(id){return S[id]||(S[id]={kuis:0,tan:false})}
+function selesaiModul(id){const s=st(id);return s.kuis>=2&&s.tan}
+
+/* ---------- Penjalan kode (iframe terisolasi) ---------- */
+function hookFn(id){
+  var hasil=[],galat=null;
+  function fmt(x){
+    if(typeof x==="string")return x;
+    if(x instanceof Error)return x.name+": "+x.message;
+    if(typeof x==="function")return String(x);
+    if(x===undefined)return "undefined";
+    if(typeof x==="number"||typeof x==="boolean"||typeof x==="bigint")return String(x);
+    try{var s=JSON.stringify(x);return s===undefined?String(x):s}catch(e){return String(x)}
+  }
+  function kirim(t,v,extra){try{var m={lat:id,t:t,v:v};if(extra)m.galat=extra;parent.postMessage(m,"*")}catch(e){}}
+  ["log","info","warn","error"].forEach(function(k){
+    console[k]=function(){kirim(k==="info"?"log":k,[].slice.call(arguments).map(fmt).join(" "))};
+  });
+  window.addEventListener("error",function(e){galat=e.message||"Error";kirim("error",galat)});
+  window.addEventListener("unhandledrejection",function(e){var r=e.reason;kirim("error","Promise ditolak: "+(r&&r.message?r.message:fmt(r)))});
+  window.cek=function(n,f){var ok=false,p="";try{ok=!!f()}catch(e){p=e.name+": "+e.message}hasil.push({n:n,ok:ok,p:p})};
+  window.selesai=function(){kirim("tes",hasil,galat||"")};
+  try{localStorage.getItem("x")}catch(e){
+    var m={};
+    try{Object.defineProperty(window,"localStorage",{configurable:true,value:{
+      getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},
+      setItem:function(k,v){m[k]=String(v)},
+      removeItem:function(k){delete m[k]},
+      clear:function(){m={}}}})}catch(e2){}
+  }
+}
+function bangun(kode,mode,id,tes){
+  const hook="<script>("+hookFn.toString()+")("+JSON.stringify(id)+");<\/script>";
+  const tesTag=tes?"<script>try{"+tes+"}catch(e){cek('Kode pengujian berjalan',function(){return false})}selesai();<\/script>":"";
+  const kepala='<!doctype html><html><head><meta charset="utf-8">';
+  if(mode==="html")return kepala+"<style>body{font-family:system-ui,sans-serif;margin:12px;color:#13222c;background:#fff}</style>"+hook+"</head><body>"+kode+tesTag+"</body></html>";
+  return kepala+hook+"</head><body><script>"+kode+"\n<\/script>"+tesTag+"</body></html>";
+}
+
+const labs={};
+let seq=0;
+window.addEventListener("message",function(e){
+  const d=e.data;if(!d||typeof d!=="object"||!d.lat)return;
+  const L=labs[d.lat];if(!L||e.source!==L.ifr.contentWindow)return;
+  L.onMsg(d);
+});
+
+function buatLab(o){
+  const id="lab"+(++seq),el=h("div","lab");
+  const label=o.mode==="html"?"HTML + CSS + JS":"JavaScript";
+  el.innerHTML='<div class="lab-bar"><span class="tagbhs">'+label+'</span><span class="sp"></span><span class="tip">Ctrl+Enter untuk menjalankan</span>'+
+    '<button type="button" class="btn kecil" data-a="reset">Kembalikan awal</button>'+
+    '<button type="button" class="btn utama kecil" data-a="run">'+(o.tes?"Periksa jawaban":"Jalankan")+'</button></div>'+
+    '<textarea class="kode" id="'+id+'-kode" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor kode"></textarea>'+
+    '<iframe '+(o.mode==="html"?'class="prev"':'hidden')+' sandbox="allow-scripts" title="'+(o.mode==="html"?"Pratinjau hasil":"Penjalan kode")+'"></iframe>'+
+    '<div class="out" aria-live="polite"></div>';
+  const ta=$("textarea",el),ifr=$("iframe",el),out=$(".out",el);
+  const awal=o.kode.replace(/^\n/,"").replace(/\s+$/,"");
+  ta.value=awal;
+  ta.rows=Math.max(5,Math.min(24,awal.split("\n").length+1));
+  let timer=0,sudah=false,logEl=null,gagalKe=0;
+
+  function kosong(){out.innerHTML='<span class="kosong">'+(o.tes?"Tekan Periksa jawaban untuk menguji kodemu.":(o.mode==="html"?"Pesan console akan muncul di sini.":"Tekan Jalankan untuk melihat hasil."))+'</span>'}
+  function tampilTes(d){
+    const list=d.v||[],lulus=list.length>0&&list.every(x=>x.ok)&&!d.galat;
+    const ringkas=h("p","ringkas "+(lulus?"ok":"gagal"),lulus?"Semua pengujian lulus.":(list.filter(x=>x.ok).length+" dari "+list.length+" pengujian lulus."));
+    const ul=h("ul","hasiltes");
+    list.forEach(x=>{ul.append(h("li",null,'<span class="m '+(x.ok?"ok":"gagal")+'">'+(x.ok?"✓":"✗")+'</span><span>'+esc(x.n)+(x.p?'<small>'+esc(x.p)+'</small>':'')+'</span>'))});
+    out.prepend(ul);out.prepend(ringkas);
+    if(lulus)gagalKe=0;else gagalKe++;
+    if(o.onHasil)o.onHasil(lulus,gagalKe);
+  }
+  function jalan(){
+    out.innerHTML='<div class="log"></div>';logEl=$(".log",out);sudah=false;clearTimeout(timer);
+    ifr.srcdoc=bangun(ta.value,o.mode,id,o.tes);
+    if(o.tes){timer=setTimeout(()=>{if(!sudah){const p=h("p","ringkas gagal","Tidak ada respons dari kode. Periksa apakah ada perulangan yang tidak pernah berhenti, lalu muat ulang halaman.");out.prepend(p)}},6000)}
+    else if(o.mode==="js"){timer=setTimeout(()=>{if(!logEl.childNodes.length)out.innerHTML='<span class="kosong">Kode berjalan tanpa keluaran. Gunakan console.log untuk menampilkan nilai.</span>'},1200)}
+  }
+  labs[id]={ifr:ifr,onMsg:function(d){
+    if(d.t==="tes"){sudah=true;clearTimeout(timer);tampilTes(d);return}
+    if(!logEl||!logEl.isConnected){out.innerHTML='<div class="log"></div>';logEl=$(".log",out)}
+    logEl.append(h("div","l "+d.t,esc(d.v)));
+  }};
+  el.addEventListener("click",ev=>{
+    const b=ev.target.closest("button[data-a]");if(!b)return;
+    if(b.dataset.a==="run")jalan();
+    else{ta.value=awal;clearTimeout(timer);kosong()}
+  });
+  let bebas=false;
+  ta.addEventListener("keydown",ev=>{
+    if((ev.ctrlKey||ev.metaKey)&&ev.key==="Enter"){ev.preventDefault();jalan();return}
+    if(ev.key==="Escape"){bebas=true;return}
+    if(ev.key==="Tab"&&!ev.shiftKey&&!bebas){ev.preventDefault();ta.setRangeText("  ",ta.selectionStart,ta.selectionEnd,"end")}
+    else if(ev.key!=="Tab"&&ev.key!=="Shift")bebas=false;
+  });
+  ta.addEventListener("blur",()=>{bebas=false});
+  kosong();
+  if(!o.tes)setTimeout(jalan,0);
+  return el;
+}
+
+/* ---------- Komponen pelajaran ---------- */
+function judulLangkah(n,t){return h("h2","lg","<small>Langkah "+n+"</small>"+t)}
+
+function buatKuis(m){
+  const s=st(m.id),box=h("section","blok");
+  box.append(judulLangkah(3,"Kuis cepat"));
+  box.append(h("p",null,"Pilih satu jawaban untuk tiap soal. Kuis dianggap lulus bila minimal 2 dari "+m.kuis.length+" benar."+(s.kuis>=2?'<span class="lulus">LULUS · skor terbaik '+s.kuis+'/'+m.kuis.length+'</span>':'')));
+  let benar=0,terjawab=0;
+  const skor=h("p","skor");skor.setAttribute("aria-live","polite");
+  m.kuis.forEach((q,qi)=>{
+    const d=h("div","soal");
+    d.append(h("p","tanya","<b>"+(qi+1)+".</b> "+q.t));
+    const op=h("div","opsi"),pj=h("p","penjelasan");pj.hidden=true;pj.innerHTML=q.j;
+    q.o.forEach((txt,oi)=>{
+      const b=h("button",null,txt);b.type="button";
+      b.addEventListener("click",()=>{
+        $$("button",op).forEach((x,xi)=>{x.disabled=true;if(xi===q.b)x.classList.add("benar")});
+        if(oi===q.b)benar++;else b.classList.add("salah");
+        pj.hidden=false;terjawab++;
+        if(terjawab===m.kuis.length){
+          skor.textContent="Skor kamu: "+benar+" dari "+m.kuis.length+(benar>=2?". Kuis lulus.":". Ulangi kuis untuk lulus.");
+          if(benar>s.kuis){s.kuis=benar;simpanS()}
+          perbaruiNav();
+          const u=h("button","btn kecil","Ulangi kuis");u.type="button";
+          u.addEventListener("click",()=>box.replaceWith(buatKuis(m)));
+          skor.after(u);
+        }
+      });
+      op.append(b);
+    });
+    d.append(op,pj);box.append(d);
+  });
+  box.append(skor);
+  return box;
+}
+
+function buatTantangan(m){
+  const c=m.tantangan,s=st(m.id),box=h("section","blok");
+  box.append(judulLangkah(4,"Tantangan"));
+  const jd=h("p",null,"<b>"+c.judul+".</b> "+c.perintah+(s.tan?'<span class="lulus">SUDAH LULUS</span>':""));
+  box.append(jd);
+  const kunciBox=h("details","kunci");kunciBox.hidden=true;
+  kunciBox.innerHTML="<summary>Lihat contoh jawaban</summary><pre><code></code></pre>";
+  $("code",kunciBox).textContent=c.kunci;
+  const lab=buatLab({kode:c.mulai,mode:c.mode,tes:c.tes,onHasil:function(lulus,gagal){
+    if(lulus){
+      if(!s.tan){s.tan=true;simpanS()}
+      if(!$(".lulus",jd))jd.append(h("span","lulus","LULUS"));
+      perbaruiNav();
+    }else if(gagal>=2){kunciBox.hidden=false}
+  }});
+  box.append(lab);
+  const pt=h("p","petunjuk");pt.hidden=true;pt.innerHTML="<b>Petunjuk:</b> "+c.petunjuk;
+  const bp=h("button","btn kecil","Tampilkan petunjuk");bp.type="button";
+  bp.addEventListener("click",()=>{pt.hidden=!pt.hidden;bp.textContent=pt.hidden?"Tampilkan petunjuk":"Sembunyikan petunjuk"});
+  box.append(bp,pt,kunciBox);
+  return box;
+}
+
+/* ---------- Tampilan ---------- */
+let aktif="home";
+function tampil(id){
+  aktif=id;S._akhir=id;simpanS();
+  Object.keys(labs).forEach(k=>delete labs[k]);
+  const main=$("#main");main.innerHTML="";
+  if(id==="home")tampilHome(main);
+  else if(id==="kamus")tampilKamus(main);
+  else tampilModul(main,id);
+  perbaruiNav();
+  window.scrollTo(0,0);
+}
+
+function tampilModul(main,id){
+  const idx=MODUL.findIndex(x=>x.id===id),m=MODUL[idx];
+  const kepala=h("header","kepala");
+  kepala.innerHTML='<div class="nomor" aria-hidden="true">'+String(idx+1).padStart(2,"0")+'</div><div style="flex:1;min-width:min(100%,260px)"><p class="eyebrow">Modul '+(idx+1)+' dari '+MODUL.length+' · '+m.waktu+'</p><h1>'+m.judul+'</h1></div>';
+  main.append(kepala,h("p","tujuan",m.tujuan));
+  const isi=h("section","isi");
+  isi.append(document.getElementById("t-"+id).content.cloneNode(true));
+  main.append(isi);
+  $$("textarea.lat",isi).forEach(ta=>ta.replaceWith(buatLab({kode:ta.value,mode:ta.dataset.mode||"js"})));
+  $$("table",isi).forEach(t=>{const g=h("div","gulung");t.replaceWith(g);g.append(t)});
+  main.append(buatKuis(m),buatTantangan(m));
+  const kaki=h("div","kaki");
+  const prev=idx>0?MODUL[idx-1]:null,next=idx<MODUL.length-1?MODUL[idx+1]:null;
+  const bp=h("button","btn",prev?"← "+prev.judul:"← Beranda");bp.type="button";bp.addEventListener("click",()=>tampil(prev?prev.id:"home"));
+  const bn=h("button","btn utama",next?next.judul+" →":"Buka kamus fungsi →");bn.type="button";bn.addEventListener("click",()=>tampil(next?next.id:"kamus"));
+  kaki.append(bp,bn);main.append(kaki);
+}
+
+function tampilHome(main){
+  const hero=h("header","hero");
+  hero.innerHTML='<p class="eyebrow">7 modul · sekitar 3 jam total</p><h1>Belajar JavaScript lewat kode yang bisa kamu ubah sendiri</h1><p class="tujuan">Dibuat untuk yang sudah pernah menyentuh PHP tetapi masih pemula di JavaScript. Tiap modul menyorot apa yang sama dan apa yang berbeda dari PHP, dan semua contoh kode di sini bisa kamu jalankan langsung.</p>';
+  main.append(hero);
+  main.append(h("h2","lg","<small>Cara belajar</small>Empat langkah di setiap modul"));
+  main.append(h("ol","langkah-list",
+    "<li><b>Baca</b>Penjelasan singkat dan perbandingan dengan PHP.</li>"+
+    "<li><b>Coba sendiri</b>Ubah kode di editor, lalu lihat hasilnya langsung.</li>"+
+    "<li><b>Kuis</b>Tiga soal pilihan ganda dengan penjelasan di tiap jawaban.</li>"+
+    "<li><b>Tantangan</b>Tulis kode sendiri. Diperiksa otomatis dengan beberapa kasus uji.</li>"));
+  main.append(h("p",null,"Saran jadwal: satu modul per hari, 20 sampai 35 menit. Modul dianggap selesai bila kuis lulus dan tantangan lulus. Kemajuanmu tersimpan di browser ini."));
+  const lanjut=MODUL.find(m=>!selesaiModul(m.id));
+  const bm=h("button","btn utama",lanjut?(MODUL.some(m=>selesaiModul(m.id))?"Lanjutkan: ":"Mulai: ")+lanjut.judul:"Buka kamus fungsi");bm.type="button";
+  bm.addEventListener("click",()=>tampil(lanjut?lanjut.id:"kamus"));
+  main.append(bm);
+
+  main.append(h("h2","lg","<small>Peta cepat</small>PHP ke JavaScript"));
+  const t=h("table");t.innerHTML="<thead><tr><th>PHP</th><th>JavaScript</th></tr></thead><tbody>"+PETA.map(r=>"<tr><td><code>"+esc(r[0])+"</code></td><td><code>"+esc(r[1])+"</code></td></tr>").join("")+"</tbody>";
+  const g=h("div","gulung");g.append(t);main.append(g);
+
+  main.append(h("h2","lg","<small>Daftar modul</small>Semua modul"));
+  const grid=h("div","kartu-modul");
+  MODUL.forEach((m,i)=>{
+    const b=h("button","km");b.type="button";
+    const s=st(m.id);
+    b.innerHTML='<span class="k1">MODUL '+(i+1)+' · '+m.waktu+'</span><span class="k2">'+m.judul+'</span><span class="k3">'+(selesaiModul(m.id)?"Selesai":"Kuis "+(s.kuis>=2?"lulus":"belum")+" · Tantangan "+(s.tan?"lulus":"belum"))+'</span>';
+    b.addEventListener("click",()=>tampil(m.id));grid.append(b);
+  });
+  main.append(grid);
+  main.append(h("div","catatan","<b>Setelah modul 7</b><p>Buka lagi kode Kasku dan cari fungsi <code>muat()</code>, <code>simpan()</code>, dan <code>render()</code>. Kamu sudah mengenali pola di baliknya.</p>"));
+}
+
+function tampilKamus(main){
+  const hero=h("header","hero");
+  hero.innerHTML='<p class="eyebrow">Referensi</p><h1>Kamus fungsi</h1><p class="tujuan">Fungsi yang paling sering dipakai, lengkap dengan contoh dan padanannya di PHP.</p>';
+  main.append(hero);
+  const cari=h("input","cari");cari.id="cariKamus";cari.type="search";cari.placeholder="Cari fungsi, misalnya filter atau JSON";cari.setAttribute("aria-label","Cari fungsi");
+  const bungkusCari=h("div");bungkusCari.append(cari);main.append(bungkusCari);
+  const kats=["Semua","DOM","Array","Teks","Angka","Lain-lain"];let kat="Semua";
+  const chips=h("div","chips");
+  kats.forEach(k=>{const c=h("button","chip",k);c.type="button";c.setAttribute("aria-pressed",k===kat?"true":"false");
+    c.addEventListener("click",()=>{kat=k;$$(".chip",chips).forEach(x=>x.setAttribute("aria-pressed",x===c?"true":"false"));isi()});chips.append(c)});
+  main.append(chips);
+  const daftar=h("div","kamus");main.append(daftar);
+  function isi(){
+    const q=cari.value.trim().toLowerCase();daftar.innerHTML="";let n=0;
+    KAMUS.forEach(r=>{
+      if(kat!=="Semua"&&r[0]!==kat)return;
+      if(q&&!(r[1]+" "+r[2]+" "+r[4]).toLowerCase().includes(q))return;
+      n++;
+      const it=h("div","ki");
+      const kiri=h("div");kiri.append(h("span","nm",esc(r[1])),h("span","kt",r[0]));
+      const kanan=h("div");kanan.append(h("p",null,esc(r[2])));
+      const pre=h("pre");const code=h("code");code.textContent=r[3];pre.append(code);kanan.append(pre);
+      if(r[4])kanan.append(h("p","ph","Di PHP: <code>"+esc(r[4])+"</code>"));
+      it.append(kiri,kanan);daftar.append(it);
+    });
+    if(!n)daftar.append(h("p",null,"Tidak ada fungsi yang cocok. Coba kata lain."));
+  }
+  cari.addEventListener("input",isi);isi();
+}
+
+/* ---------- Menu ---------- */
+function bangunNav(){
+  const w=$("#daftarNav");w.innerHTML="";
+  function item(id,no,judul,titik){
+    const b=h("button","ni");b.type="button";b.dataset.id=id;
+    b.innerHTML='<span class="no">'+no+'</span><span class="jd">'+judul+'</span>'+(titik?'<span class="st" aria-hidden="true"><i class="pt" title="Kuis"></i><i class="pt" title="Tantangan"></i></span>':"");
+    b.addEventListener("click",()=>tampil(id));w.append(b);
+  }
+  item("home","~","Beranda",false);
+  w.append(h("hr","pisah"));
+  MODUL.forEach((m,i)=>item(m.id,String(i+1),m.judul,true));
+  w.append(h("hr","pisah"));
+  item("kamus","A–Z","Kamus fungsi",false);
+}
+function perbaruiNav(){
+  let total=0;
+  MODUL.forEach(m=>{const s=st(m.id);total+=(s.kuis>=2?.5:0)+(s.tan?.5:0)});
+  const sel=MODUL.filter(m=>selesaiModul(m.id)).length;
+  $("#kemTeks").textContent=sel+" dari "+MODUL.length+" modul selesai";
+  $("#kemBar").style.width=Math.round(total/MODUL.length*100)+"%";
+  $$(".ni").forEach(b=>{
+    if(b.dataset.id===aktif)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");
+    const s=S[b.dataset.id];const pts=$$(".pt",b);
+    if(pts.length){pts[0].classList.toggle("ya",!!s&&s.kuis>=2);pts[1].classList.toggle("ya",!!s&&!!s.tan)}
+  });
+}
+
+/* ---------- Mulai ---------- */
+bangunNav();
+let awal="home";
+try{const hs=(location.hash||"").slice(1);if(hs&&(MODUL.some(m=>m.id===hs)||hs==="kamus"||hs==="home"))awal=hs;
+ else if(S._akhir&&(MODUL.some(m=>m.id===S._akhir)||S._akhir==="kamus"))awal=S._akhir}catch(e){}
+tampil(awal);
+})();
+</script>
+
+</body></html>
