@@ -26,7 +26,7 @@ nav a.mati{opacity:.45;cursor:default}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:22px 0}
 .topbar h1{margin:0;font-size:22px}.topbar p{margin:2px 0 0;color:var(--abu)}
 .aksi{display:flex;gap:8px;flex-wrap:wrap}
-button,select,input{font:inherit}
+button,select,input,textarea{font:inherit}
 .btn{padding:9px 14px;border-radius:10px;border:1px solid var(--garis);background:var(--kartu);color:var(--teks);cursor:pointer}
 .btn:hover{border-color:var(--utama)}
 .btn.utama{background:var(--utama);border-color:var(--utama);color:#fff;font-weight:600}
@@ -89,6 +89,7 @@ dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px
 .lb{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 .in{width:100%;padding:10px;border-radius:10px;border:1px solid var(--garis);background:var(--bg);color:var(--teks)}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;background:var(--utama2);margin:0 6px 8px 0}
+.tag select{padding:2px 4px;font-size:11px;border-radius:8px}
 .dua2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .lap{max-width:820px;margin:0 auto}
 .kop{text-align:center;margin-bottom:18px;border-bottom:2px solid var(--garis);padding-bottom:14px}
@@ -98,6 +99,8 @@ dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px
 .lap .tot td{font-weight:700;border-top:1px solid var(--teks)}
 .lap .akhir td{font-weight:800;font-size:16px;border-top:2px solid var(--teks)}
 .lap h4{margin:24px 0 8px}
+.lap p{line-height:1.6;margin:6px 0}
+.lap .ok{color:var(--hijau);font-weight:600}.lap .bad{color:var(--merah);font-weight:600}
 #login{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:grid;place-items:center;padding:16px;overflow:auto}
 .kotak{background:var(--kartu);color:var(--teks);width:min(380px,100%);padding:30px;border-radius:20px;box-shadow:0 20px 60px #00000055;text-align:center}
 .kotak .lg{width:52px;height:52px;border-radius:14px;background:var(--utama);display:grid;place-items:center;font-size:26px;margin:0 auto 14px}
@@ -195,8 +198,15 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 
     <div id="halamanLaporan" class="sembunyi">
       <div class="kartu noprint" style="margin-bottom:16px">
-        <div class="judul"><h2>Pilih periode laporan</h2>
+        <div class="judul"><h2>Pilih laporan &amp; periode</h2>
           <div class="aksi">
+            <select class="btn" id="jenisLap" onchange="renderLaporan()">
+              <option value="labarugi">1. Laporan Laba Rugi</option>
+              <option value="ekuitas">2. Laporan Perubahan Ekuitas</option>
+              <option value="neraca">3. Laporan Posisi Keuangan (Neraca)</option>
+              <option value="aruskas">4. Laporan Arus Kas</option>
+              <option value="calk">5. Catatan atas Laporan Keuangan</option>
+            </select>
             <select class="btn" id="bulanLap" onchange="renderLaporan()"></select>
             <button class="btn utama" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
           </div>
@@ -210,6 +220,8 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
         <div class="kartu">
           <div class="judul"><h2>Profil usaha</h2></div>
           <label class="lb">Nama usaha</label><input class="in" id="sUsaha">
+          <label class="lb">Catatan tambahan (muncul di Catatan atas Laporan Keuangan)</label>
+          <textarea class="in" id="sCatatan" rows="4" placeholder="Contoh: Usaha berdiri sejak 2026, bergerak di bidang penjualan..."></textarea>
           <div class="aksi" style="margin-top:16px"><button class="btn utama" onclick="simpanProfil()">Simpan profil</button></div>
         </div>
         <div class="kartu">
@@ -217,8 +229,10 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
           <div id="daftarKat"></div>
           <div class="aksi" style="margin-top:8px;flex-wrap:nowrap">
             <input class="in" id="kategoriBaru" placeholder="Nama kategori baru">
+            <select class="btn" id="kelasBaru"></select>
             <button class="btn" onclick="tambahKat()">+ Tambah</button>
           </div>
+          <p class="delta">Jenis akun menentukan di laporan mana transaksi muncul: <b>Operasional</b> = pendapatan/beban (Laba Rugi); <b>Modal/Prive</b> = setoran modal (masuk) &amp; prive (keluar); <b>Aset tetap</b> = penjualan (masuk) &amp; pembelian (keluar); <b>Pinjaman</b> = terima pinjaman (masuk) &amp; bayar pinjaman (keluar).</p>
         </div>
       </div>
       <div class="kartu" style="margin-top:16px">
@@ -244,7 +258,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
       </div>
       <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Data</h2></div>
-        <p class="delta">Format impor CSV: tanggal (YYYY-MM-DD atau DD/MM/YYYY), keterangan, kategori, jenis (masuk/keluar), jumlah. Baris pertama boleh berisi judul kolom.</p>
+        <p class="delta">Format impor CSV: tanggal (YYYY-MM-DD atau DD/MM/YYYY), keterangan, kategori, jenis (masuk/keluar), jumlah. Baris pertama boleh berisi judul kolom. Kategori baru dari CSV otomatis menjadi jenis Operasional (bisa diubah di atas).</p>
         <input type="file" id="fileCsv" accept=".csv,text/csv" class="sembunyi" onchange="impor(this)">
         <div class="aksi">
           <button class="btn" onclick="document.getElementById('fileCsv').click()">⬆ Impor CSV</button>
@@ -325,7 +339,8 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 <script>
 const KUNCI="dashboardAkuntansi",KUNCI_P="kaskuPengaturan";
 const WARNA=["#4f46e5","#f43f5e","#f59e0b","#10b981","#06b6d4","#8b5cf6","#94a3b8"];
-const EMOJI={"Penjualan":"🛍️","Gaji":"👥","Sewa":"🏠","Listrik & Air":"💡","Bahan Baku":"📦","Pemasaran":"📣","Lainnya":"🧾"};
+const EMOJI={"Penjualan":"🛍️","Gaji":"👥","Sewa":"🏠","Listrik & Air":"💡","Bahan Baku":"📦","Pemasaran":"📣","Lainnya":"🧾","Modal Pemilik":"🏦","Aset Tetap":"🏗️","Pinjaman":"🤝"};
+const KELAS_LABEL={operasi:"Operasional",ekuitas:"Modal/Prive",aset:"Aset tetap",utang:"Pinjaman"};
 const contoh=[
 {id:1,tgl:"2026-05-03",ket:"Penjualan produk A",kat:"Penjualan",jenis:"masuk",jumlah:12500000},
 {id:2,tgl:"2026-05-10",ket:"Sewa toko",kat:"Sewa",jenis:"keluar",jumlah:3000000},
@@ -338,11 +353,31 @@ const contoh=[
 {id:9,tgl:"2026-09-06",ket:"Penjualan produk A",kat:"Penjualan",jenis:"masuk",jumlah:14300000},
 {id:10,tgl:"2026-09-18",ket:"Listrik dan air",kat:"Listrik & Air",jenis:"keluar",jumlah:950000},
 {id:11,tgl:"2026-10-01",ket:"Penjualan harian",kat:"Penjualan",jenis:"masuk",jumlah:5400000},
-{id:12,tgl:"2026-10-02",ket:"Gaji karyawan",kat:"Gaji",jenis:"keluar",jumlah:6500000}];
+{id:12,tgl:"2026-10-02",ket:"Gaji karyawan",kat:"Gaji",jenis:"keluar",jumlah:6500000},
+{id:13,tgl:"2026-05-01",ket:"Setoran modal awal",kat:"Modal Pemilik",jenis:"masuk",jumlah:50000000},
+{id:14,tgl:"2026-05-02",ket:"Beli peralatan usaha",kat:"Aset Tetap",jenis:"keluar",jumlah:8000000},
+{id:15,tgl:"2026-06-01",ket:"Pinjaman bank",kat:"Pinjaman",jenis:"masuk",jumlah:10000000},
+{id:16,tgl:"2026-09-25",ket:"Angsuran pokok pinjaman",kat:"Pinjaman",jenis:"keluar",jumlah:2000000},
+{id:17,tgl:"2026-09-30",ket:"Prive pemilik",kat:"Modal Pemilik",jenis:"keluar",jumlah:1000000}];
 
-const PDEF={usaha:"Kasku",nama:"Putri",peran:"Pemilik usaha",kategori:["Penjualan","Gaji","Sewa","Listrik & Air","Bahan Baku","Pemasaran","Lainnya"]};
+const PDEF={usaha:"Kasku",nama:"Putri",peran:"Pemilik usaha",
+  kategori:["Penjualan","Gaji","Sewa","Listrik & Air","Bahan Baku","Pemasaran","Lainnya","Modal Pemilik","Aset Tetap","Pinjaman"],
+  kelas:{"Modal Pemilik":"ekuitas","Aset Tetap":"aset","Pinjaman":"utang"},catatan:""};
 let data=muat(),tampilan="dashboard",jenisAktif="semua",p=muatP();
-function muatP(){try{let x=localStorage.getItem(KUNCI_P);if(x)return Object.assign(JSON.parse(JSON.stringify(PDEF)),JSON.parse(x))}catch(e){}return JSON.parse(JSON.stringify(PDEF))}
+function muatP(){
+  let d=JSON.parse(JSON.stringify(PDEF));
+  try{
+    let x=localStorage.getItem(KUNCI_P);
+    if(x){
+      let s=JSON.parse(x),r=Object.assign(d,s);
+      if(!s.kelas){ // migrasi dari versi lama: tambahkan kategori akun baru
+        PDEF.kategori.forEach(function(k){if(!r.kategori.includes(k))r.kategori.push(k)});
+      }
+      return r;
+    }
+  }catch(e){}
+  return d;
+}
 function simpanP(){try{localStorage.setItem(KUNCI_P,JSON.stringify(p))}catch(e){}}
 const $=id=>document.getElementById(id);
 const dlg=$("dlg");
@@ -350,10 +385,13 @@ const dlg=$("dlg");
 function muat(){try{let s=localStorage.getItem(KUNCI);if(s)return JSON.parse(s)}catch(e){}return contoh}
 function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(data))}catch(e){}}
 function rp(n){return "Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID")}
+function nrp(n){return (Math.round(n)<0?"-":"")+rp(n)}
 function singkat(n){return n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(n)}
 function aman(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function kb(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
 function jumlahDari(arr,j){return arr.filter(d=>d.jenis===j).reduce((a,d)=>a+d.jumlah,0)}
+function kelasDari(k){return (p.kelas&&p.kelas[k])||"operasi"}
+function oper(arr){return arr.filter(d=>kelasDari(d.kat)==="operasi")}
 function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2200)}
 
 const JUDUL={dashboard:"Dashboard",transaksi:"Transaksi",laporan:"Laporan",pengaturan:"Pengaturan"};
@@ -374,7 +412,7 @@ function ganti(v){
 function render(){
   renderDashboard();
   if(tampilan==="transaksi")$("subjudul").innerText=dataDilihat().length+" transaksi tercatat";
-  if(tampilan==="laporan"){renderLaporan();$("subjudul").innerText="Laporan laba rugi";}
+  if(tampilan==="laporan"){renderLaporan();$("subjudul").innerText="5 laporan keuangan dasar";}
   if(tampilan==="pengaturan"){renderPengaturan();$("subjudul").innerText="Atur profil, kategori, dan data";}
 }
 function filterJ(el){
@@ -386,8 +424,9 @@ function filterJ(el){
 function renderDashboard(){
   let now=new Date(),bulanIni=kb(now),bulanLalu=kb(new Date(now.getFullYear(),now.getMonth()-1,1));
   let mode=$("periode").value;
-  let dp=data.filter(d=>mode==="semua"||d.tgl.startsWith(bulanIni));
-  $("subjudul").innerText=(mode==="semua"?"Ringkasan semua waktu":"Ringkasan bulan ini")+" · "+dp.length+" transaksi";
+  let dpAll=data.filter(d=>mode==="semua"||d.tgl.startsWith(bulanIni));
+  let dp=oper(dpAll);
+  $("subjudul").innerText=(mode==="semua"?"Ringkasan semua waktu":"Ringkasan bulan ini")+" · "+dpAll.length+" transaksi";
 
   let masuk=jumlahDari(dp,"masuk"),keluar=jumlahDari(dp,"keluar"),laba=masuk-keluar;
   let margin=masuk>0?laba/masuk*100:0;
@@ -395,19 +434,19 @@ function renderDashboard(){
   // delta vs bulan lalu (hanya mode bulan ini)
   function delta(j,nilai){
     if(mode!=="bulan")return '<span class="delta">Semua waktu</span>';
-    let lalu=jumlahDari(data.filter(d=>d.tgl.startsWith(bulanLalu)),j);
+    let lalu=jumlahDari(oper(data.filter(d=>d.tgl.startsWith(bulanLalu))),j);
     if(lalu===0)return '<span class="delta">Belum ada data bulan lalu</span>';
-    let p=(nilai-lalu)/lalu*100,baik=(j==="keluar")?p<=0:p>=0;
-    return '<span class="'+(baik?"naik":"turun")+'">'+(p>=0?"▲ ":"▼ ")+Math.abs(p).toFixed(0)+'%</span> <span class="delta">vs bulan lalu</span>';
+    let pct=(nilai-lalu)/lalu*100,baik=(j==="keluar")?pct<=0:pct>=0;
+    return '<span class="'+(baik?"naik":"turun")+'">'+(pct>=0?"▲ ":"▼ ")+Math.abs(pct).toFixed(0)+'%</span> <span class="delta">vs bulan lalu</span>';
   }
   let kartu=[
-    ["Total pemasukan","💰","#10b9811f",rp(masuk),delta("masuk",masuk),""],
-    ["Total pengeluaran","💸","#f43f5e1f",rp(keluar),delta("keluar",keluar),""],
+    ["Total pendapatan","💰","#10b9811f",rp(masuk),delta("masuk",masuk),""],
+    ["Total beban","💸","#f43f5e1f",rp(keluar),delta("keluar",keluar),""],
     ["Laba bersih","📈","#4f46e51f",(laba<0?"-":"")+rp(laba),'<span class="delta">'+(laba>=0?"Usaha untung":"Usaha rugi")+"</span>",laba>=0?"var(--hijau)":"var(--merah)"],
-    ["Margin laba","🎯","#f59e0b1f",margin.toFixed(1)+"%",'<span class="delta">Laba dibanding pemasukan</span>',""]];
+    ["Margin laba","🎯","#f59e0b1f",margin.toFixed(1)+"%",'<span class="delta">Laba dibanding pendapatan</span>',""]];
   $("kpi").innerHTML=kartu.map(k=>'<div class="kartu"><span class="ikon" style="background:'+k[2]+'">'+k[1]+'</span><h3>'+k[0]+'</h3><div class="nilai" style="color:'+(k[5]||"inherit")+'">'+k[3]+'</div>'+k[4]+'</div>').join("");
 
-  // grafik 6 bulan
+  // grafik 6 bulan (arus kas semua transaksi)
   let bln=[];
   for(let i=5;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1);bln.push({k:kb(d),l:d.toLocaleDateString("id-ID",{month:"short"}),masuk:0,keluar:0})}
   data.forEach(d=>bln.forEach(b=>{if(d.tgl.startsWith(b.k))b[d.jenis]+=d.jumlah}));
@@ -415,7 +454,7 @@ function renderDashboard(){
   let garis=[1,.75,.5,.25].map(f=>'<div class="gl" style="top:'+((1-f)*(100-0))*0.88+'%"><span>'+singkat(maks*f)+'</span></div>').join("");
   $("grafik").innerHTML=garis+bln.map(b=>'<div class="kol"><b style="height:'+(b.masuk/maks*88)+'%;background:var(--hijau)" title="Pemasukan '+rp(b.masuk)+'"></b><b style="height:'+(b.keluar/maks*88)+'%;background:var(--merah)" title="Pengeluaran '+rp(b.keluar)+'"></b><em>'+b.l+'</em></div>').join("");
 
-  // donat kategori
+  // donat kategori beban
   let pk={};dp.filter(d=>d.jenis==="keluar").forEach(d=>pk[d.kat]=(pk[d.kat]||0)+d.jumlah);
   let ks=Object.keys(pk).sort((a,b)=>pk[b]-pk[a]);
   if(ks.length===0){$("donat").innerHTML='<div class="kosong">Belum ada pengeluaran</div>'}
@@ -686,36 +725,50 @@ function terapkanProfil(){
     $("avatar").innerText=(sesi.nama||"?").charAt(0).toUpperCase();
   }
 }
-function isiFormProfil(){$("sUsaha").value=p.usaha}
+function isiFormProfil(){$("sUsaha").value=p.usaha;$("sCatatan").value=p.catatan||""}
 function simpanProfil(){
   if(!bisa("pengaturan"))return;
   p.usaha=$("sUsaha").value.trim()||"Kasku";
+  p.catatan=$("sCatatan").value.trim();
   simpanP();terapkanProfil();toast("Profil disimpan ✓");
 }
 function isiKategori(){
   let s=$("fKat"),lama=s.value;
   s.innerHTML=p.kategori.map(k=>"<option>"+aman(k)+"</option>").join("");
   if(p.kategori.includes(lama))s.value=lama;
+  $("kelasBaru").innerHTML=Object.keys(KELAS_LABEL).map(k=>'<option value="'+k+'">'+KELAS_LABEL[k]+"</option>").join("");
 }
 function tambahKat(){
   if(!bisa("pengaturan"))return;
   let k=$("kategoriBaru").value.replace(/[,;]/g," ").trim();
   if(k==="")return;
   if(p.kategori.some(x=>x.toLowerCase()===k.toLowerCase())){toast("Kategori sudah ada");return}
-  p.kategori.push(k);simpanP();isiKategori();$("kategoriBaru").value="";renderPengaturan();
+  p.kategori.push(k);
+  let kl=$("kelasBaru").value;
+  if(kl!=="operasi"){p.kelas=p.kelas||{};p.kelas[k]=kl}
+  simpanP();isiKategori();$("kategoriBaru").value="";renderPengaturan();
+}
+function ubahKelas(i,v){
+  if(!bisa("pengaturan"))return;
+  p.kelas=p.kelas||{};
+  if(v==="operasi"){delete p.kelas[p.kategori[i]]}else{p.kelas[p.kategori[i]]=v}
+  simpanP();renderPengaturan();toast("Jenis akun diperbarui");
 }
 function hapusKat(i){
   if(!bisa("pengaturan"))return;
   let k=p.kategori[i];
   if(data.some(d=>d.kat===k)){toast("Kategori masih dipakai transaksi");return}
   if(p.kategori.length<=1){toast("Minimal harus ada 1 kategori");return}
-  p.kategori.splice(i,1);simpanP();isiKategori();renderPengaturan();
+  p.kategori.splice(i,1);if(p.kelas)delete p.kelas[k];
+  simpanP();isiKategori();renderPengaturan();
 }
 function renderPengaturan(){
   renderUser();
   let me=users.find(x=>sesi&&x.id===sesi.id);
   $("statusPulih").innerText=me&&me.pulih?"Status: sudah dibuat ✅":"Status: belum dibuat ⚠️";
-  $("daftarKat").innerHTML=p.kategori.map((k,i)=>'<span class="tag">'+(EMOJI[k]||"🧾")+" "+aman(k)+' <button class="x" onclick="hapusKat('+i+')" title="Hapus">✕</button></span>').join("");
+  $("daftarKat").innerHTML=p.kategori.map((k,i)=>'<span class="tag">'+(EMOJI[k]||"🧾")+" "+aman(k)+
+    ' <select class="btn" onchange="ubahKelas('+i+',this.value)" title="Jenis akun">'+Object.keys(KELAS_LABEL).map(c=>'<option value="'+c+'"'+(kelasDari(k)===c?" selected":"")+">"+KELAS_LABEL[c]+"</option>").join("")+'</select>'+
+    '<button class="x" onclick="hapusKat('+i+')" title="Hapus">✕</button></span>').join("");
   $("infoData").innerText=data.length+" transaksi tersimpan di browser ini.";
 }
 
@@ -762,7 +815,8 @@ function impor(el){
       let jumlah=/^\d+(\.\d+)?$/.test(mentah)?Number(mentah):Number(mentah.replace(/[^0-9]/g,""));
       let kat=(c[2]||"").trim()||"Lainnya";
       if(tgl===""||jenis===""||!(jumlah>0)){lewat++;return}
-      if(!p.kategori.some(x=>x.toLowerCase()===kat.toLowerCase()))p.kategori.push(kat);
+      let ada=p.kategori.find(x=>x.toLowerCase()===kat.toLowerCase());
+      if(ada){kat=ada}else{p.kategori.push(kat)}
       data.push({id:Date.now()+i,tgl:tgl,ket:(c[1]||"").trim()||"(tanpa keterangan)",kat:kat,jenis:jenis,jumlah:jumlah});
       ok++;
     });
@@ -778,40 +832,172 @@ function resetContoh(){
   data=JSON.parse(JSON.stringify(contoh));simpan();render();toast("Data contoh dikembalikan");
 }
 
-// ===== Laporan laba rugi =====
+// ===== 5 Laporan keuangan =====
 function namaBulan(b){return new Date(b+"-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"})}
+function tglPanjang(s){return new Date(s+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}
+
+// Merangkum transaksi menurut jenis akun
+function ringkas(arr){
+  let r={m1:{},m2:{},t1:0,t2:0,setor:0,prive:0,beliAset:0,jualAset:0,terimaUtang:0,bayarUtang:0};
+  arr.forEach(function(d){
+    let k=kelasDari(d.kat),masuk=d.jenis==="masuk";
+    if(k==="operasi"){
+      if(masuk){r.m1[d.kat]=(r.m1[d.kat]||0)+d.jumlah;r.t1+=d.jumlah}
+      else{r.m2[d.kat]=(r.m2[d.kat]||0)+d.jumlah;r.t2+=d.jumlah}
+    }else if(k==="ekuitas"){if(masuk)r.setor+=d.jumlah;else r.prive+=d.jumlah}
+    else if(k==="aset"){if(masuk)r.jualAset+=d.jumlah;else r.beliAset+=d.jumlah}
+    else{if(masuk)r.terimaUtang+=d.jumlah;else r.bayarUtang+=d.jumlah}
+  });
+  r.laba=r.t1-r.t2;
+  r.kasOps=r.laba;
+  r.kasInv=r.jualAset-r.beliAset;
+  r.kasDan=r.setor-r.prive+r.terimaUtang-r.bayarUtang;
+  r.kas=r.kasOps+r.kasInv+r.kasDan;
+  r.asetTetap=r.beliAset-r.jualAset;
+  r.utang=r.terimaUtang-r.bayarUtang;
+  r.ekuitas=r.setor-r.prive+r.laba;
+  return r;
+}
+function br(l,v,cls,sub){return '<tr class="'+(cls||"")+'"><td'+(sub?' style="padding-left:24px"':"")+'>'+l+'</td><td class="num">'+nrp(v)+'</td></tr>'}
+function grupRow(t){return '<tr class="grup"><td colspan="2">'+t+'</td></tr>'}
+function tbl(rows){return '<table><thead><tr><th>Keterangan</th><th class="num">Jumlah</th></tr></thead><tbody>'+rows+'</tbody></table>'}
+function urut(m){return Object.keys(m).sort((a,b)=>m[b]-m[a])}
+
+function lapLabaRugi(R,per,dalam){
+  function persen(x){return R.t1>0?(x/R.t1*100).toFixed(1)+"%":"-"}
+  function baris(m){
+    let k=urut(m);
+    return k.length===0?'<tr><td colspan="3" style="color:var(--abu);padding-left:24px">Tidak ada data</td></tr>':
+      k.map(x=>'<tr><td style="padding-left:24px">'+aman(x)+'</td><td class="num">'+rp(m[x])+'</td><td class="num">'+persen(m[x])+"</td></tr>").join("");
+  }
+  let rincian="";
+  let ada=[...new Set(data.map(d=>d.tgl.slice(0,7)))].sort();
+  if(per==="semua"&&ada.length>0){
+    rincian='<h4>Rincian per bulan</h4><table><thead><tr><th>Bulan</th><th class="num">Pendapatan</th><th class="num">Beban</th><th class="num">Laba/Rugi</th></tr></thead><tbody>'+
+      ada.map(function(b){
+        let x=ringkas(data.filter(d=>d.tgl.startsWith(b)));
+        return "<tr><td>"+namaBulan(b)+'</td><td class="num">'+rp(x.t1)+'</td><td class="num">'+rp(x.t2)+'</td><td class="num" style="color:var(--'+(x.laba>=0?"hijau":"merah")+')">'+nrp(x.laba)+"</td></tr>";
+      }).join("")+"</tbody></table>";
+  }
+  return '<table><thead><tr><th>Keterangan</th><th class="num">Jumlah</th><th class="num">% pendapatan</th></tr></thead><tbody>'+
+    '<tr class="grup"><td colspan="3">PENDAPATAN</td></tr>'+baris(R.m1)+
+    '<tr class="tot"><td>Total pendapatan</td><td class="num">'+rp(R.t1)+'</td><td class="num">'+(R.t1>0?"100%":"-")+"</td></tr>"+
+    '<tr class="grup"><td colspan="3">BEBAN OPERASIONAL</td></tr>'+baris(R.m2)+
+    '<tr class="tot"><td>Total beban</td><td class="num">'+rp(R.t2)+'</td><td class="num">'+persen(R.t2)+"</td></tr>"+
+    '<tr class="akhir"><td>'+(R.laba>=0?"LABA BERSIH":"RUGI BERSIH")+'</td><td class="num" style="color:var(--'+(R.laba>=0?"hijau":"merah")+')">'+nrp(R.laba)+'</td><td class="num">'+persen(R.laba)+"</td></tr>"+
+    "</tbody></table>"+rincian;
+}
+
+function lapEkuitas(R,A){
+  let awal=A.ekuitas,akhir=awal+R.setor+R.laba-R.prive;
+  return tbl(
+    br("Modal awal periode",awal,"grup")+
+    br("Setoran modal pemilik",R.setor,"",1)+
+    br(R.laba>=0?"Laba bersih periode berjalan":"Rugi bersih periode berjalan",R.laba,"",1)+
+    br("Prive (penarikan pemilik)",-R.prive,"",1)+
+    br("MODAL AKHIR PERIODE",akhir,"akhir")
+  );
+}
+
+function lapNeraca(S){
+  let aset=S.kas+S.asetTetap,liab=S.utang,eku=S.ekuitas,tot=liab+eku;
+  let seimbang=Math.round(aset)===Math.round(tot);
+  return tbl(
+    grupRow("ASET")+
+    br("Kas",S.kas,"",1)+
+    br("Aset tetap (harga perolehan)",S.asetTetap,"",1)+
+    br("Total aset",aset,"tot")+
+    grupRow("LIABILITAS")+
+    br("Pinjaman",S.utang,"",1)+
+    br("Total liabilitas",liab,"tot")+
+    grupRow("EKUITAS")+
+    br("Modal pemilik",S.setor,"",1)+
+    br("Prive",-S.prive,"",1)+
+    br("Laba ditahan",S.laba,"",1)+
+    br("Total ekuitas",eku,"tot")+
+    br("TOTAL LIABILITAS + EKUITAS",tot,"akhir")
+  )+'<p class="'+(seimbang?"ok":"bad")+'">'+(seimbang?"✓ Neraca seimbang (Aset = Liabilitas + Ekuitas)":"⚠ Neraca tidak seimbang, periksa jenis akun kategori di Pengaturan")+"</p>";
+}
+
+function lapArusKas(R,A,S){
+  let ops="";
+  urut(R.m1).forEach(k=>ops+=br("Penerimaan: "+aman(k),R.m1[k],"",1));
+  urut(R.m2).forEach(k=>ops+=br("Pembayaran: "+aman(k),-R.m2[k],"",1));
+  if(ops==="")ops=br("Tidak ada transaksi operasional",0,"",1);
+  let awal=A.kas,akhir=awal+R.kas;
+  return tbl(
+    grupRow("ARUS KAS DARI AKTIVITAS OPERASI")+ops+
+    br("Kas bersih dari aktivitas operasi",R.kasOps,"tot")+
+    grupRow("ARUS KAS DARI AKTIVITAS INVESTASI")+
+    br("Penjualan aset tetap",R.jualAset,"",1)+
+    br("Pembelian aset tetap",-R.beliAset,"",1)+
+    br("Kas bersih dari aktivitas investasi",R.kasInv,"tot")+
+    grupRow("ARUS KAS DARI AKTIVITAS PENDANAAN")+
+    br("Setoran modal pemilik",R.setor,"",1)+
+    br("Penerimaan pinjaman",R.terimaUtang,"",1)+
+    br("Pembayaran pinjaman",-R.bayarUtang,"",1)+
+    br("Prive (penarikan pemilik)",-R.prive,"",1)+
+    br("Kas bersih dari aktivitas pendanaan",R.kasDan,"tot")+
+    br("KENAIKAN (PENURUNAN) KAS BERSIH",R.kas,"tot")+
+    br("Saldo kas awal periode",awal,"")+
+    br("SALDO KAS AKHIR PERIODE",akhir,"akhir")
+  );
+}
+
+function listTrx(arr,lm,lk){
+  if(arr.length===0)return '<p style="color:var(--abu)">Tidak ada transaksi.</p>';
+  return '<table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th class="num">Jumlah</th></tr></thead><tbody>'+
+    arr.slice().sort((a,b)=>a.tgl.localeCompare(b.tgl)).map(d=>'<tr><td>'+tglPanjang(d.tgl)+'</td><td>'+aman(d.ket)+'</td><td>'+(d.jenis==="masuk"?lm:lk)+'</td><td class="num">'+rp(d.jumlah)+'</td></tr>').join("")+"</tbody></table>";
+}
+
+function lapCalk(R,S,sampai,dalam,perLabel){
+  let ketAset=sampai.filter(d=>kelasDari(d.kat)==="aset");
+  let ketUtang=sampai.filter(d=>kelasDari(d.kat)==="utang");
+  let ketEku=sampai.filter(d=>kelasDari(d.kat)==="ekuitas");
+  return '<h4>1. Informasi umum</h4>'+
+    '<p>'+aman(p.usaha)+' menyusun laporan keuangan untuk periode <b>'+perLabel+'</b>. Laporan keuangan terdiri dari Laporan Laba Rugi, Laporan Perubahan Ekuitas, Laporan Posisi Keuangan (Neraca), Laporan Arus Kas, dan Catatan atas Laporan Keuangan ini. Jumlah transaksi pada periode berjalan: <b>'+dalam.length+'</b>.</p>'+
+    '<h4>2. Dasar penyusunan &amp; kebijakan akuntansi</h4>'+
+    '<p>a. Laporan disusun dengan <b>basis kas</b>: pendapatan dan beban diakui ketika kas diterima atau dibayarkan.</p>'+
+    '<p>b. Mata uang pelaporan adalah Rupiah (Rp).</p>'+
+    '<p>c. Aset tetap dicatat sebesar harga perolehan dan tidak disusutkan. Penjualan aset dicatat sebesar harga jual tanpa pengakuan laba/rugi pelepasan.</p>'+
+    '<p>d. Pinjaman dicatat sebesar pokok. Bunga dan biaya pinjaman dicatat sebagai beban operasional.</p>'+
+    '<p>e. Ekuitas terdiri dari modal pemilik (setoran), prive (penarikan), dan laba ditahan.</p>'+
+    '<h4>3. Rincian akun</h4>'+
+    '<p><b>Kas</b> per akhir periode: '+nrp(S.kas)+'</p>'+
+    '<p><b>Aset tetap</b> per akhir periode: '+nrp(S.asetTetap)+'</p>'+listTrx(ketAset,"Penjualan aset","Pembelian aset")+
+    '<p><b>Pinjaman</b> per akhir periode: '+nrp(S.utang)+'</p>'+listTrx(ketUtang,"Penerimaan pinjaman","Pembayaran pinjaman")+
+    '<p><b>Modal pemilik</b>: setoran '+rp(S.setor)+', prive '+rp(S.prive)+', laba ditahan '+nrp(S.laba)+'</p>'+listTrx(ketEku,"Setoran modal","Prive")+
+    '<h4>4. Ikhtisar kinerja periode berjalan</h4>'+
+    '<p>Total pendapatan '+rp(R.t1)+', total beban '+rp(R.t2)+', '+(R.laba>=0?"laba bersih ":"rugi bersih ")+rp(R.laba)+'.'+(R.t1>0?" Margin laba "+(R.laba/R.t1*100).toFixed(1)+"%.":"")+'</p>'+
+    '<h4>5. Catatan tambahan</h4>'+
+    '<p style="white-space:pre-wrap">'+(p.catatan?aman(p.catatan):'<span style="color:var(--abu)">Tidak ada catatan tambahan. Tambahkan di Pengaturan &gt; Profil usaha.</span>')+'</p>';
+}
+
+const JUDUL_LAP={labarugi:"Laporan Laba Rugi",ekuitas:"Laporan Perubahan Ekuitas",neraca:"Laporan Posisi Keuangan (Neraca)",aruskas:"Laporan Arus Kas",calk:"Catatan atas Laporan Keuangan"};
 function renderLaporan(){
   let sel=$("bulanLap"),lama=sel.value||"semua";
   let ada=[...new Set(data.map(d=>d.tgl.slice(0,7)))].sort().reverse();
   sel.innerHTML='<option value="semua">Semua waktu</option>'+ada.map(b=>'<option value="'+b+'">'+namaBulan(b)+"</option>").join("");
   sel.value=(lama==="semua"||ada.includes(lama))?lama:"semua";
-  let per=sel.value,dl=data.filter(d=>per==="semua"||d.tgl.startsWith(per));
-  function kel(j){let m={};dl.filter(d=>d.jenis===j).forEach(d=>m[d.kat]=(m[d.kat]||0)+d.jumlah);return m}
-  let m1=kel("masuk"),m2=kel("keluar");
-  let t1=Object.values(m1).reduce((a,b)=>a+b,0),t2=Object.values(m2).reduce((a,b)=>a+b,0),laba=t1-t2;
-  function persen(x){return t1>0?(x/t1*100).toFixed(1)+"%":"-"}
-  function baris(m){
-    let k=Object.keys(m).sort((a,b)=>m[b]-m[a]);
-    return k.length===0?'<tr><td colspan="3" style="color:var(--abu);padding-left:24px">Tidak ada data</td></tr>':
-      k.map(x=>'<tr><td style="padding-left:24px">'+aman(x)+'</td><td class="num">'+rp(m[x])+'</td><td class="num">'+persen(m[x])+"</td></tr>").join("");
-  }
-  let rincian="";
-  if(per==="semua"&&ada.length>0){
-    rincian='<h4>Rincian per bulan</h4><table><thead><tr><th>Bulan</th><th class="num">Pemasukan</th><th class="num">Pengeluaran</th><th class="num">Laba/Rugi</th></tr></thead><tbody>'+
-      ada.slice().reverse().map(function(b){
-        let x=data.filter(d=>d.tgl.startsWith(b)),a=jumlahDari(x,"masuk"),c=jumlahDari(x,"keluar");
-        return "<tr><td>"+namaBulan(b)+'</td><td class="num">'+rp(a)+'</td><td class="num">'+rp(c)+'</td><td class="num" style="color:var(--'+(a-c>=0?"hijau":"merah")+')">'+(a-c<0?"-":"")+rp(a-c)+"</td></tr>";
-      }).join("")+"</tbody></table>";
-  }
+  let per=sel.value,jenis=$("jenisLap").value||"labarugi";
+  let dalam=data.filter(d=>per==="semua"||d.tgl.slice(0,7)===per);
+  let sebelum=per==="semua"?[]:data.filter(d=>d.tgl.slice(0,7)<per);
+  let sampai=per==="semua"?data:data.filter(d=>d.tgl.slice(0,7)<=per);
+  let R=ringkas(dalam),A=ringkas(sebelum),S=ringkas(sampai);
+  let perLabel=per==="semua"?"Semua waktu":namaBulan(per);
+  let tglCetak=new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+  let subJudul;
+  if(jenis==="neraca")subJudul=per==="semua"?"Per "+tglCetak+" (seluruh transaksi)":"Per akhir "+namaBulan(per);
+  else subJudul=(jenis==="calk"?"Untuk periode: ":"Periode: ")+perLabel;
+  let isi;
+  if(jenis==="ekuitas")isi=lapEkuitas(R,A);
+  else if(jenis==="neraca")isi=lapNeraca(S);
+  else if(jenis==="aruskas")isi=lapArusKas(R,A,S);
+  else if(jenis==="calk")isi=lapCalk(R,S,sampai,dalam,perLabel);
+  else isi=lapLabaRugi(R,per,dalam);
   $("lapIsi").innerHTML=
-    '<div class="kop"><h2>'+aman(p.usaha)+"</h2><div><b>Laporan Laba Rugi</b></div><div>Periode: "+(per==="semua"?"Semua waktu":namaBulan(per))+"</div><div>Dicetak: "+new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})+"</div></div>"+
-    '<table><thead><tr><th>Keterangan</th><th class="num">Jumlah</th><th class="num">% pendapatan</th></tr></thead><tbody>'+
-    '<tr class="grup"><td colspan="3">PENDAPATAN</td></tr>'+baris(m1)+
-    '<tr class="tot"><td>Total pendapatan</td><td class="num">'+rp(t1)+'</td><td class="num">'+(t1>0?"100%":"-")+"</td></tr>"+
-    '<tr class="grup"><td colspan="3">BEBAN OPERASIONAL</td></tr>'+baris(m2)+
-    '<tr class="tot"><td>Total beban</td><td class="num">'+rp(t2)+'</td><td class="num">'+persen(t2)+"</td></tr>"+
-    '<tr class="akhir"><td>'+(laba>=0?"LABA BERSIH":"RUGI BERSIH")+'</td><td class="num" style="color:var(--'+(laba>=0?"hijau":"merah")+')">'+(laba<0?"-":"")+rp(laba)+'</td><td class="num">'+persen(laba)+"</td></tr>"+
-    "</tbody></table>"+rincian+
+    '<div class="kop"><h2>'+aman(p.usaha)+"</h2><div><b>"+JUDUL_LAP[jenis]+"</b></div><div>"+subJudul+"</div><div>Dicetak: "+tglCetak+"</div></div>"+
+    isi+
     '<p class="delta" style="margin-top:24px">Disusun oleh '+aman(sesi.nama)+", "+LABEL[sesi.role]+".</p>";
 }
 
