@@ -30,12 +30,12 @@ button,select,input,textarea{font:inherit}
 .btn.utama:hover{opacity:.9}
 select.btn{padding-right:8px}
 .grid{display:grid;gap:16px}
-.kpi{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.kpi{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .dua{grid-template-columns:2fr 1fr;margin-top:16px}
 .kartu{background:var(--kartu);border:1px solid var(--garis);border-radius:16px;padding:20px;box-shadow:0 1px 2px #0000000a}
 .kartu h3{margin:0;font-size:14px;color:var(--abu);font-weight:600}
 .ikon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:18px;float:right}
-.nilai{font-size:24px;font-weight:700;margin:12px 0 6px;letter-spacing:-.5px}
+.nilai{font-size:23px;font-weight:700;margin:12px 0 6px;letter-spacing:-.5px;white-space:nowrap}
 .delta{font-size:12px;color:var(--abu)}
 .naik{color:var(--hijau);font-weight:600}.turun{color:var(--merah);font-weight:600}
 .judul{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
@@ -66,36 +66,37 @@ tr:last-child td{border-bottom:none}
 .sel .ik{width:36px;height:36px;border-radius:10px;background:var(--utama2);display:grid;place-items:center;flex:none}
 .sel small{color:var(--abu);display:block}
 .badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
-.badge.masuk{background:#10b9811f;color:var(--hijau)}.badge.keluar{background:#f43f5e1f;color:var(--merah)}.badge.non{background:#64748b1f;color:var(--abu)}
+.badge.masuk{background:#10b9811f;color:var(--hijau)}.badge.keluar{background:#f43f5e1f;color:var(--merah)}.badge.nonkas{background:#64748b22;color:var(--abu)}
 .x{background:none;border:none;cursor:pointer;opacity:.5;font-size:15px}.x:hover{opacity:1}
 .kosong{text-align:center;color:var(--abu);padding:26px}
-dialog{border:none;border-radius:18px;padding:24px;width:min(520px,94vw);background:var(--kartu);color:var(--teks);box-shadow:0 20px 60px #00000055}
+dialog{border:none;border-radius:18px;padding:24px;width:min(460px,92vw);background:var(--kartu);color:var(--teks);box-shadow:0 20px 60px #00000055}
 dialog::backdrop{background:#0f172a99}
 dialog h2{margin:0 0 16px}
 dialog label{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--garis);background:var(--bg);color:var(--teks)}
 .baris{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
-.jr{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;margin-bottom:6px}
 #err{color:var(--merah);font-size:13px;min-height:16px;margin-top:10px}
+#fInfo{background:var(--utama2);border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
 #toast{position:fixed;bottom:24px;right:24px;background:var(--sisi);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:200}
 #toast.tampil{opacity:1;transform:none}
 .sembunyi{display:none!important}
 .lb{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
 .in{width:100%;padding:10px;border-radius:10px;border:1px solid var(--garis);background:var(--bg);color:var(--teks)}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;background:var(--utama2);margin:0 6px 8px 0}
 .dua2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.lap{max-width:860px;margin:0 auto}
+.lap{max-width:900px;margin:0 auto}
 .kop{text-align:center;margin-bottom:18px;border-bottom:2px solid var(--garis);padding-bottom:14px}
 .kop h2{margin:0 0 4px;font-size:20px}.kop div{color:var(--abu)}
 .lap td,.lap th{padding:8px}
 .lap .grup td{font-weight:700;background:var(--bg)}
 .lap .tot td{font-weight:700;border-top:1px solid var(--teks)}
 .lap .akhir td{font-weight:800;font-size:15px;border-top:2px solid var(--teks)}
+.lap .sub td{font-weight:600;padding-top:14px;border-bottom:none}
 .lap h4{margin:24px 0 8px}
 .lap p{line-height:1.6;margin:6px 0}
 .lap .ok{color:var(--hijau);font-weight:600}.lap .bad{color:var(--merah);font-weight:600}
-.ttd{display:flex;justify-content:flex-end;margin-top:36px}
-.ttd div{text-align:center;min-width:200px}
-.ttd span{display:block;height:64px}
+.lap .kecil{font-size:12px;color:var(--abu)}
+.lap .oto{font-size:11px;color:var(--abu);margin-left:6px}
 #login{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:grid;place-items:center;padding:16px;overflow:auto}
 .kotak{background:var(--kartu);color:var(--teks);width:min(380px,100%);padding:30px;border-radius:20px;box-shadow:0 20px 60px #00000055;text-align:center}
 .kotak .lg{width:52px;height:52px;border-radius:14px;background:var(--utama);display:grid;place-items:center;font-size:26px;margin:0 auto 14px}
@@ -169,7 +170,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
           <div class="grafik" id="grafik"></div>
         </div>
         <div class="kartu">
-          <div class="judul"><h2>Beban per akun</h2></div>
+          <div class="judul"><h2>Beban per kategori</h2></div>
           <div id="donat"></div>
         </div>
       </div>
@@ -183,11 +184,11 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
           <button class="chip aktif" data-j="semua" onclick="filterJ(this)">Semua</button>
           <button class="chip" data-j="masuk" onclick="filterJ(this)">Kas masuk</button>
           <button class="chip" data-j="keluar" onclick="filterJ(this)">Kas keluar</button>
-          <button class="chip" data-j="non" onclick="filterJ(this)">Non-kas</button>
+          <button class="chip" data-j="nonkas" onclick="filterJ(this)">Non-kas</button>
         </div>
       </div>
       <div class="bungkus"><table>
-        <thead><tr><th>Transaksi</th><th>Tanggal</th><th>Jenis</th><th class="num">Jumlah</th><th></th></tr></thead>
+        <thead><tr><th>Transaksi</th><th>Tanggal</th><th>Arus kas</th><th class="num">Jumlah</th><th></th></tr></thead>
         <tbody id="isiTabel"></tbody>
       </table></div>
     </div>
@@ -197,20 +198,15 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
         <div class="judul"><h2>Pilih laporan &amp; periode</h2>
           <div class="aksi">
             <select class="btn" id="jenisLap" onchange="renderLaporan()">
-              <optgroup label="Laporan keuangan">
-                <option value="neraca">1. Laporan Posisi Keuangan (Neraca)</option>
-                <option value="labarugi">2. Laporan Laba Rugi &amp; Penghasilan Komprehensif Lain</option>
-                <option value="ekuitas">3. Laporan Perubahan Ekuitas</option>
-                <option value="aruskas">4. Laporan Arus Kas</option>
-                <option value="calk">5. Catatan atas Laporan Keuangan</option>
-              </optgroup>
-              <optgroup label="Pendukung">
-                <option value="saldo">Neraca Saldo</option>
-                <option value="bukubesar">Buku Besar</option>
-              </optgroup>
+              <option value="neraca">1. Laporan Posisi Keuangan</option>
+              <option value="labarugi">2. Laporan Laba Rugi &amp; Penghasilan Komprehensif Lain</option>
+              <option value="ekuitas">3. Laporan Perubahan Ekuitas</option>
+              <option value="aruskas">4. Laporan Arus Kas</option>
+              <option value="calk">5. Catatan atas Laporan Keuangan</option>
+              <option value="jurnal">Pendukung: Jurnal Umum</option>
+              <option value="saldo">Pendukung: Neraca Saldo</option>
             </select>
             <select class="btn" id="periodeLap" onchange="renderLaporan()"></select>
-            <select class="btn sembunyi" id="akunBB" onchange="renderLaporan()"></select>
             <button class="btn utama" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
           </div>
         </div>
@@ -223,35 +219,39 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
         <div class="kartu">
           <div class="judul"><h2>Profil usaha</h2></div>
           <label class="lb">Nama usaha</label><input class="in" id="sUsaha">
-          <label class="lb">Catatan tambahan (muncul di Catatan atas Laporan Keuangan: peristiwa setelah periode, komitmen, kontinjensi, dll.)</label>
-          <textarea class="in" id="sCatatan" rows="4"></textarea>
+          <label class="lb">Catatan tambahan (muncul di Catatan atas Laporan Keuangan)</label>
+          <textarea class="in" id="sCatatan" rows="4" placeholder="Contoh: Usaha berdiri sejak 2026, bergerak di bidang penjualan..."></textarea>
           <div class="aksi" style="margin-top:16px"><button class="btn utama" onclick="simpanProfil()">Simpan profil</button></div>
         </div>
         <div class="kartu">
-          <div class="judul"><h2>Penyusutan aset tetap</h2></div>
-          <p class="delta">Metode garis lurus, tanpa nilai residu, dihitung dari saldo harga perolehan aset tetap pada akhir bulan (dimulai di bulan perolehan).</p>
-          <label class="lb">Umur manfaat (tahun)</label><input class="in" type="number" id="sUmur" min="1" max="50">
-          <label class="lb">Bulan yang disusutkan</label><input class="in" type="month" id="sBulanSusut">
-          <div class="aksi" style="margin-top:16px">
-            <button class="btn" onclick="simpanUmur()">Simpan umur manfaat</button>
-            <button class="btn utama" onclick="buatSusut()">Buat jurnal penyusutan</button>
-          </div>
+          <div class="judul"><h2>Pajak penghasilan</h2></div>
+          <label class="lb">Tarif (%)</label><input class="in" id="sTarif" type="number" min="0" step="0.1">
+          <label class="lb">Dasar pengenaan</label>
+          <select class="in" id="sDasar">
+            <option value="pendapatan">% dari pendapatan bruto per bulan (PPh final)</option>
+            <option value="laba">% dari laba sebelum pajak per bulan (tanpa kompensasi rugi)</option>
+          </select>
+          <p class="delta">Bawaan 0,5% dari omzet mengikuti PPh final UMKM (PP 55/2022). Isi 0 jika usahamu tidak dikenai, dan periksa ketentuan terbaru. Ini bukan nasihat pajak. Perubahan berlaku untuk semua periode.</p>
+          <div class="aksi"><button class="btn utama" onclick="simpanPajak()">Simpan pajak</button></div>
         </div>
       </div>
-      <div class="kartu" style="margin-top:16px">
-        <div class="judul"><h2>Bagan akun</h2></div>
-        <p class="delta">Akun bawaan tidak bisa dihapus. Kamu bisa menambah akun sendiri (kecuali ekuitas); akun hanya bisa dihapus jika belum dipakai jurnal.</p>
-        <div class="bungkus"><table>
-          <thead><tr><th>Kode</th><th>Nama akun</th><th>Kelompok</th><th></th></tr></thead>
-          <tbody id="daftarAkun"></tbody>
-        </table></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px">
-          <input class="in" id="aKode" placeholder="Kode (mis. 5-207)">
-          <input class="in" id="aNama" placeholder="Nama akun">
-          <select class="in" id="aGrup"></select>
-          <button class="btn utama" onclick="tambahAkun()">+ Tambah akun</button>
+      <div class="grid dua2" style="margin-top:16px">
+        <div class="kartu">
+          <div class="judul"><h2>Kategori pendapatan</h2></div>
+          <div id="daftarKatP"></div>
+          <div class="aksi" style="margin-top:8px;flex-wrap:nowrap">
+            <input class="in" id="katBaruP" placeholder="Nama kategori pendapatan">
+            <button class="btn" onclick="tambahKat('P')">+ Tambah</button>
+          </div>
         </div>
-        <p id="errAkun" style="color:var(--merah);font-size:13px;min-height:16px;margin:8px 0 0"></p>
+        <div class="kartu">
+          <div class="judul"><h2>Kategori beban</h2></div>
+          <div id="daftarKatB"></div>
+          <div class="aksi" style="margin-top:8px;flex-wrap:nowrap">
+            <input class="in" id="katBaruB" placeholder="Nama kategori beban">
+            <button class="btn" onclick="tambahKat('B')">+ Tambah</button>
+          </div>
+        </div>
       </div>
       <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Sandi pemulihan</h2></div>
@@ -260,7 +260,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
       </div>
       <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Pengguna &amp; hak akses</h2></div>
-        <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (termasuk jurnal umum), laporan, ekspor. <b>Kasir</b>: hanya mencatat penjualan, penerimaan piutang, dan beban tunai, serta melihat catatannya sendiri.</p>
+        <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (tambah/hapus), laporan, ekspor. <b>Kasir</b>: hanya mencatat transaksi dan melihat catatannya sendiri.</p>
         <div class="bungkus"><table>
           <thead><tr><th>Pengguna</th><th>Peran</th><th></th></tr></thead>
           <tbody id="daftarUser"></tbody>
@@ -276,7 +276,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
       </div>
       <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Data</h2></div>
-        <p class="delta">Impor CSV (format sederhana): tanggal (YYYY-MM-DD atau DD/MM/YYYY), keterangan, kategori, jenis (masuk/keluar), jumlah. Setiap baris otomatis dijadikan jurnal kas. Ekspor CSV berisi baris jurnal (debit/kredit per akun).</p>
+        <p class="delta">Format impor CSV baru: tanggal, keterangan, tipe (kode atau nama jenis transaksi), kategori, jumlah, umur_tahun, residu. Format lama (tanggal, keterangan, kategori, masuk/keluar, jumlah) tetap bisa diimpor dan dicatat sebagai transaksi tunai. Tanggal boleh YYYY-MM-DD atau DD/MM/YYYY.</p>
         <input type="file" id="fileCsv" accept=".csv,text/csv" class="sembunyi" onchange="impor(this)">
         <div class="aksi">
           <button class="btn" onclick="document.getElementById('fileCsv').click()">⬆ Impor CSV</button>
@@ -293,17 +293,16 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 <dialog id="dlg">
   <h2>Transaksi baru</h2>
   <label>Tanggal</label><input type="date" id="fTgl">
-  <label>Jenis transaksi</label><select id="fJenis" onchange="ubahJenis()"></select>
+  <label>Jenis transaksi</label>
+  <select id="fTipe" onchange="ubahTipe()"></select>
+  <div id="fInfo" class="delta"></div>
   <label>Keterangan</label><input id="fKet" placeholder="Contoh: Penjualan produk A">
-  <div id="bxAkun" class="sembunyi"><label id="lbAkun">Akun</label><select id="fAkun" onchange="pratinjau()"></select></div>
-  <div id="bxJumlah"><label>Jumlah (Rp)</label><input type="number" id="fJumlah" min="1" placeholder="0"></div>
-  <div id="bxUmum" class="sembunyi">
-    <label>Baris jurnal (isi debit ATAU kredit per baris)</label>
-    <div id="jRows"></div>
-    <button class="btn" type="button" onclick="tambahBarisJ()">+ Baris</button>
-    <div class="delta" id="jTot" style="margin-top:8px"></div>
+  <div id="rowKat"><label id="lblKat">Kategori</label><select id="fKat"></select></div>
+  <div id="rowAset" class="sembunyi">
+    <label>Umur manfaat (tahun). Isi 0 jika tidak disusutkan, mis. tanah</label><input type="number" id="fUmur" min="0" step="0.5" value="4">
+    <label>Nilai residu (Rp)</label><input type="number" id="fResidu" min="0" value="0">
   </div>
-  <p class="delta" id="pvJurnal"></p>
+  <label>Jumlah (Rp)</label><input type="number" id="fJumlah" min="1" placeholder="0">
   <div id="err"></div>
   <div class="baris"><button class="btn" onclick="dlg.close()">Batal</button><button class="btn utama" onclick="tambah()">Simpan</button></div>
 </dialog>
@@ -343,14 +342,14 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 </dialog>
 <dialog id="dlgData" oncancel="event.preventDefault()">
   <h2>Mulai dengan data apa?</h2>
-  <p class="delta">Pilih data awal untuk aplikasi ini. Akun, bagan akun, dan pengaturan tidak terpengaruh.</p>
+  <p class="delta">Pilih data awal untuk aplikasi ini. Akun, kategori, dan pengaturan tidak terpengaruh.</p>
   <button class="btn utama" onclick="pilihData('kosong')">✨ Data baru (kosong)</button>
   <button class="btn" onclick="pilihData('contoh')">🧪 Data contoh (untuk mencoba)</button>
   <button class="btn" id="btnDataAda" onclick="pilihData('ada')">📂 Pertahankan data yang sudah ada</button>
 </dialog>
 <dialog id="dlgBaru">
   <h2>✨ Mulai data baru</h2>
-  <p class="delta">Semua jurnal akan dihapus dan kamu mulai dari data kosong. Akun pengguna, bagan akun, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
+  <p class="delta">Semua transaksi akan dihapus dan kamu mulai dari data kosong. Akun pengguna, kategori, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
   <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="baruCadangan" checked style="width:auto"> Unduh cadangan CSV dulu (disarankan)</label>
   <label>Ketik <b>BARU</b> untuk melanjutkan</label>
   <input id="baruKonfirm" autocomplete="off" placeholder="BARU">
@@ -360,994 +359,1018 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 <div id="toast"></div>
 
 <script>
-const KUNCI="dashboardAkuntansi",KUNCI_J="kaskuJurnal",KUNCI_P="kaskuPengaturan",KUNCI_U="kaskuPengguna";
+const KUNCI="dashboardAkuntansi",KUNCI_P="kaskuPengaturan";
 const WARNA=["#4f46e5","#f43f5e","#f59e0b","#10b981","#06b6d4","#8b5cf6","#94a3b8"];
 
-// ===== Bagan akun (kelompok mengikuti penyajian SAK EP / IAS 1) =====
-const GRUP={
-  al:{n:"Aset lancar",d:true},at:{n:"Aset tidak lancar",d:true},
-  ll:{n:"Liabilitas jangka pendek",d:false},lp:{n:"Liabilitas jangka panjang",d:false},ek:{n:"Ekuitas",d:false},
-  pd:{n:"Pendapatan usaha",d:false},bp:{n:"Beban pokok penjualan",d:true},bb:{n:"Beban usaha",d:true},
-  pl:{n:"Pendapatan lain-lain",d:false},bl:{n:"Beban lain-lain",d:true},pj:{n:"Beban pajak penghasilan",d:true}
+/* ===== Jenis transaksi -> jurnal otomatis =====
+   dr / kr = akun debit / kredit. "P" = akun pendapatan (kategori), "B" = akun beban (kategori). */
+const TIPE={
+ jual_tunai:{l:"Penjualan tunai",a:"masuk",ik:"🛍️",dr:"kas",kr:"P",kat:"P"},
+ jual_kredit:{l:"Penjualan kredit (piutang)",a:"nonkas",ik:"🧾",dr:"piutang",kr:"P",kat:"P"},
+ terima_piutang:{l:"Terima pelunasan piutang",a:"masuk",ik:"📥",dr:"kas",kr:"piutang"},
+ beli_persediaan_tunai:{l:"Beli persediaan (tunai)",a:"keluar",ik:"📦",dr:"persediaan",kr:"kas"},
+ beli_persediaan_kredit:{l:"Beli persediaan (kredit)",a:"nonkas",ik:"📦",dr:"persediaan",kr:"utang_usaha"},
+ bayar_utang:{l:"Bayar utang usaha",a:"keluar",ik:"📤",dr:"utang_usaha",kr:"kas"},
+ hpp:{l:"Harga pokok penjualan (pakai persediaan)",a:"nonkas",ik:"🏷️",dr:"hpp",kr:"persediaan"},
+ beban_tunai:{l:"Beban (dibayar tunai)",a:"keluar",ik:"💸",dr:"B",kr:"kas",kat:"B"},
+ beban_kredit:{l:"Beban (belum dibayar)",a:"nonkas",ik:"🧮",dr:"B",kr:"utang_usaha",kat:"B"},
+ beban_dimuka:{l:"Bayar beban di muka",a:"keluar",ik:"🗓️",dr:"dimuka",kr:"kas"},
+ amortisasi_dimuka:{l:"Akui beban dibayar di muka",a:"nonkas",ik:"⏳",dr:"B",kr:"dimuka",kat:"B"},
+ bunga:{l:"Bayar bunga pinjaman",a:"keluar",ik:"🏦",dr:"bunga",kr:"kas"},
+ bayar_pajak:{l:"Setor pajak penghasilan",a:"keluar",ik:"🏛️",dr:"utang_pajak",kr:"kas"},
+ beli_aset:{l:"Beli aset tetap (tunai)",a:"keluar",ik:"🏗️",dr:"aset",kr:"kas",aset:1},
+ setor_modal:{l:"Setoran modal pemilik",a:"masuk",ik:"💼",dr:"kas",kr:"modal"},
+ prive:{l:"Prive (penarikan pemilik)",a:"keluar",ik:"🙋",dr:"prive",kr:"kas"},
+ pinjam_pendek:{l:"Terima pinjaman jangka pendek",a:"masuk",ik:"🤝",dr:"kas",kr:"utang_bank_pendek"},
+ bayar_pinjam_pendek:{l:"Bayar pokok pinjaman jangka pendek",a:"keluar",ik:"🤝",dr:"utang_bank_pendek",kr:"kas"},
+ pinjam_panjang:{l:"Terima pinjaman jangka panjang",a:"masuk",ik:"🤝",dr:"kas",kr:"utang_bank_panjang"},
+ bayar_pinjam_panjang:{l:"Bayar pokok pinjaman jangka panjang",a:"keluar",ik:"🤝",dr:"utang_bank_panjang",kr:"kas"}
 };
-const DEF_AKUN=[
-  {k:"1-101",n:"Kas dan Bank",g:"al"},{k:"1-102",n:"Piutang Usaha",g:"al"},{k:"1-103",n:"Persediaan",g:"al"},{k:"1-104",n:"Biaya Dibayar di Muka",g:"al"},
-  {k:"1-201",n:"Aset Tetap (Harga Perolehan)",g:"at"},{k:"1-202",n:"Akumulasi Penyusutan",g:"at",kontra:true},
-  {k:"2-101",n:"Utang Usaha",g:"ll"},{k:"2-102",n:"Beban yang Masih Harus Dibayar",g:"ll"},{k:"2-103",n:"Utang Pajak Penghasilan",g:"ll"},{k:"2-104",n:"Pinjaman Jangka Pendek",g:"ll"},
-  {k:"2-201",n:"Pinjaman Jangka Panjang",g:"lp"},
-  {k:"3-101",n:"Modal Pemilik",g:"ek"},{k:"3-102",n:"Prive",g:"ek",kontra:true},{k:"3-103",n:"Saldo Laba Awal",g:"ek"},
-  {k:"4-101",n:"Penjualan",g:"pd"},{k:"4-201",n:"Pendapatan Lain-lain",g:"pl"},
-  {k:"5-101",n:"Beban Pokok Penjualan / Bahan Baku",g:"bp"},
-  {k:"5-201",n:"Beban Gaji",g:"bb"},{k:"5-202",n:"Beban Sewa",g:"bb"},{k:"5-203",n:"Beban Listrik & Air",g:"bb"},{k:"5-204",n:"Beban Pemasaran",g:"bb"},{k:"5-205",n:"Beban Penyusutan",g:"bb"},{k:"5-299",n:"Beban Usaha Lainnya",g:"bb"},
-  {k:"5-301",n:"Beban Bunga",g:"bl"},
-  {k:"5-401",n:"Beban Pajak Penghasilan",g:"pj"}
-];
-const PDEF={usaha:"Kasku",nama:"Putri",peran:"Pemilik usaha",akun:DEF_AKUN,umur:5,catatan:"",kelas:{"Modal Pemilik":"ekuitas","Aset Tetap":"aset","Pinjaman":"utang"}};
+const GRUP=[
+ ["Penjualan & pendapatan",["jual_tunai","jual_kredit","terima_piutang"]],
+ ["Persediaan & utang usaha",["beli_persediaan_tunai","beli_persediaan_kredit","bayar_utang","hpp"]],
+ ["Beban",["beban_tunai","beban_kredit","beban_dimuka","amortisasi_dimuka","bunga"]],
+ ["Aset tetap",["beli_aset"]],
+ ["Modal & pinjaman",["setor_modal","prive","pinjam_pendek","bayar_pinjam_pendek","pinjam_panjang","bayar_pinjam_panjang"]],
+ ["Pajak",["bayar_pajak"]]];
+const AKUN_NAMA={kas:"Kas",piutang:"Piutang usaha",persediaan:"Persediaan",dimuka:"Beban dibayar di muka",aset:"Aset tetap (harga perolehan)",akum:"Akumulasi penyusutan",
+ utang_usaha:"Utang usaha & beban masih harus dibayar",utang_pajak:"Utang pajak penghasilan",utang_bank_pendek:"Utang bank jangka pendek",utang_bank_panjang:"Utang bank jangka panjang",
+ modal:"Modal pemilik",prive:"Prive",hpp:"Beban pokok penjualan",penyusutan:"Beban penyusutan",bunga:"Beban bunga",pajak:"Beban pajak penghasilan"};
+function akunNama(a){if(a.indexOf("P:")===0)return "Pendapatan – "+a.slice(2);if(a.indexOf("B:")===0)return "Beban – "+a.slice(2);return AKUN_NAMA[a]||a}
+function akunDari(k,t){return (k==="P"||k==="B")?k+":"+(t.kat||"Lainnya"):k}
 
-// Templat transaksi: d/k = kode akun, "?" = dipilih pengguna
-const TPL=[
- {id:"jual_tunai",n:"Penjualan tunai",d:"1-101",k:"4-101",kasir:1},
- {id:"jual_kredit",n:"Penjualan kredit (menambah piutang)",d:"1-102",k:"4-101",kasir:1},
- {id:"terima_piutang",n:"Penerimaan pelunasan piutang",d:"1-101",k:"1-102",kasir:1},
- {id:"pend_lain",n:"Pendapatan lain-lain (tunai)",d:"1-101",k:"4-201"},
- {id:"beban_tunai",n:"Pembayaran beban (tunai)",d:"?",k:"1-101",pilih:["bb","bp","bl"],lb:"Akun beban",kasir:1},
- {id:"beban_akrual",n:"Beban belum dibayar (akrual)",d:"?",k:"2-102",pilih:["bb","bp","bl"],lb:"Akun beban"},
- {id:"bayar_akrual",n:"Pembayaran beban yang masih harus dibayar",d:"2-102",k:"1-101"},
- {id:"bdd",n:"Pembayaran biaya di muka",d:"1-104",k:"1-101"},
- {id:"bdd_beban",n:"Pengakuan biaya di muka menjadi beban",d:"?",k:"1-104",pilih:["bb","bp"],lb:"Akun beban"},
- {id:"beli_pers_tunai",n:"Pembelian persediaan (tunai)",d:"1-103",k:"1-101"},
- {id:"beli_pers_kredit",n:"Pembelian persediaan (kredit)",d:"1-103",k:"2-101"},
- {id:"bayar_utang",n:"Pembayaran utang usaha",d:"2-101",k:"1-101"},
- {id:"pakai_pers",n:"Pemakaian persediaan (beban pokok penjualan)",d:"5-101",k:"1-103"},
- {id:"beli_aset",n:"Pembelian aset tetap (tunai)",d:"1-201",k:"1-101"},
- {id:"susut",n:"Penyusutan aset tetap (manual)",d:"5-205",k:"1-202"},
- {id:"modal",n:"Setoran modal pemilik",d:"1-101",k:"3-101"},
- {id:"prive",n:"Prive (penarikan pemilik)",d:"3-102",k:"1-101"},
- {id:"pinj_terima",n:"Penerimaan pinjaman jangka panjang",d:"1-101",k:"2-201"},
- {id:"pinj_bayar",n:"Pembayaran pokok pinjaman jangka panjang",d:"2-201",k:"1-101"},
- {id:"pajak_beban",n:"Beban pajak penghasilan (terutang)",d:"5-401",k:"2-103"},
- {id:"pajak_bayar",n:"Pembayaran pajak penghasilan",d:"2-103",k:"1-101"},
- {id:"umum",n:"Jurnal umum (manual, debit/kredit bebas)",umum:1}
-];
-
-let p=muatP(),jur=muatJ(),tampilan="dashboard",jenisAktif="semua";
-function muatP(){
-  let d=JSON.parse(JSON.stringify(PDEF));
-  try{
-    let x=localStorage.getItem(KUNCI_P);
-    if(x){let s=JSON.parse(x);d=Object.assign(d,s)}
-  }catch(e){}
-  DEF_AKUN.forEach(function(a){if(!d.akun.some(x=>x.k===a.k))d.akun.push(JSON.parse(JSON.stringify(a)))});
-  d.akun.sort((a,b)=>a.k.localeCompare(b.k));
-  return d;
+function buatContoh(){
+ let a=[],id=1;
+ function t(tgl,ket,tipe,jumlah,kat,x){a.push(Object.assign({id:id++,tgl:tgl,ket:ket,tipe:tipe,jumlah:jumlah},kat?{kat:kat}:{},x||{}))}
+ t("2026-05-01","Setoran modal awal","setor_modal",50000000);
+ t("2026-05-02","Peralatan usaha","beli_aset",8000000,null,{umur:4,residu:0});
+ t("2026-05-03","Stok barang dagang awal","beli_persediaan_tunai",20000000);
+ t("2026-05-05","Penjualan produk A","jual_tunai",12500000,"Penjualan");
+ t("2026-05-10","Sewa toko 12 bulan (Mei–April)","beban_dimuka",12000000);
+ t("2026-05-31","HPP bulan Mei","hpp",7500000);
+ t("2026-06-01","Pinjaman bank 3 tahun","pinjam_panjang",10000000);
+ t("2026-06-05","Penjualan produk B – Toko Maju","jual_kredit",15200000,"Penjualan");
+ t("2026-06-12","Gaji karyawan","beban_tunai",6500000,"Gaji");
+ t("2026-06-20","Stok dari Supplier X","beli_persediaan_kredit",9000000);
+ t("2026-06-30","HPP bulan Juni","hpp",9100000);
+ t("2026-07-02","Penjualan online","jual_tunai",11800000,"Penjualan");
+ t("2026-07-08","Pelunasan Toko Maju","terima_piutang",15200000);
+ t("2026-07-15","Bayar Supplier X","bayar_utang",9000000);
+ t("2026-07-20","Bunga pinjaman bank","bunga",150000);
+ t("2026-07-31","HPP bulan Juli","hpp",7000000);
+ t("2026-08-02","Restok barang dagang","beli_persediaan_tunai",15000000);
+ t("2026-08-04","Penjualan grosir – CV Berkah","jual_kredit",18900000,"Penjualan");
+ t("2026-08-20","Iklan media sosial","beban_tunai",1500000,"Pemasaran");
+ t("2026-08-31","HPP bulan Agustus","hpp",11300000);
+ t("2026-09-06","Penjualan produk A","jual_tunai",14300000,"Penjualan");
+ t("2026-09-10","Setor PPh final Mei–Agustus","bayar_pajak",292000);
+ t("2026-09-15","Pelunasan sebagian CV Berkah","terima_piutang",10000000);
+ t("2026-09-18","Listrik dan air","beban_tunai",950000,"Listrik & Air");
+ t("2026-09-25","Angsuran pokok pinjaman","bayar_pinjam_panjang",2000000);
+ t("2026-09-30","Prive pemilik","prive",1000000);
+ t("2026-09-30","HPP bulan September","hpp",8600000);
+ t("2026-10-01","Penjualan harian","jual_tunai",5400000,"Penjualan");
+ t("2026-10-02","Gaji karyawan","beban_tunai",6500000,"Gaji");
+ t("2026-10-05","Restok barang dagang","beli_persediaan_tunai",10000000);
+ t("2026-10-15","Tagihan listrik Oktober (belum dibayar)","beban_kredit",800000,"Listrik & Air");
+ ["05","06","07","08","09","10"].forEach(function(m){t("2026-"+m+"-28","Pengakuan sewa dibayar di muka","amortisasi_dimuka",1000000,"Sewa")});
+ return a;
 }
+const contoh=buatContoh();
+
+const PDEF={v:2,usaha:"Kasku",catatan:"",pajakTarif:0.5,pajakDasar:"pendapatan",
+ katPend:["Penjualan","Pendapatan Jasa","Pendapatan Lain-lain"],
+ katBeban:["Gaji","Sewa","Listrik & Air","Pemasaran","Perlengkapan","Transportasi","Lainnya"]};
+const KELAS_LAMA={"Modal Pemilik":"ekuitas","Aset Tetap":"aset","Pinjaman":"utang"};
+
+/* ===== Muat & migrasi dari versi lama (basis kas) ===== */
+function konversi(t,kelas){
+ if(t.tipe)return t;
+ let k=kelas[t.kat]||"operasi",m=t.jenis==="masuk",n=Object.assign({},t);
+ delete n.jenis;
+ if(k==="ekuitas"){n.tipe=m?"setor_modal":"prive";delete n.kat}
+ else if(k==="aset"){if(m){n.tipe="jual_tunai";n.kat="Pendapatan Lain-lain"}else{n.tipe="beli_aset";n.umur=4;n.residu=0;delete n.kat}}
+ else if(k==="utang"){n.tipe=m?"pinjam_panjang":"bayar_pinjam_panjang";delete n.kat}
+ else n.tipe=m?"jual_tunai":"beban_tunai";
+ n.migrasi=true;
+ return n;
+}
+let data=[],p=null,migrasiBerubah=false;
+(function muatAwal(){
+ let rawP=null,rawD=null;
+ try{let x=localStorage.getItem(KUNCI_P);if(x)rawP=JSON.parse(x)}catch(e){}
+ try{let x=localStorage.getItem(KUNCI);if(x)rawD=JSON.parse(x)}catch(e){}
+ let np=JSON.parse(JSON.stringify(PDEF));
+ let kelas=Object.assign({},KELAS_LAMA,(rawP&&rawP.kelas)||{});
+ if(rawP&&rawP.v===2){np=Object.assign(np,rawP)}
+ else{
+  if(rawP){["usaha","catatan"].forEach(function(k){if(rawP[k]!==undefined)np[k]=rawP[k]});migrasiBerubah=true}
+  let pend=new Set(PDEF.katPend),beb=new Set(PDEF.katBeban);
+  ((rawP&&rawP.kategori)||[]).forEach(function(k){if((kelas[k]||"operasi")==="operasi"&&!pend.has(k)&&!beb.has(k))beb.add(k)});
+  (rawD||[]).forEach(function(t){if(t.tipe)return;if((kelas[t.kat]||"operasi")!=="operasi")return;if(t.jenis==="masuk")pend.add(t.kat);else beb.add(t.kat)});
+  np.katPend=Array.from(pend);np.katBeban=Array.from(beb);
+ }
+ p=np;
+ if(rawD===null){data=JSON.parse(JSON.stringify(contoh))}
+ else{
+  data=rawD.map(function(t){if(!t.tipe)migrasiBerubah=true;return konversi(t,kelas)});
+  if(migrasiBerubah){try{localStorage.setItem(KUNCI,JSON.stringify(data));localStorage.setItem(KUNCI_P,JSON.stringify(p))}catch(e){}}
+ }
+})();
+let tampilan="dashboard",jenisAktif="semua";
 function simpanP(){try{localStorage.setItem(KUNCI_P,JSON.stringify(p))}catch(e){}}
-function simpanJ(){try{localStorage.setItem(KUNCI_J,JSON.stringify(jur))}catch(e){}}
 const $=id=>document.getElementById(id);
 const dlg=$("dlg");
-
-// ===== Migrasi data lama (transaksi kas sederhana -> jurnal) =====
-function kodeKat(kat,jenis){
-  let kls=(p.kelas&&p.kelas[kat])||"operasi",masuk=jenis==="masuk",kl=String(kat).toLowerCase();
-  if(kls==="ekuitas")return masuk?"3-101":"3-102";
-  if(kls==="aset")return "1-201";
-  if(kls==="utang")return "2-201";
-  let M={"penjualan":"4-101","gaji":"5-201","sewa":"5-202","listrik & air":"5-203","pemasaran":"5-204","bahan baku":"5-101","lainnya":"5-299"};
-  if(M[kl])return M[kl];
-  return masuk?"4-101":"5-299";
-}
-function konversi(t){
-  let j=Number(t.jumlah)||0,kode=kodeKat(t.kat,t.jenis);
-  let b=t.jenis==="masuk"?[{a:"1-101",d:j,k:0},{a:kode,d:0,k:j}]:[{a:kode,d:j,k:0},{a:"1-101",d:0,k:j}];
-  return {id:t.id,tgl:t.tgl,ket:t.ket,baris:b,oleh:t.oleh};
-}
-function muatJ(){
-  try{let s=localStorage.getItem(KUNCI_J);if(s)return JSON.parse(s)}catch(e){}
-  try{
-    let o=localStorage.getItem(KUNCI);
-    if(o){let j=JSON.parse(o).map(konversi);try{localStorage.setItem(KUNCI_J,JSON.stringify(j))}catch(e){}return j}
-  }catch(e){}
-  return contohJ();
-}
-function contohJ(){
-  let n=0;
-  function J(tgl,ket,b){return {id:++n,tgl:tgl,ket:ket,baris:b.map(x=>({a:x[0],d:x[1]||0,k:x[2]||0}))}}
-  const K="1-101";
-  let L=[
-    J("2026-05-01","Setoran modal awal",[[K,50000000],["3-101",0,50000000]]),
-    J("2026-05-02","Beli peralatan usaha",[["1-201",8000000],[K,0,8000000]]),
-    J("2026-05-03","Penjualan produk A (tunai)",[[K,12500000],["4-101",0,12500000]]),
-    J("2026-05-10","Sewa toko",[["5-202",3000000],[K,0,3000000]]),
-    J("2026-06-01","Pinjaman bank jangka panjang",[[K,10000000],["2-201",0,10000000]]),
-    J("2026-06-05","Penjualan produk B (kredit)",[["1-102",15200000],["4-101",0,15200000]]),
-    J("2026-06-12","Gaji karyawan",[["5-201",6500000],[K,0,6500000]]),
-    J("2026-06-25","Pelunasan piutang produk B",[[K,15200000],["1-102",0,15200000]]),
-    J("2026-07-02","Penjualan online (tunai)",[[K,11800000],["4-101",0,11800000]]),
-    J("2026-07-15","Beli bahan baku (kredit)",[["1-103",6000000],["2-101",0,6000000]]),
-    J("2026-08-04","Penjualan grosir (kredit)",[["1-102",18900000],["4-101",0,18900000]]),
-    J("2026-08-10","Bayar utang usaha",[["2-101",6000000],[K,0,6000000]]),
-    J("2026-08-20","Iklan media sosial",[["5-204",1500000],[K,0,1500000]]),
-    J("2026-08-31","Pemakaian bahan baku",[["5-101",4200000],["1-103",0,4200000]]),
-    J("2026-09-06","Penjualan produk A (tunai)",[[K,14300000],["4-101",0,14300000]]),
-    J("2026-09-15","Pelunasan piutang grosir (sebagian)",[[K,10000000],["1-102",0,10000000]]),
-    J("2026-09-18","Listrik dan air (belum dibayar)",[["5-203",950000],["2-102",0,950000]]),
-    J("2026-09-25","Angsuran pokok pinjaman",[["2-201",2000000],[K,0,2000000]]),
-    J("2026-09-25","Bunga pinjaman",[["5-301",150000],[K,0,150000]]),
-    J("2026-09-30","Beban pajak penghasilan Sep (terutang)",[["5-401",500000],["2-103",0,500000]]),
-    J("2026-09-30","Prive pemilik",[["3-102",1000000],[K,0,1000000]]),
-    J("2026-10-01","Penjualan harian (tunai)",[[K,5400000],["4-101",0,5400000]]),
-    J("2026-10-02","Gaji karyawan",[["5-201",6500000],[K,0,6500000]])
-  ];
-  ["2026-05-31","2026-06-30","2026-07-31","2026-08-31","2026-09-30"].forEach(function(t){
-    let e=J(t,"Penyusutan peralatan usaha",[["5-205",133333],["1-202",0,133333]]);
-    e.ref="DEP-"+t.slice(0,7);L.push(e);
-  });
-  return L;
-}
-
-// ===== Util =====
+function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(data))}catch(e){}}
 function rp(n){return "Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID")}
 function nrp(n){return (Math.round(n)<0?"-":"")+rp(n)}
-function n0(n){return Math.round(n)===0?"–":nrp(n)}
-function singkat(n){return n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(Math.round(n))}
+function ang(n){n=Math.round(n);if(n===0)return "-";let s=Math.abs(n).toLocaleString("id-ID");return n<0?"("+s+")":s}
+function singkat(n){return n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(n)}
 function aman(t){return String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function kb(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
-function pad(n){return String(n).padStart(2,"0")}
-function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2200)}
+function geser(b,n){let q=b.split("-").map(Number);return kb(new Date(q[0],q[1]-1+n,1))}
+function selisih(b1,b2){let x=b1.split("-").map(Number),y=b2.split("-").map(Number);return (y[0]-x[0])*12+y[1]-x[1]}
+function akhirBulan(b){let q=b.split("-").map(Number),d=new Date(q[0],q[1],0);return b+"-"+String(d.getDate()).padStart(2,"0")}
 function namaBulan(b){return new Date(b+"-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"})}
+function bPendek(b){return new Date(b+"-01T00:00:00").toLocaleDateString("id-ID",{month:"short",year:"numeric"})}
 function tglPanjang(s){return new Date(s+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}
-function hariSebelum(s){let d=new Date(s+"T00:00:00Z");d.setUTCDate(d.getUTCDate()-1);return d.toISOString().slice(0,10)}
-const byKode=(a,b)=>a.k.localeCompare(b.k);
+function tglPendek(s){return new Date(s+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}
+function rentang(b1,b2){return b1===b2?bPendek(b1):bPendek(b1)+" – "+bPendek(b2)}
+function jumlahSum(o){return Object.keys(o).reduce((a,k)=>a+o[k],0)}
+function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2200)}
 
-// ===== Mesin akuntansi =====
-function akunDari(k){return p.akun.find(a=>a.k===k)}
-function namaAkun(k){let a=akunDari(k);return a?a.n:k}
-function normalD(a){let d=GRUP[a.g].d;return a.kontra?!d:d}
-// saldo bersih (debit - kredit) per akun dalam rentang tanggal (inklusif; null = tanpa batas)
-function saldoMap(arr,awal,akhir){
-  let m={};
-  arr.forEach(function(e){
-    if((awal&&e.tgl<awal)||(akhir&&e.tgl>akhir))return;
-    e.baris.forEach(function(b){m[b.a]=(m[b.a]||0)+(b.d||0)-(b.k||0)});
+/* ===== Mesin akuntansi: jurnal, penyusutan, pajak ===== */
+function jurnalTrx(t){
+ let d=TIPE[t.tipe];if(!d)return [];
+ return [{akun:akunDari(d.dr,t),d:t.jumlah,k:0},{akun:akunDari(d.kr,t),d:0,k:t.jumlah}];
+}
+function akumAset(t,b){
+ let n=Math.round(Number(t.umur)*12);if(!(n>0))return 0;
+ let i=selisih(t.tgl.slice(0,7),b)+1;if(i<=0)return 0;
+ let tot=t.jumlah-(Number(t.residu)||0),bln=Math.round(tot/n);
+ return i>=n?tot:bln*i;
+}
+function isBeban(a){return a.indexOf("B:")===0||a==="hpp"||a==="penyusutan"||a==="bunga"}
+function bulanTrx(t){return t.tgl.slice(0,7)}
+function bangunJurnal(sampai){
+ let L=[];
+ data.forEach(function(t){
+  let b=bulanTrx(t);if(b>sampai)return;
+  jurnalTrx(t).forEach(function(x){L.push({b:b,tgl:t.tgl,ket:t.ket,tipe:t.tipe,akun:x.akun,d:x.d,k:x.k,oto:false})});
+ });
+ if(data.length===0)return L;
+ let awal=data.reduce((m,t)=>bulanTrx(t)<m?bulanTrx(t):m,"9999-99");
+ let aset=data.filter(t=>t.tipe==="beli_aset"&&Number(t.umur)>0);
+ let tarif=(Number(p.pajakTarif)||0)/100;
+ for(let b=awal;b<=sampai;b=geser(b,1)){
+  let tglB=akhirBulan(b);
+  aset.forEach(function(t){
+   let amt=akumAset(t,b)-akumAset(t,geser(b,-1));
+   if(amt<=0)return;
+   L.push({b:b,tgl:tglB,ket:"Penyusutan "+t.ket,tipe:"penyusutan",akun:"penyusutan",d:amt,k:0,oto:true});
+   L.push({b:b,tgl:tglB,ket:"Penyusutan "+t.ket,tipe:"penyusutan",akun:"akum",d:0,k:amt,oto:true});
   });
-  return m;
-}
-function nilai(a,m){let v=m[a.k]||0;return normalD(a)?v:-v}          // pada sisi normal akun
-function nk(kode,m){let a=akunDari(kode);return a?nilai(a,m):0}
-function kontrib(a,m){let n=nilai(a,m);return a.kontra?-n:n}         // kontribusi ke total kelompok
-function sumGrup(g,m){let t=0;p.akun.forEach(function(a){if(a.g===g)t+=kontrib(a,m)});return t}
-function pnl(m){
-  let r={};
-  ["pd","bp","bb","pl","bl","pj"].forEach(g=>r[g]=sumGrup(g,m));
-  r.pendapatan=r.pd+r.pl;r.beban=r.bp+r.bb+r.bl+r.pj;
-  r.kotor=r.pd-r.bp;r.usaha=r.kotor-r.bb;r.sebPajak=r.usaha+r.pl-r.bl;r.laba=r.sebPajak-r.pj;
-  return r;
-}
-function kasBersih(e){let c=0;e.baris.forEach(function(b){if(b.a==="1-101")c+=(b.d||0)-(b.k||0)});return c}
-function totalDebit(e){return e.baris.reduce((a,b)=>a+(b.d||0),0)}
-
-// periode laporan: "t:2026" atau "b:2026-10"
-function bangunPeriode(v){
-  if(v.slice(0,2)==="t:"){
-    let y=+v.slice(2);
-    return {awal:y+"-01-01",akhir:y+"-12-31",label:"Tahun "+y,prev:"t:"+(y-1)};
+  let pend=0,beb=0;
+  L.forEach(function(l){
+   if(l.b!==b)return;
+   if(l.akun.indexOf("P:")===0)pend+=l.k-l.d;else if(isBeban(l.akun))beb+=l.d-l.k;
+  });
+  let dasar=p.pajakDasar==="laba"?Math.max(0,pend-beb):pend;
+  let pj=Math.round(dasar*tarif);
+  if(pj>0){
+   L.push({b:b,tgl:tglB,ket:"Beban pajak penghasilan "+namaBulan(b),tipe:"pajak",akun:"pajak",d:pj,k:0,oto:true});
+   L.push({b:b,tgl:tglB,ket:"Beban pajak penghasilan "+namaBulan(b),tipe:"pajak",akun:"utang_pajak",d:0,k:pj,oto:true});
   }
-  let s=v.slice(2).split("-"),y=+s[0],m=+s[1],last=new Date(y,m,0).getDate();
-  let py=m===1?y-1:y,pm=m===1?12:m-1;
-  return {awal:y+"-"+pad(m)+"-01",akhir:y+"-"+pad(m)+"-"+pad(last),label:namaBulan(y+"-"+pad(m)),prev:"b:"+py+"-"+pad(pm)};
+ }
+ return L;
+}
+function net(J,a,b1,b2){let s=0;for(let i=0;i<J.length;i++){let l=J[i];if(l.akun===a&&(!b1||l.b>=b1)&&l.b<=b2)s+=l.d-l.k}return s}
+function gross(J,a,b1,b2,sisi){let s=0;for(let i=0;i<J.length;i++){let l=J[i];if(l.akun===a&&(!b1||l.b>=b1)&&l.b<=b2)s+=l[sisi]}return s}
+function akunPL(J){let s={};J.forEach(function(l){if(l.akun.indexOf(":")>0||["hpp","penyusutan","bunga","pajak"].includes(l.akun))s[l.akun]=1});return Object.keys(s)}
+
+function hitung(J,b1,b2){
+ let o=geser(b1,-1),K={b1:b1,b2:b2},pl=akunPL(J);
+ function pos(u){
+  let s={};
+  ["kas","piutang","persediaan","dimuka","aset","prive"].forEach(a=>s[a]=net(J,a,"",u));
+  ["akum","utang_usaha","utang_pajak","utang_bank_pendek","utang_bank_panjang","modal"].forEach(a=>s[a]=-net(J,a,"",u));
+  let lb=0;pl.forEach(a=>{lb-=net(J,a,"",u)});s.laba=lb;
+  return s;
+ }
+ K.awal=pos(o);K.akhir=pos(b2);
+ K.pend={};K.beban={};
+ pl.forEach(function(a){
+  let v=net(J,a,b1,b2);
+  if(a.indexOf("P:")===0){if(v!==0)K.pend[a.slice(2)]=-v}
+  else if(a.indexOf("B:")===0){if(v!==0)K.beban[a.slice(2)]=v}
+ });
+ K.totPend=jumlahSum(K.pend);K.totBeban=jumlahSum(K.beban);
+ K.hpp=net(J,"hpp",b1,b2);K.peny=net(J,"penyusutan",b1,b2);K.bunga=net(J,"bunga",b1,b2);K.pajak=net(J,"pajak",b1,b2);
+ K.labaBruto=K.totPend-K.hpp;
+ K.totBebanOps=K.totBeban+K.peny;
+ K.labaUsaha=K.labaBruto-K.totBebanOps;
+ K.labaSblPajak=K.labaUsaha-K.bunga;
+ K.laba=K.labaSblPajak-K.pajak;
+ K.totBebanSemua=K.hpp+K.totBebanOps+K.bunga+K.pajak;
+ K.setor=-net(J,"modal",b1,b2);
+ K.prive=net(J,"prive",b1,b2);
+ K.beliAset=net(J,"aset",b1,b2);
+ K.terimaPinjam=gross(J,"utang_bank_pendek",b1,b2,"k")+gross(J,"utang_bank_panjang",b1,b2,"k");
+ K.bayarPinjam=gross(J,"utang_bank_pendek",b1,b2,"d")+gross(J,"utang_bank_panjang",b1,b2,"d");
+ K.pajakBayar=gross(J,"utang_pajak",b1,b2,"d");
+ K.dPiut=K.akhir.piutang-K.awal.piutang;
+ K.dPers=K.akhir.persediaan-K.awal.persediaan;
+ K.dMuka=K.akhir.dimuka-K.awal.dimuka;
+ K.dUsaha=K.akhir.utang_usaha-K.awal.utang_usaha;
+ K.kasDariOps=K.labaSblPajak+K.peny-K.dPiut-K.dPers-K.dMuka+K.dUsaha;
+ K.kasOps=K.kasDariOps-K.pajakBayar;
+ K.kasInv=-K.beliAset;
+ K.kasDan=K.setor-K.prive+K.terimaPinjam-K.bayarPinjam;
+ K.kasNet=K.kasOps+K.kasInv+K.kasDan;
+ K.kasCek=Math.round(K.kasNet)===Math.round(K.akhir.kas-K.awal.kas);
+ return K;
 }
 
-// ===== Navigasi =====
+/* ===== Periode ===== */
+function bulanData(){return data.map(bulanTrx).sort()}
+function resolvePeriode(v){
+ let now=kb(new Date()),bs=bulanData(),first=bs[0]||now,last=bs.length?bs[bs.length-1]:now,mx=last>now?last:now,r;
+ if(v.indexOf("Y:")===0){
+  let y=v.slice(2),b2=y+"-12";if(b2>mx)b2=mx;
+  r={b1:y+"-01",b2:b2};r.banding={b1:geser(r.b1,-12),b2:geser(r.b2,-12)};
+ }else if(v.indexOf("M:")===0){
+  let m=v.slice(2);r={b1:m,b2:m,banding:{b1:geser(m,-1),b2:geser(m,-1)}};
+ }else{r={b1:first,b2:mx,banding:null}}
+ return r;
+}
+
+/* ===== Navigasi ===== */
 const JUDUL={dashboard:"Dashboard",transaksi:"Transaksi",laporan:"Laporan",pengaturan:"Pengaturan"};
 function ganti(v){
-  if(!bisa(v)){toast("Akses ditolak");return}
-  tampilan=v;
-  for(let k in JUDUL){$("nav-"+k).classList.toggle("aktif",k===v)}
-  $("atas").classList.toggle("sembunyi",v!=="dashboard");
-  $("kartuTabel").classList.toggle("sembunyi",v!=="dashboard"&&v!=="transaksi");
-  $("halamanLaporan").classList.toggle("sembunyi",v!=="laporan");
-  $("halamanPengaturan").classList.toggle("sembunyi",v!=="pengaturan");
-  $("periode").classList.toggle("sembunyi",v!=="dashboard");
-  $("judulHalaman").innerText=JUDUL[v];
-  $("judulTabel").innerText=v==="dashboard"?"Transaksi terbaru":"Semua transaksi";
-  if(v==="pengaturan")isiFormProfil();
-  render();
+ if(!bisa(v)){toast("Akses ditolak");return}
+ tampilan=v;
+ for(let k in JUDUL){$("nav-"+k).classList.toggle("aktif",k===v)}
+ $("atas").classList.toggle("sembunyi",v!=="dashboard");
+ $("kartuTabel").classList.toggle("sembunyi",v!=="dashboard"&&v!=="transaksi");
+ $("halamanLaporan").classList.toggle("sembunyi",v!=="laporan");
+ $("halamanPengaturan").classList.toggle("sembunyi",v!=="pengaturan");
+ $("periode").classList.toggle("sembunyi",v!=="dashboard");
+ $("judulHalaman").innerText=JUDUL[v];
+ $("judulTabel").innerText=v==="dashboard"?"Transaksi terbaru":"Semua transaksi";
+ if(v==="pengaturan")isiFormProfil();
+ render();
 }
 function render(){
-  renderDashboard();
-  if(tampilan==="transaksi")$("subjudul").innerText=dataDilihat().length+" jurnal tercatat";
-  if(tampilan==="laporan"){renderLaporan();$("subjudul").innerText="Laporan keuangan basis akrual";}
-  if(tampilan==="pengaturan"){renderPengaturan();$("subjudul").innerText="Profil, bagan akun, penyusutan, dan data";}
+ renderDashboard();
+ if(tampilan==="transaksi")$("subjudul").innerText=dataDilihat().length+" transaksi tercatat";
+ if(tampilan==="laporan"){renderLaporan();$("subjudul").innerText="Laporan keuangan basis akrual";}
+ if(tampilan==="pengaturan"){renderPengaturan();$("subjudul").innerText="Atur profil, pajak, kategori, dan data";}
 }
 function filterJ(el){
-  jenisAktif=el.dataset.j;
-  document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("aktif",c===el));
-  render();
+ jenisAktif=el.dataset.j;
+ document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("aktif",c===el));
+ render();
 }
 
-// ===== Dashboard =====
+/* ===== Dashboard ===== */
 function renderDashboard(){
-  let now=new Date(),bi=kb(now),lalu=kb(new Date(now.getFullYear(),now.getMonth()-1,1));
-  let mode=$("periode").value;
-  let awal=mode==="bulan"?bi+"-01":null,akhir=mode==="bulan"?bi+"-31":null;
-  let m=saldoMap(jur,awal,akhir),P=pnl(m);
-  let P0=pnl(saldoMap(jur,lalu+"-01",lalu+"-31"));
-  let sAll=saldoMap(jur,null,null);
-  let jumlahJ=jur.filter(e=>(!awal||e.tgl>=awal)&&(!akhir||e.tgl<=akhir)).length;
-  $("subjudul").innerText=(mode==="semua"?"Ringkasan semua waktu":"Ringkasan bulan ini")+" · "+jumlahJ+" jurnal";
-  let margin=P.pendapatan>0?P.laba/P.pendapatan*100:0;
+ let now=new Date(),bIni=kb(now),mode=$("periode").value;
+ let bs=bulanData(),first=bs[0]||bIni,last=bs.length?bs[bs.length-1]:bIni,mx=last>bIni?last:bIni;
+ let J=bangunJurnal(mx);
+ let K=mode==="bulan"?hitung(J,bIni,bIni):hitung(J,first,mx);
+ let Kp=mode==="bulan"?hitung(J,geser(bIni,-1),geser(bIni,-1)):null;
+ let dp=dataDilihat();
+ $("subjudul").innerText=(mode==="semua"?"Ringkasan semua waktu":"Ringkasan bulan ini")+" · "+data.length+" transaksi";
+ function delta(now_,lalu,naikBaik){
+  if(!Kp)return '<span class="delta">Semua waktu</span>';
+  if(lalu===0)return '<span class="delta">Belum ada data bulan lalu</span>';
+  let pct=(now_-lalu)/Math.abs(lalu)*100,baik=naikBaik?pct>=0:pct<=0;
+  return '<span class="'+(baik?"naik":"turun")+'">'+(pct>=0?"▲ ":"▼ ")+Math.abs(pct).toFixed(0)+'%</span> <span class="delta">vs bulan lalu</span>';
+ }
+ let margin=K.totPend>0?K.laba/K.totPend*100:0;
+ let kartu=[
+  ["Pendapatan","💰","#10b9811f",rp(K.totPend),delta(K.totPend,Kp?Kp.totPend:0,true),""],
+  ["Total beban","💸","#f43f5e1f",rp(K.totBebanSemua),delta(K.totBebanSemua,Kp?Kp.totBebanSemua:0,false),""],
+  ["Laba bersih","📈","#4f46e51f",nrp(K.laba),'<span class="delta">Margin '+margin.toFixed(1)+'% · '+(K.laba>=0?"untung":"rugi")+'</span>',K.laba>=0?"var(--hijau)":"var(--merah)"],
+  ["Saldo kas","🏦","#f59e0b1f",nrp(K.akhir.kas),'<span class="delta">Piutang '+rp(K.akhir.piutang)+' · Utang usaha '+rp(K.akhir.utang_usaha)+'</span>',K.akhir.kas<0?"var(--merah)":""]];
+ $("kpi").innerHTML=kartu.map(k=>'<div class="kartu"><span class="ikon" style="background:'+k[2]+'">'+k[1]+'</span><h3>'+k[0]+'</h3><div class="nilai" style="color:'+(k[5]||"inherit")+'">'+k[3]+'</div>'+k[4]+'</div>').join("");
 
-  function delta(sebelum,nilaiNow,naikBaik){
-    if(mode!=="bulan")return '<span class="delta">Basis akrual</span>';
-    if(!sebelum)return '<span class="delta">Belum ada data bulan lalu</span>';
-    let pct=(nilaiNow-sebelum)/Math.abs(sebelum)*100,baik=naikBaik?pct>=0:pct<=0;
-    return '<span class="'+(baik?"naik":"turun")+'">'+(pct>=0?"▲ ":"▼ ")+Math.abs(pct).toFixed(0)+'%</span> <span class="delta">vs bulan lalu</span>';
-  }
-  let kartu=[
-    ["Pendapatan","💰","#10b9811f",rp(P.pendapatan),delta(P0.pendapatan,P.pendapatan,true),""],
-    ["Total beban","💸","#f43f5e1f",rp(P.beban),delta(P0.beban,P.beban,false),""],
-    ["Laba bersih","📈","#4f46e51f",nrp(P.laba),'<span class="delta">'+(P.laba>=0?"Usaha untung":"Usaha rugi")+" · margin "+margin.toFixed(1)+"%</span>",P.laba>=0?"var(--hijau)":"var(--merah)"],
-    ["Saldo kas & bank","🏦","#06b6d41f",nrp(nk("1-101",sAll)),'<span class="delta">Per saat ini</span>',""],
-    ["Piutang usaha","🧾","#f59e0b1f",nrp(nk("1-102",sAll)),'<span class="delta">Belum tertagih</span>',""],
-    ["Utang usaha","📦","#8b5cf61f",nrp(nk("2-101",sAll)),'<span class="delta">Belum dibayar</span>',""]];
-  $("kpi").innerHTML=kartu.map(k=>'<div class="kartu"><span class="ikon" style="background:'+k[2]+'">'+k[1]+'</span><h3>'+k[0]+'</h3><div class="nilai" style="color:'+(k[5]||"inherit")+'">'+k[3]+'</div>'+k[4]+'</div>').join("");
+ let bln=[];
+ for(let i=5;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1);bln.push({k:kb(d),l:d.toLocaleDateString("id-ID",{month:"short"}),masuk:0,keluar:0})}
+ J.forEach(function(l){if(l.akun!=="kas")return;bln.forEach(function(b){if(l.b===b.k){b.masuk+=l.d;b.keluar+=l.k}})});
+ let maks=Math.max(1,...bln.map(b=>Math.max(b.masuk,b.keluar)));
+ let garis=[1,.75,.5,.25].map(f=>'<div class="gl" style="top:'+((1-f)*100)*0.88+'%"><span>'+singkat(maks*f)+'</span></div>').join("");
+ $("grafik").innerHTML=garis+bln.map(b=>'<div class="kol"><b style="height:'+(b.masuk/maks*88)+'%;background:var(--hijau)" title="Kas masuk '+rp(b.masuk)+'"></b><b style="height:'+(b.keluar/maks*88)+'%;background:var(--merah)" title="Kas keluar '+rp(b.keluar)+'"></b><em>'+b.l+'</em></div>').join("");
 
-  // grafik arus kas 6 bulan
-  let bln=[];
-  for(let i=5;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1);bln.push({k:kb(d),l:d.toLocaleDateString("id-ID",{month:"short"}),masuk:0,keluar:0})}
-  jur.forEach(function(e){
-    let c=kasBersih(e);if(Math.round(c)===0)return;
-    bln.forEach(function(b){if(e.tgl.startsWith(b.k)){if(c>0)b.masuk+=c;else b.keluar+=-c}});
-  });
-  let maks=Math.max(1,...bln.map(b=>Math.max(b.masuk,b.keluar)));
-  let garis=[1,.75,.5,.25].map(f=>'<div class="gl" style="top:'+((1-f)*100)*0.88+'%"><span>'+singkat(maks*f)+'</span></div>').join("");
-  $("grafik").innerHTML=garis+bln.map(b=>'<div class="kol"><b style="height:'+(b.masuk/maks*88)+'%;background:var(--hijau)" title="Kas masuk '+rp(b.masuk)+'"></b><b style="height:'+(b.keluar/maks*88)+'%;background:var(--merah)" title="Kas keluar '+rp(b.keluar)+'"></b><em>'+b.l+'</em></div>').join("");
+ let pk={};
+ Object.keys(K.beban).forEach(k=>pk[k]=K.beban[k]);
+ if(K.hpp>0)pk["Beban pokok penjualan"]=K.hpp;
+ if(K.peny>0)pk["Beban penyusutan"]=K.peny;
+ if(K.bunga>0)pk["Beban bunga"]=K.bunga;
+ if(K.pajak>0)pk["Beban pajak"]=K.pajak;
+ let tot=jumlahSum(pk),ks=Object.keys(pk).sort((a,b)=>pk[b]-pk[a]);
+ if(ks.length===0||tot<=0){$("donat").innerHTML='<div class="kosong">Belum ada beban</div>'}
+ else{
+  let acc=0,seg=ks.map(function(k,i){let a=acc/tot*100;acc+=pk[k];return WARNA[i%WARNA.length]+" "+a+"% "+(acc/tot*100)+"%"});
+  $("donat").innerHTML='<div class="donat" style="background:conic-gradient('+seg.join(",")+')"><div><span><strong>'+singkat(tot)+'</strong>total</span></div></div>'+
+   ks.map((k,i)=>'<div class="lk"><span><i style="background:'+WARNA[i%WARNA.length]+'"></i>'+aman(k)+'</span><b>'+(pk[k]/tot*100).toFixed(0)+'%</b></div>').join("");
+ }
 
-  // donat beban per akun
-  let pk={},tot=0;
-  p.akun.forEach(function(a){
-    if(["bp","bb","bl","pj"].includes(a.g)){let v=kontrib(a,m);if(Math.round(v)>0){pk[a.n]=v;tot+=v}}
-  });
-  let ks=Object.keys(pk).sort((a,b)=>pk[b]-pk[a]);
-  if(ks.length===0){$("donat").innerHTML='<div class="kosong">Belum ada beban</div>'}
-  else{
-    let acc=0,seg=ks.map((k,i)=>{let a=acc/tot*100;acc+=pk[k];return WARNA[i%WARNA.length]+" "+a+"% "+(acc/tot*100)+"%"});
-    $("donat").innerHTML='<div class="donat" style="background:conic-gradient('+seg.join(",")+')"><div><span><strong>'+singkat(tot)+'</strong>total</span></div></div>'+
-      ks.map((k,i)=>'<div class="lk"><span><i style="background:'+WARNA[i%WARNA.length]+'"></i>'+aman(k)+'</span><b>'+(pk[k]/tot*100).toFixed(0)+'%</b></div>').join("");
-  }
-
-  // tabel jurnal
-  let q=$("cari").value.trim().toLowerCase();
-  let tampil=dataDilihat().filter(function(e){
-    let c=Math.round(kasBersih(e)),jn=c>0?"masuk":c<0?"keluar":"non";
-    let teks=(e.ket+" "+e.baris.map(b=>namaAkun(b.a)).join(" ")).toLowerCase();
-    return (jenisAktif==="semua"||jn===jenisAktif)&&(q===""||teks.includes(q));
-  }).sort((a,b)=>b.tgl.localeCompare(a.tgl)||b.id-a.id);
-  if(tampilan==="dashboard")tampil=tampil.slice(0,6);
-  $("isiTabel").innerHTML=tampil.length===0?'<tr><td colspan="5" class="kosong">Tidak ada transaksi ditemukan</td></tr>':
-    tampil.map(function(e){
-      let c=kasBersih(e),r=Math.round(c),jn=r>0?"masuk":r<0?"keluar":"non";
-      let dn=e.baris.filter(b=>b.d>0).map(b=>aman(namaAkun(b.a))).join(", "),kn=e.baris.filter(b=>b.k>0).map(b=>aman(namaAkun(b.a))).join(", ");
-      let jumlah=jn==="non"?'<span style="color:var(--abu)">'+rp(totalDebit(e))+'</span>':'<span style="color:var(--'+(jn==="masuk"?"hijau":"merah")+')">'+(jn==="masuk"?"+":"-")+rp(c)+'</span>';
-      return '<tr><td><div class="sel"><div class="ik">'+(jn==="masuk"?"💵":jn==="keluar"?"💸":"📒")+'</div><div>'+aman(e.ket)+'<small>D: '+dn+' · K: '+kn+'</small></div></div></td>'+
-        '<td>'+new Date(e.tgl+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})+'</td>'+
-        '<td><span class="badge '+jn+'">'+(jn==="masuk"?"Kas masuk":jn==="keluar"?"Kas keluar":"Non-kas")+'</span></td>'+
-        '<td class="num" style="font-weight:600">'+jumlah+'</td>'+
-        '<td class="num">'+(bisa("hapus")?'<button class="x" onclick="hapus('+e.id+')" title="Hapus">🗑️</button>':"")+'</td></tr>';
-    }).join("");
+ let q=$("cari").value.trim().toLowerCase();
+ let tampil=dp.filter(function(d){
+  let td=TIPE[d.tipe]||{l:d.tipe,a:"nonkas"};
+  return (jenisAktif==="semua"||td.a===jenisAktif)&&(q===""||(d.ket+" "+(d.kat||"")+" "+td.l).toLowerCase().includes(q));
+ }).sort((a,b)=>b.tgl.localeCompare(a.tgl)||b.id-a.id);
+ if(tampilan==="dashboard")tampil=tampil.slice(0,6);
+ $("isiTabel").innerHTML=tampil.length===0?'<tr><td colspan="5" class="kosong">Tidak ada transaksi ditemukan</td></tr>':
+  tampil.map(function(d){
+   let td=TIPE[d.tipe]||{l:d.tipe,a:"nonkas",ik:"🧾"};
+   let lb=td.a==="masuk"?"Kas masuk":td.a==="keluar"?"Kas keluar":"Non-kas";
+   let tanda=td.a==="masuk"?"+":td.a==="keluar"?"-":"";
+   let warna=td.a==="masuk"?"hijau":td.a==="keluar"?"merah":"abu";
+   return '<tr><td><div class="sel"><div class="ik">'+td.ik+'</div><div>'+aman(d.ket)+'<small>'+aman(td.l)+(d.kat?" · "+aman(d.kat):"")+'</small></div></div></td>'+
+    '<td>'+new Date(d.tgl+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})+'</td>'+
+    '<td><span class="badge '+td.a+'">'+lb+'</span></td>'+
+    '<td class="num" style="font-weight:600;color:var(--'+warna+')">'+tanda+rp(d.jumlah)+'</td>'+
+    '<td class="num">'+(bisa("hapus")?'<button class="x" onclick="hapus('+d.id+')" title="Hapus">🗑️</button>':"")+'</td></tr>';
+  }).join("");
 }
 
-// ===== Login & hak akses =====
+/* ===== Login & hak akses ===== */
 const LABEL={pemilik:"Pemilik",akuntan:"Akuntan",kasir:"Kasir"};
 const IZIN={
-  pemilik:["dashboard","transaksi","laporan","pengaturan","tambah","jurnalumum","hapus","ekspor","pengguna"],
-  akuntan:["dashboard","transaksi","laporan","tambah","jurnalumum","hapus","ekspor"],
-  kasir:["transaksi","tambah"]
+ pemilik:["dashboard","transaksi","laporan","pengaturan","tambah","hapus","ekspor","pengguna"],
+ akuntan:["dashboard","transaksi","laporan","tambah","hapus","ekspor"],
+ kasir:["transaksi","tambah"]
 };
+const KUNCI_U="kaskuPengguna";
 let users=muatU(),sesi=null,modeLogin="login",gagal=0,kunciSampai=0,idPw=null;
 function muatU(){try{let x=localStorage.getItem(KUNCI_U);if(x)return JSON.parse(x)}catch(e){}return []}
 function simpanU(){try{localStorage.setItem(KUNCI_U,JSON.stringify(users))}catch(e){}}
 function bisa(x){return !!sesi&&IZIN[sesi.role].includes(x)}
-function dataDilihat(){return sesi&&sesi.role==="kasir"?jur.filter(d=>d.oleh===sesi.username):jur}
+function dataDilihat(){return sesi&&sesi.role==="kasir"?data.filter(d=>d.oleh===sesi.username):data}
 
 function acak(){return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,"0")).join("")}
 async function hash(pw,salt){
-  let enc=new TextEncoder();
-  let kunci=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]);
-  let bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:100000,hash:"SHA-256"},kunci,256);
-  return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,"0")).join("");
+ let enc=new TextEncoder();
+ let kunci=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]);
+ let bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:100000,hash:"SHA-256"},kunci,256);
+ return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 async function buatUser(nama,username,pw,role){
-  let salt=acak();
-  return {id:Date.now()+Math.floor(Math.random()*1000),username:username,nama:nama,role:role,salt:salt,hash:await hash(pw,salt)};
+ let salt=acak();
+ return {id:Date.now()+Math.floor(Math.random()*1000),username:username,nama:nama,role:role,salt:salt,hash:await hash(pw,salt)};
 }
 function tampilLogin(mode){
-  modeLogin=mode;
-  $("login").classList.remove("sembunyi");
-  document.body.classList.add("terkunci");
-  let setup=mode==="setup";
-  $("lgJudul").innerText=setup?"Buat akun Pemilik":p.usaha;
-  $("lgSub").innerText=setup?"Aplikasi baru dipakai. Buat akun Pemilik dengan akses penuh.":"Masuk untuk melanjutkan";
-  $("lgSetup").classList.toggle("sembunyi",!setup);
-  $("lgUlang").classList.toggle("sembunyi",!setup);
-  $("lgTombol").innerText=setup?"Buat akun & masuk":"Masuk";
-  $("lgLupa").classList.toggle("sembunyi",setup);
-  $("lgErr").innerText="";
-  $("lgPass").value="";$("lgPass2").value="";
+ modeLogin=mode;
+ $("login").classList.remove("sembunyi");
+ document.body.classList.add("terkunci");
+ let setup=mode==="setup";
+ $("lgJudul").innerText=setup?"Buat akun Pemilik":p.usaha;
+ $("lgSub").innerText=setup?"Aplikasi baru dipakai. Buat akun Pemilik dengan akses penuh.":"Masuk untuk melanjutkan";
+ $("lgSetup").classList.toggle("sembunyi",!setup);
+ $("lgUlang").classList.toggle("sembunyi",!setup);
+ $("lgTombol").innerText=setup?"Buat akun & masuk":"Masuk";
+ $("lgLupa").classList.toggle("sembunyi",setup);
+ $("lgErr").innerText="";
+ $("lgPass").value="";$("lgPass2").value="";
 }
 function lihatPw(t){$("lgPass").type=t?"text":"password";$("lgPass2").type=t?"text":"password"}
 async function kirimLogin(){
-  let err=$("lgErr");err.innerText="";
-  let user=$("lgUser").value.trim().toLowerCase(),pw=$("lgPass").value;
-  if(modeLogin==="setup"){
-    let nama=$("lgNama").value.trim();
-    if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
-    if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
-    if(pw!==$("lgPass2").value){err.innerText="Konfirmasi password tidak sama.";return}
-    let u=await buatUser(nama,user,pw,"pemilik");
-    perluPilihData=true;users.push(u);simpanU();masuk(u,true);return;
-  }
-  if(Date.now()<kunciSampai){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.";return}
-  let u=users.find(x=>x.username===user);
-  let h=await hash(pw,u?u.salt:"tidak-ada");
-  if(u&&h===u.hash){gagal=0;masuk(u,true)}
-  else{gagal++;if(gagal>=5){kunciSampai=Date.now()+30000;gagal=0}err.innerText="Username atau password salah."}
+ let err=$("lgErr");err.innerText="";
+ let user=$("lgUser").value.trim().toLowerCase(),pw=$("lgPass").value;
+ if(modeLogin==="setup"){
+  let nama=$("lgNama").value.trim();
+  if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
+  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
+  if(pw!==$("lgPass2").value){err.innerText="Konfirmasi password tidak sama.";return}
+  let u=await buatUser(nama,user,pw,"pemilik");
+  perluPilihData=true;users.push(u);simpanU();masuk(u,true);return;
+ }
+ if(Date.now()<kunciSampai){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.";return}
+ let u=users.find(x=>x.username===user);
+ let h=await hash(pw,u?u.salt:"tidak-ada");
+ if(u&&h===u.hash){gagal=0;masuk(u,true)}
+ else{gagal++;if(gagal>=5){kunciSampai=Date.now()+30000;gagal=0}err.innerText="Username atau password salah."}
 }
 function masuk(u,baru){
-  sesi={id:u.id,username:u.username,nama:u.nama,role:u.role};
-  try{sessionStorage.setItem("kaskuSesi",String(u.id))}catch(e){}
-  $("login").classList.add("sembunyi");
-  document.body.classList.remove("terkunci");
-  $("lgUser").value="";$("lgPass").value="";
-  terapkanProfil();terapkanHak();
-  ganti(bisa("dashboard")?"dashboard":"transaksi");
-  if(baru&&u.role==="pemilik"){if(perluPilihData){bukaData()}else if(!u.pulih){bukaPulih()}}
+ sesi={id:u.id,username:u.username,nama:u.nama,role:u.role};
+ try{sessionStorage.setItem("kaskuSesi",String(u.id))}catch(e){}
+ $("login").classList.add("sembunyi");
+ document.body.classList.remove("terkunci");
+ $("lgUser").value="";$("lgPass").value="";
+ terapkanProfil();terapkanHak();
+ ganti(bisa("dashboard")?"dashboard":"transaksi");
+ if(baru&&u.role==="pemilik"){if(perluPilihData){bukaData()}else if(!u.pulih){bukaPulih()}}
 }
 function keluar(){
-  sesi=null;
-  try{sessionStorage.removeItem("kaskuSesi")}catch(e){}
-  tampilLogin("login");
+ sesi=null;
+ try{sessionStorage.removeItem("kaskuSesi")}catch(e){}
+ tampilLogin("login");
 }
 function terapkanHak(){
-  for(let k in JUDUL){$("nav-"+k).classList.toggle("sembunyi",!bisa(k))}
-  $("btnEkspor").classList.toggle("sembunyi",!bisa("ekspor"));
-  $("btnTambah").classList.toggle("sembunyi",!bisa("tambah"));
+ for(let k in JUDUL){$("nav-"+k).classList.toggle("sembunyi",!bisa(k))}
+ $("btnEkspor").classList.toggle("sembunyi",!bisa("ekspor"));
+ $("btnTambah").classList.toggle("sembunyi",!bisa("tambah"));
 }
 function mulai(){
-  if(!window.crypto||!crypto.subtle){
-    tampilLogin("login");
-    $("lgErr").innerText="Browser ini tidak mendukung enkripsi password. Buka lewat https (misalnya GitHub Pages) atau browser terbaru.";
-    $("lgTombol").disabled=true;return;
-  }
-  if(users.length===0){tampilLogin("setup");return}
-  let id=null;try{id=sessionStorage.getItem("kaskuSesi")}catch(e){}
-  let u=users.find(x=>String(x.id)===id);
-  if(u){masuk(u)}else{tampilLogin("login")}
+ if(!window.crypto||!crypto.subtle){
+  tampilLogin("login");
+  $("lgErr").innerText="Browser ini tidak mendukung enkripsi password. Buka lewat https (misalnya GitHub Pages) atau browser terbaru.";
+  $("lgTombol").disabled=true;return;
+ }
+ if(users.length===0){tampilLogin("setup");return}
+ let id=null;try{id=sessionStorage.getItem("kaskuSesi")}catch(e){}
+ let u=users.find(x=>String(x.id)===id);
+ if(u){masuk(u)}else{tampilLogin("login")}
 }
 document.getElementById("login").addEventListener("keydown",function(e){if(e.key==="Enter")kirimLogin()});
 
-// ===== Data awal / data baru =====
+/* ===== Data awal / data baru ===== */
 let perluPilihData=false;
 function bukaData(){
-  let ada=false;try{ada=localStorage.getItem(KUNCI_J)!==null||localStorage.getItem(KUNCI)!==null}catch(e){}
-  $("btnDataAda").classList.toggle("sembunyi",!ada);
-  document.getElementById("dlgData").showModal();
+ let ada=false;try{ada=localStorage.getItem(KUNCI)!==null}catch(e){}
+ $("btnDataAda").classList.toggle("sembunyi",!ada);
+ document.getElementById("dlgData").showModal();
 }
 function pilihData(mode){
-  if(mode==="kosong"){jur=[]}
-  else if(mode==="contoh"){jur=contohJ()}
-  simpanJ();perluPilihData=false;
-  document.getElementById("dlgData").close();
-  render();
-  toast(mode==="kosong"?"Data baru (kosong) siap dipakai ✓":mode==="contoh"?"Data contoh dimuat":"Data lama dipertahankan");
-  let me=users.find(x=>sesi&&x.id===sesi.id);
-  if(me&&!me.pulih){bukaPulih()}
+ if(mode==="kosong"){data=[]}
+ else if(mode==="contoh"){data=JSON.parse(JSON.stringify(contoh))}
+ simpan();perluPilihData=false;
+ document.getElementById("dlgData").close();
+ render();
+ toast(mode==="kosong"?"Data baru (kosong) siap dipakai ✓":mode==="contoh"?"Data contoh dimuat":"Data lama dipertahankan");
+ let me=users.find(x=>sesi&&x.id===sesi.id);
+ if(me&&!me.pulih){bukaPulih()}
 }
 function bukaBaru(){
-  if(!bisa("pengaturan"))return;
-  $("baruKonfirm").value="";$("errBaru").innerText="";
-  $("baruCadangan").checked=jur.length>0;
-  document.getElementById("dlgBaru").showModal();
+ if(!bisa("pengaturan"))return;
+ $("baruKonfirm").value="";$("errBaru").innerText="";
+ $("baruCadangan").checked=data.length>0;
+ document.getElementById("dlgBaru").showModal();
 }
 function jalankanBaru(){
-  if(!bisa("pengaturan"))return;
-  if($("baruKonfirm").value.trim().toUpperCase()!=="BARU"){$("errBaru").innerText='Ketik "BARU" untuk melanjutkan.';return}
-  if($("baruCadangan").checked&&jur.length>0){ekspor()}
-  jur=[];simpanJ();
-  document.getElementById("dlgBaru").close();
-  render();toast("Data baru siap dipakai ✓");
+ if(!bisa("pengaturan"))return;
+ if($("baruKonfirm").value.trim().toUpperCase()!=="BARU"){$("errBaru").innerText='Ketik "BARU" untuk melanjutkan.';return}
+ if($("baruCadangan").checked&&data.length>0){ekspor()}
+ data=[];simpan();
+ document.getElementById("dlgBaru").close();
+ render();toast("Data baru siap dipakai ✓");
 }
 
-// ===== Sandi pemulihan =====
+/* ===== Sandi pemulihan ===== */
 let userPulih=null,gagalP=0,kunciP=0;
 function normKode(x){return String(x||"").toUpperCase().replace(/[\s-]/g,"")}
 function buatKode(){
-  let abj="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",a=crypto.getRandomValues(new Uint8Array(16)),k="";
-  for(let i=0;i<16;i++){k+=abj[a[i]%abj.length];if(i%4===3&&i<15){k+="-"}}
-  $("pulihKode").value=k;
+ let abj="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",a=crypto.getRandomValues(new Uint8Array(16)),k="";
+ for(let i=0;i<16;i++){k+=abj[a[i]%abj.length];if(i%4===3&&i<15){k+="-"}}
+ $("pulihKode").value=k;
 }
 function bukaPulih(){
-  $("pulihKode").value="";$("pulihOk").checked=false;$("errPulih").innerText="";
-  document.getElementById("dlgPulih").showModal();
+ $("pulihKode").value="";$("pulihOk").checked=false;$("errPulih").innerText="";
+ document.getElementById("dlgPulih").showModal();
 }
 function lewatiPulih(){document.getElementById("dlgPulih").close()}
 async function simpanPulih(){
-  if(!sesi)return;
-  let k=normKode($("pulihKode").value);
-  if(k.length<8){$("errPulih").innerText="Sandi pemulihan minimal 8 karakter.";return}
-  if(!$("pulihOk").checked){$("errPulih").innerText="Centang dulu setelah kamu menyimpan sandinya.";return}
-  let u=users.find(x=>x.id===sesi.id);if(!u)return;
-  let salt=acak();
-  u.pulih={salt:salt,hash:await hash(k,salt)};
-  simpanU();
-  document.getElementById("dlgPulih").close();
-  $("pulihKode").value="";
-  if(tampilan==="pengaturan")renderPengaturan();
-  toast("Sandi pemulihan disimpan ✓");
+ if(!sesi)return;
+ let k=normKode($("pulihKode").value);
+ if(k.length<8){$("errPulih").innerText="Sandi pemulihan minimal 8 karakter.";return}
+ if(!$("pulihOk").checked){$("errPulih").innerText="Centang dulu setelah kamu menyimpan sandinya.";return}
+ let u=users.find(x=>x.id===sesi.id);if(!u)return;
+ let salt=acak();
+ u.pulih={salt:salt,hash:await hash(k,salt)};
+ simpanU();
+ document.getElementById("dlgPulih").close();
+ $("pulihKode").value="";
+ if(tampilan==="pengaturan")renderPengaturan();
+ toast("Sandi pemulihan disimpan ✓");
 }
 function bukaLupa(){
-  userPulih=null;
-  $("lupaKode").value="";$("lupaPw").value="";$("lupaPw2").value="";
-  $("errLupa1").innerText="";$("errLupa2").innerText="";
-  $("lupa1").classList.remove("sembunyi");$("lupa2").classList.add("sembunyi");
-  document.getElementById("dlgLupa").showModal();
+ userPulih=null;
+ $("lupaKode").value="";$("lupaPw").value="";$("lupaPw2").value="";
+ $("errLupa1").innerText="";$("errLupa2").innerText="";
+ $("lupa1").classList.remove("sembunyi");$("lupa2").classList.add("sembunyi");
+ document.getElementById("dlgLupa").showModal();
 }
 async function cekPulih(){
-  let err=$("errLupa1");err.innerText="";
-  if(Date.now()<kunciP){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciP-Date.now())/1000)+" detik.";return}
-  let k=normKode($("lupaKode").value);
-  if(k.length<8){err.innerText="Masukkan sandi pemulihan dengan benar.";return}
-  let cocok=null;
-  for(let u of users){
-    if(u.pulih&&(await hash(k,u.pulih.salt))===u.pulih.hash){cocok=u;break}
-  }
-  if(!cocok){
-    gagalP++;if(gagalP>=5){kunciP=Date.now()+60000;gagalP=0}
-    err.innerText="Sandi pemulihan tidak cocok.";return;
-  }
-  gagalP=0;userPulih=cocok;
-  $("lupaUser").innerText="@"+cocok.username+" ("+cocok.nama+")";
-  $("lupa1").classList.add("sembunyi");$("lupa2").classList.remove("sembunyi");
+ let err=$("errLupa1");err.innerText="";
+ if(Date.now()<kunciP){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciP-Date.now())/1000)+" detik.";return}
+ let k=normKode($("lupaKode").value);
+ if(k.length<8){err.innerText="Masukkan sandi pemulihan dengan benar.";return}
+ let cocok=null;
+ for(let u of users){
+  if(u.pulih&&(await hash(k,u.pulih.salt))===u.pulih.hash){cocok=u;break}
+ }
+ if(!cocok){
+  gagalP++;if(gagalP>=5){kunciP=Date.now()+60000;gagalP=0}
+  err.innerText="Sandi pemulihan tidak cocok.";return;
+ }
+ gagalP=0;userPulih=cocok;
+ $("lupaUser").innerText="@"+cocok.username+" ("+cocok.nama+")";
+ $("lupa1").classList.add("sembunyi");$("lupa2").classList.remove("sembunyi");
 }
 async function simpanLupa(){
-  let err=$("errLupa2");err.innerText="";
-  if(!userPulih)return;
-  let pw=$("lupaPw").value;
-  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
-  if(pw!==$("lupaPw2").value){err.innerText="Konfirmasi password tidak sama.";return}
-  let u=users.find(x=>x.id===userPulih.id);if(!u)return;
-  u.salt=acak();u.hash=await hash(pw,u.salt);
-  delete u.pulih;
-  simpanU();userPulih=null;
-  document.getElementById("dlgLupa").close();
-  masuk(u,true);
+ let err=$("errLupa2");err.innerText="";
+ if(!userPulih)return;
+ let pw=$("lupaPw").value;
+ if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
+ if(pw!==$("lupaPw2").value){err.innerText="Konfirmasi password tidak sama.";return}
+ let u=users.find(x=>x.id===userPulih.id);if(!u)return;
+ u.salt=acak();u.hash=await hash(pw,u.salt);
+ delete u.pulih;
+ simpanU();userPulih=null;
+ document.getElementById("dlgLupa").close();
+ masuk(u,true);
 }
 
-// ===== Kelola pengguna (khusus Pemilik) =====
+/* ===== Kelola pengguna ===== */
 function jumlahPemilik(){return users.filter(u=>u.role==="pemilik").length}
 function renderUser(){
-  if(!bisa("pengguna")){$("daftarUser").innerHTML="";return}
-  $("daftarUser").innerHTML=users.map(u=>'<tr><td><b>'+aman(u.nama)+'</b><small style="display:block;color:var(--abu)">@'+aman(u.username)+(u.id===sesi.id?" (kamu)":"")+'</small></td>'+
-    '<td><select class="btn" onchange="ubahPeran('+u.id+',this.value)">'+Object.keys(LABEL).map(r=>'<option value="'+r+'"'+(u.role===r?" selected":"")+">"+LABEL[r]+"</option>").join("")+"</select></td>"+
-    '<td class="num"><button class="btn" onclick="bukaPw('+u.id+')">🔑 Password</button> <button class="btn" style="color:var(--merah)" onclick="hapusUser('+u.id+')">Hapus</button></td></tr>').join("");
+ if(!bisa("pengguna")){$("daftarUser").innerHTML="";return}
+ $("daftarUser").innerHTML=users.map(u=>'<tr><td><b>'+aman(u.nama)+'</b><small style="display:block;color:var(--abu)">@'+aman(u.username)+(u.id===sesi.id?" (kamu)":"")+'</small></td>'+
+  '<td><select class="btn" onchange="ubahPeran('+u.id+',this.value)">'+Object.keys(LABEL).map(r=>'<option value="'+r+'"'+(u.role===r?" selected":"")+">"+LABEL[r]+"</option>").join("")+"</select></td>"+
+  '<td class="num"><button class="btn" onclick="bukaPw('+u.id+')">🔑 Password</button> <button class="btn" style="color:var(--merah)" onclick="hapusUser('+u.id+')">Hapus</button></td></tr>').join("");
 }
 async function tambahUser(){
-  if(!bisa("pengguna"))return;
-  let err=$("errUser");err.innerText="";
-  let nama=$("uNama").value.trim(),user=$("uUser").value.trim().toLowerCase(),pw=$("uPass").value,role=$("uPeran").value;
-  if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
-  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
-  if(users.some(x=>x.username===user)){err.innerText="Username sudah dipakai.";return}
-  users.push(await buatUser(nama,user,pw,role));
-  simpanU();$("uNama").value="";$("uUser").value="";$("uPass").value="";
-  renderUser();toast("Pengguna ditambahkan ✓");
+ if(!bisa("pengguna"))return;
+ let err=$("errUser");err.innerText="";
+ let nama=$("uNama").value.trim(),user=$("uUser").value.trim().toLowerCase(),pw=$("uPass").value,role=$("uPeran").value;
+ if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
+ if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
+ if(users.some(x=>x.username===user)){err.innerText="Username sudah dipakai.";return}
+ users.push(await buatUser(nama,user,pw,role));
+ simpanU();$("uNama").value="";$("uUser").value="";$("uPass").value="";
+ renderUser();toast("Pengguna ditambahkan ✓");
 }
 function ubahPeran(id,role){
-  if(!bisa("pengguna"))return;
-  let u=users.find(x=>x.id===id);if(!u)return;
-  if(u.role==="pemilik"&&role!=="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");renderUser();return}
-  u.role=role;simpanU();
-  if(u.id===sesi.id){sesi.role=role;terapkanHak();ganti(bisa("dashboard")?"dashboard":"transaksi");return}
-  renderUser();toast("Peran diperbarui");
+ if(!bisa("pengguna"))return;
+ let u=users.find(x=>x.id===id);if(!u)return;
+ if(u.role==="pemilik"&&role!=="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");renderUser();return}
+ u.role=role;simpanU();
+ if(u.id===sesi.id){sesi.role=role;terapkanHak();ganti(bisa("dashboard")?"dashboard":"transaksi");return}
+ renderUser();toast("Peran diperbarui");
 }
 function hapusUser(id){
-  if(!bisa("pengguna"))return;
-  let u=users.find(x=>x.id===id);if(!u)return;
-  if(id===sesi.id){toast("Akun yang sedang dipakai tidak bisa dihapus");return}
-  if(u.role==="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");return}
-  if(!confirm("Hapus pengguna "+u.nama+"?"))return;
-  users=users.filter(x=>x.id!==id);simpanU();renderUser();toast("Pengguna dihapus");
+ if(!bisa("pengguna"))return;
+ let u=users.find(x=>x.id===id);if(!u)return;
+ if(id===sesi.id){toast("Akun yang sedang dipakai tidak bisa dihapus");return}
+ if(u.role==="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");return}
+ if(!confirm("Hapus pengguna "+u.nama+"?"))return;
+ users=users.filter(x=>x.id!==id);simpanU();renderUser();toast("Pengguna dihapus");
 }
 function bukaPw(id){
-  let u=users.find(x=>x.id===id);if(!u)return;
-  idPw=id;$("pwUntuk").innerText="Untuk: "+u.nama+" (@"+u.username+")";
-  $("pwBaru").value="";$("errPw").innerText="";document.getElementById("dlgPw").showModal();
+ let u=users.find(x=>x.id===id);if(!u)return;
+ idPw=id;$("pwUntuk").innerText="Untuk: "+u.nama+" (@"+u.username+")";
+ $("pwBaru").value="";$("errPw").innerText="";document.getElementById("dlgPw").showModal();
 }
 async function simpanPw(){
-  if(!bisa("pengguna"))return;
-  let pw=$("pwBaru").value,u=users.find(x=>x.id===idPw);
-  if(!u)return;
-  if(pw.length<6){$("errPw").innerText="Password minimal 6 karakter.";return}
-  u.salt=acak();u.hash=await hash(pw,u.salt);simpanU();
-  document.getElementById("dlgPw").close();toast("Password diganti ✓");
+ if(!bisa("pengguna"))return;
+ let pw=$("pwBaru").value,u=users.find(x=>x.id===idPw);
+ if(!u)return;
+ if(pw.length<6){$("errPw").innerText="Password minimal 6 karakter.";return}
+ u.salt=acak();u.hash=await hash(pw,u.salt);simpanU();
+ document.getElementById("dlgPw").close();toast("Password diganti ✓");
 }
 
-// ===== Profil, bagan akun, penyusutan =====
+/* ===== Profil, pajak, kategori ===== */
 function terapkanProfil(){
-  $("namaUsaha").innerText=p.usaha;
-  document.title=p.usaha+" — Dashboard Akuntansi";
-  if(sesi){
-    $("namaPengguna").innerText=sesi.nama;
-    $("peranPengguna").innerText=LABEL[sesi.role];
-    $("avatar").innerText=(sesi.nama||"?").charAt(0).toUpperCase();
-  }
+ $("namaUsaha").innerText=p.usaha;
+ document.title=p.usaha+" — Dashboard Akuntansi";
+ if(sesi){
+  $("namaPengguna").innerText=sesi.nama;
+  $("peranPengguna").innerText=LABEL[sesi.role];
+  $("avatar").innerText=(sesi.nama||"?").charAt(0).toUpperCase();
+ }
 }
 function isiFormProfil(){
-  $("sUsaha").value=p.usaha;$("sCatatan").value=p.catatan||"";$("sUmur").value=p.umur||5;
-  if(!$("sBulanSusut").value)$("sBulanSusut").value=kb(new Date());
-  $("aGrup").innerHTML=Object.keys(GRUP).filter(g=>g!=="ek").map(g=>'<option value="'+g+'">'+GRUP[g].n+"</option>").join("");
+ $("sUsaha").value=p.usaha;$("sCatatan").value=p.catatan||"";
+ $("sTarif").value=p.pajakTarif;$("sDasar").value=p.pajakDasar;
 }
 function simpanProfil(){
-  if(!bisa("pengaturan"))return;
-  p.usaha=$("sUsaha").value.trim()||"Kasku";
-  p.catatan=$("sCatatan").value.trim();
-  simpanP();terapkanProfil();toast("Profil disimpan ✓");
+ if(!bisa("pengaturan"))return;
+ p.usaha=$("sUsaha").value.trim()||"Kasku";
+ p.catatan=$("sCatatan").value.trim();
+ simpanP();terapkanProfil();toast("Profil disimpan ✓");
 }
-function simpanUmur(){
-  if(!bisa("pengaturan"))return;
-  let u=Number($("sUmur").value);
-  if(!(u>=1&&u<=50)){toast("Umur manfaat 1–50 tahun");return}
-  p.umur=Math.round(u);simpanP();toast("Umur manfaat disimpan ✓");
+function simpanPajak(){
+ if(!bisa("pengaturan"))return;
+ let t=Number($("sTarif").value);
+ if(!(t>=0)||t>100){toast("Tarif harus antara 0 dan 100");return}
+ p.pajakTarif=t;p.pajakDasar=$("sDasar").value;
+ simpanP();toast("Pengaturan pajak disimpan ✓");
 }
-function buatSusut(){
-  if(!bisa("pengaturan"))return;
-  let b=$("sBulanSusut").value;
-  if(!/^\d{4}-\d{2}$/.test(b)){toast("Pilih bulan terlebih dahulu");return}
-  simpanUmur();
-  let ref="DEP-"+b;
-  if(jur.some(e=>e.ref===ref)){toast("Penyusutan bulan ini sudah dicatat");return}
-  let y=+b.slice(0,4),m=+b.slice(5),akhir=b+"-"+pad(new Date(y,m,0).getDate());
-  let s=saldoMap(jur,null,akhir),biaya=nk("1-201",s),akum=nk("1-202",s);
-  if(biaya<=0){toast("Belum ada aset tetap pada bulan tersebut");return}
-  let jml=Math.round(Math.min(biaya/(p.umur*12),biaya-akum));
-  if(jml<=0){toast("Aset tetap sudah tersusutkan penuh");return}
-  jur.push({id:Date.now(),tgl:akhir,ket:"Penyusutan aset tetap "+namaBulan(b),ref:ref,oleh:sesi.username,baris:[{a:"5-205",d:jml,k:0},{a:"1-202",d:0,k:jml}]});
-  simpanJ();render();toast("Jurnal penyusutan "+rp(jml)+" dibuat ✓");
+function daftarKat(j){return j==="P"?p.katPend:p.katBeban}
+function tambahKat(j){
+ if(!bisa("pengaturan"))return;
+ let el=$(j==="P"?"katBaruP":"katBaruB"),k=el.value.replace(/[,;]/g," ").trim();
+ if(k==="")return;
+ if(daftarKat(j).some(x=>x.toLowerCase()===k.toLowerCase())){toast("Kategori sudah ada");return}
+ daftarKat(j).push(k);simpanP();el.value="";renderPengaturan();
 }
-function renderAkun(){
-  $("daftarAkun").innerHTML=p.akun.map(function(a){
-    let def=DEF_AKUN.some(x=>x.k===a.k);
-    return '<tr><td>'+aman(a.k)+'</td><td>'+aman(a.n)+(a.kontra?' <small style="color:var(--abu)">(kontra)</small>':"")+'</td><td>'+GRUP[a.g].n+'</td><td class="num">'+(def?"":'<button class="x" onclick="hapusAkun(\''+aman(a.k)+'\')" title="Hapus">✕</button>')+'</td></tr>';
-  }).join("");
-}
-function tambahAkun(){
-  if(!bisa("pengaturan"))return;
-  let err=$("errAkun");err.innerText="";
-  let k=$("aKode").value.trim(),n=$("aNama").value.trim(),g=$("aGrup").value;
-  if(!/^[0-9A-Za-z.\-]{2,10}$/.test(k)||n===""){err.innerText="Isi kode (2–10 karakter, tanpa spasi) dan nama akun.";return}
-  if(p.akun.some(a=>a.k===k)){err.innerText="Kode akun sudah dipakai.";return}
-  p.akun.push({k:k,n:n,g:g});p.akun.sort(byKode);simpanP();
-  $("aKode").value="";$("aNama").value="";renderAkun();toast("Akun ditambahkan ✓");
-}
-function hapusAkun(k){
-  if(!bisa("pengaturan"))return;
-  if(DEF_AKUN.some(x=>x.k===k))return;
-  if(jur.some(e=>e.baris.some(b=>b.a===k))){toast("Akun masih dipakai jurnal");return}
-  p.akun=p.akun.filter(a=>a.k!==k);simpanP();renderAkun();toast("Akun dihapus");
+function hapusKat(j,i){
+ if(!bisa("pengaturan"))return;
+ let lst=daftarKat(j),k=lst[i];
+ if(data.some(d=>d.kat===k&&TIPE[d.tipe]&&TIPE[d.tipe].kat===j)){toast("Kategori masih dipakai transaksi");return}
+ if(lst.length<=1){toast("Minimal harus ada 1 kategori");return}
+ lst.splice(i,1);simpanP();renderPengaturan();
 }
 function renderPengaturan(){
-  renderUser();renderAkun();
-  let me=users.find(x=>sesi&&x.id===sesi.id);
-  $("statusPulih").innerText=me&&me.pulih?"Status: sudah dibuat ✅":"Status: belum dibuat ⚠️";
-  $("infoData").innerText=jur.length+" jurnal tersimpan di browser ini.";
+ renderUser();
+ let me=users.find(x=>sesi&&x.id===sesi.id);
+ $("statusPulih").innerText=me&&me.pulih?"Status: sudah dibuat ✅":"Status: belum dibuat ⚠️";
+ $("daftarKatP").innerHTML=p.katPend.map((k,i)=>'<span class="tag">'+aman(k)+' <button class="x" onclick="hapusKat(\'P\','+i+')" title="Hapus">✕</button></span>').join("");
+ $("daftarKatB").innerHTML=p.katBeban.map((k,i)=>'<span class="tag">'+aman(k)+' <button class="x" onclick="hapusKat(\'B\','+i+')" title="Hapus">✕</button></span>').join("");
+ $("infoData").innerText=data.length+" transaksi tersimpan di browser ini.";
 }
 
-// ===== Input transaksi (templat jurnal + jurnal umum) =====
-function opsiAkun(grup){
-  return p.akun.filter(a=>!grup||grup.includes(a.g)).sort(byKode).map(a=>'<option value="'+aman(a.k)+'">'+aman(a.k)+" · "+aman(a.n)+"</option>").join("");
-}
-function buka(){
-  $("fTgl").value=new Date().toISOString().slice(0,10);
-  $("err").innerText="";$("fKet").value="";$("fJumlah").value="";$("jRows").innerHTML="";
-  let boleh=TPL.filter(t=>sesi&&sesi.role==="kasir"?t.kasir:(t.umum?bisa("jurnalumum"):true));
-  $("fJenis").innerHTML=boleh.map(t=>'<option value="'+t.id+'">'+t.n+"</option>").join("");
-  ubahJenis();dlg.showModal();
-}
-function tplAktif(){return TPL.find(x=>x.id===$("fJenis").value)}
-function ubahJenis(){
-  let t=tplAktif();
-  $("bxUmum").classList.toggle("sembunyi",!t.umum);
-  $("bxJumlah").classList.toggle("sembunyi",!!t.umum);
-  $("bxAkun").classList.toggle("sembunyi",!t.pilih);
-  if(t.pilih){$("lbAkun").innerText=t.lb;$("fAkun").innerHTML=opsiAkun(t.pilih)}
-  if(t.umum&&$("jRows").children.length===0){tambahBarisJ();tambahBarisJ()}
-  pratinjau();
-}
-function pratinjau(){
-  let t=tplAktif();
-  if(t.umum){hitungJ();$("pvJurnal").innerText="";return}
-  let d=t.d==="?"?$("fAkun").value:t.d,k=t.k==="?"?$("fAkun").value:t.k;
-  $("pvJurnal").innerText="Jurnal: Debit "+namaAkun(d)+" · Kredit "+namaAkun(k);
-}
-function tambahBarisJ(){
-  let div=document.createElement("div");div.className="jr";
-  div.innerHTML='<select class="ja">'+opsiAkun()+'</select><input class="jd" type="number" min="0" placeholder="Debit" oninput="hitungJ()"><input class="jk" type="number" min="0" placeholder="Kredit" oninput="hitungJ()">';
-  $("jRows").appendChild(div);
-}
-function hitungJ(){
-  let d=0,k=0;
-  document.querySelectorAll("#jRows .jr").forEach(function(r){d+=Number(r.querySelector(".jd").value)||0;k+=Number(r.querySelector(".jk").value)||0});
-  $("jTot").innerText="Total debit "+rp(d)+" · kredit "+rp(k)+(Math.round(d)===Math.round(k)&&d>0?" ✓ seimbang":" — belum seimbang");
-}
-function tambah(){
-  if(!bisa("tambah"))return;
-  let t=tplAktif(),tgl=$("fTgl").value,ket=$("fKet").value.trim(),err=$("err"),baris=[];
-  err.innerText="";
-  if(sesi.role==="kasir"&&!t.kasir)return;
-  if(t.umum&&!bisa("jurnalumum"))return;
-  if(tgl===""||ket===""){err.innerText="Lengkapi tanggal dan keterangan.";return}
-  if(t.umum){
-    let sd=0,sk=0;
-    let rows=document.querySelectorAll("#jRows .jr");
-    for(let i=0;i<rows.length;i++){
-      let d=Number(rows[i].querySelector(".jd").value)||0,k=Number(rows[i].querySelector(".jk").value)||0;
-      if(d===0&&k===0)continue;
-      if(d<0||k<0||(d>0&&k>0)){err.innerText="Setiap baris hanya boleh berisi debit ATAU kredit (angka positif).";return}
-      baris.push({a:rows[i].querySelector(".ja").value,d:d,k:k});sd+=d;sk+=k;
-    }
-    if(baris.length<2){err.innerText="Jurnal minimal terdiri dari 2 baris.";return}
-    if(Math.round(sd)!==Math.round(sk)||sd<=0){err.innerText="Total debit harus sama dengan total kredit.";return}
-  }else{
-    let jml=Number($("fJumlah").value);
-    if(!(jml>0)){err.innerText="Jumlah harus lebih dari 0.";return}
-    let d=t.d==="?"?$("fAkun").value:t.d,k=t.k==="?"?$("fAkun").value:t.k;
-    baris=[{a:d,d:jml,k:0},{a:k,d:0,k:jml}];
-  }
-  jur.push({id:Date.now(),tgl:tgl,ket:ket,baris:baris,oleh:sesi.username});
-  simpanJ();dlg.close();render();toast("Transaksi berhasil dicatat ✓");
-}
-function hapus(id){if(!bisa("hapus"))return;if(!confirm("Hapus jurnal ini?"))return;jur=jur.filter(d=>d.id!==id);simpanJ();render();toast("Jurnal dihapus")}
-
-// ===== Impor / ekspor =====
+/* ===== Impor / ekspor / reset ===== */
 function urai(t){
-  let baris=[],b=[],s="",q=false;
-  for(let i=0;i<t.length;i++){
-    let c=t[i];
-    if(q){if(c==='"'){if(t[i+1]==='"'){s+='"';i++}else{q=false}}else{s+=c}}
-    else if(c==='"'){q=true}
-    else if(c===","||c===";"){b.push(s);s=""}
-    else if(c==="\n"||c==="\r"){
-      if(c==="\r"&&t[i+1]==="\n")i++;
-      b.push(s);s="";
-      if(b.some(x=>x.trim()!==""))baris.push(b);
-      b=[];
-    }else{s+=c}
-  }
-  b.push(s);if(b.some(x=>x.trim()!==""))baris.push(b);
-  return baris;
+ let baris=[],b=[],s="",q=false;
+ for(let i=0;i<t.length;i++){
+  let c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){s+='"';i++}else{q=false}}else{s+=c}}
+  else if(c==='"'){q=true}
+  else if(c===","||c===";"){b.push(s);s=""}
+  else if(c==="\n"||c==="\r"){
+   if(c==="\r"&&t[i+1]==="\n")i++;
+   b.push(s);s="";
+   if(b.some(x=>x.trim()!==""))baris.push(b);
+   b=[];
+  }else{s+=c}
+ }
+ b.push(s);if(b.some(x=>x.trim()!==""))baris.push(b);
+ return baris;
 }
 function normTgl(x){
-  x=(x||"").trim();
-  if(/^\d{4}-\d{2}-\d{2}$/.test(x))return x;
-  let m=x.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-  return m?m[3]+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0"):"";
+ x=(x||"").trim();
+ if(/^\d{4}-\d{2}-\d{2}$/.test(x))return x;
+ let m=x.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+ return m?m[3]+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0"):"";
 }
 function normJenis(x){
-  x=(x||"").trim().toLowerCase();
-  if(["masuk","pemasukan","income","in","debit"].includes(x))return "masuk";
-  if(["keluar","pengeluaran","expense","out","kredit"].includes(x))return "keluar";
-  return "";
+ x=(x||"").trim().toLowerCase();
+ if(["masuk","pemasukan","income","in","debit"].includes(x))return "masuk";
+ if(["keluar","pengeluaran","expense","out","kredit"].includes(x))return "keluar";
+ return "";
+}
+function normTipe(x){
+ x=(x||"").trim().toLowerCase();
+ if(TIPE[x])return x;
+ for(let k in TIPE){if(TIPE[k].l.toLowerCase()===x)return k}
+ return "";
+}
+function parseJml(x){let m=String(x||"").trim();return /^\d+(\.\d+)?$/.test(m)?Number(m):Number(m.replace(/[^0-9]/g,""))}
+function pastikanKat(j,kat){
+ let lst=daftarKat(j),ada=lst.find(x=>x.toLowerCase()===kat.toLowerCase());
+ if(ada)return ada;lst.push(kat);return kat;
 }
 function impor(el){
-  if(!bisa("pengaturan"))return;
-  let f=el.files[0];if(!f)return;
-  let r=new FileReader();
-  r.onload=function(){
-    let rows=urai(String(r.result).replace(/^\uFEFF/,""));
-    if(rows.length&&/tanggal|date/i.test(rows[0][0]))rows.shift();
-    let ok=0,lewat=0;
-    rows.forEach(function(c,i){
-      let tgl=normTgl(c[0]),jenis=normJenis(c[3]),mentah=String(c[4]||"").trim();
-      let jumlah=/^\d+(\.\d+)?$/.test(mentah)?Number(mentah):Number(mentah.replace(/[^0-9]/g,""));
-      let kat=(c[2]||"").trim()||"Lainnya";
-      if(tgl===""||jenis===""||!(jumlah>0)){lewat++;return}
-      jur.push(konversi({id:Date.now()+i,tgl:tgl,ket:(c[1]||"").trim()||"(tanpa keterangan)",kat:kat,jenis:jenis,jumlah:jumlah}));
-      ok++;
-    });
-    simpanJ();render();
-    toast(ok+" baris diimpor"+(lewat?", "+lewat+" dilewati":""));
-    el.value="";
-  };
-  r.readAsText(f);
+ if(!bisa("pengaturan"))return;
+ let f=el.files[0];if(!f)return;
+ let r=new FileReader();
+ r.onload=function(){
+  let rows=urai(String(r.result).replace(/^﻿/,""));
+  if(rows.length&&/tanggal|date/i.test(rows[0][0]))rows.shift();
+  let ok=0,lewat=0;
+  rows.forEach(function(c,i){
+   let tgl=normTgl(c[0]);if(tgl===""){lewat++;return}
+   let ket=(c[1]||"").trim()||"(tanpa keterangan)",jl=normJenis(c[3]),t;
+   if(jl!==""){
+    let jml=parseJml(c[4]),kat=(c[2]||"").trim()||"Lainnya";
+    if(!(jml>0)){lewat++;return}
+    t=konversi({id:Date.now()+i,tgl:tgl,ket:ket,kat:kat,jenis:jl,jumlah:jml},KELAS_LAMA);
+    if(t.tipe==="jual_tunai")t.kat=pastikanKat("P",t.kat||"Penjualan");
+    else if(t.tipe==="beban_tunai")t.kat=pastikanKat("B",t.kat||"Lainnya");
+   }else{
+    let tp=normTipe(c[2]),jml=parseJml(c[4]);
+    if(tp===""||!(jml>0)){lewat++;return}
+    t={id:Date.now()+i,tgl:tgl,ket:ket,tipe:tp,jumlah:jml};
+    let d=TIPE[tp];
+    if(d.kat)t.kat=pastikanKat(d.kat,(c[3]||"").trim()||(d.kat==="P"?"Penjualan":"Lainnya"));
+    if(d.aset){let u=Number(c[5]);t.umur=u>=0&&String(c[5]||"").trim()!==""?u:4;t.residu=Math.max(0,Number(c[6])||0)}
+   }
+   data.push(t);ok++;
+  });
+  simpan();simpanP();render();
+  toast(ok+" baris diimpor"+(lewat?", "+lewat+" dilewati":""));
+  el.value="";
+ };
+ r.readAsText(f);
 }
 function resetContoh(){
-  if(!bisa("pengaturan"))return;
-  if(!confirm("Ganti semua jurnal dengan data contoh?"))return;
-  jur=contohJ();simpanJ();render();toast("Data contoh dikembalikan");
+ if(!bisa("pengaturan"))return;
+ if(!confirm("Ganti semua data dengan data contoh?"))return;
+ data=JSON.parse(JSON.stringify(contoh));
+ ["Penjualan","Pendapatan Jasa","Pendapatan Lain-lain"].forEach(k=>pastikanKat("P",k));
+ ["Gaji","Sewa","Listrik & Air","Pemasaran"].forEach(k=>pastikanKat("B",k));
+ simpan();simpanP();render();toast("Data contoh dikembalikan");
 }
 function ekspor(){
-  if(!bisa("ekspor"))return;
-  let h=["tanggal,ref,keterangan,kode_akun,nama_akun,debit,kredit"];
-  jur.slice().sort((a,b)=>a.tgl.localeCompare(b.tgl)||a.id-b.id).forEach(function(e){
-    e.baris.forEach(function(b){
-      h.push([e.tgl,e.ref||e.id,'"'+String(e.ket).replace(/"/g,'""')+'"',b.a,'"'+namaAkun(b.a).replace(/"/g,'""')+'"',b.d||0,b.k||0].join(","));
-    });
-  });
-  let a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([h.join("\n")],{type:"text/csv"}));
-  a.download="jurnal.csv";a.click();toast("File CSV diunduh");
+ if(!bisa("ekspor"))return;
+ function q(x){return '"'+String(x).replace(/"/g,'""')+'"'}
+ let baris=["tanggal,keterangan,tipe,kategori,jumlah,umur_tahun,residu"].concat(data.map(d=>[d.tgl,q(d.ket),d.tipe,q(d.kat||""),d.jumlah,d.umur!==undefined?d.umur:"",d.residu!==undefined?d.residu:""].join(",")));
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([baris.join("\n")],{type:"text/csv"}));
+ a.download="transaksi.csv";a.click();toast("File CSV diunduh");
 }
 
-// ===== Pembantu penyajian laporan =====
-function kontribRow(a,x,y){return a.kontra?"Dikurangi: "+aman(a.n):aman(a.n)}
-function r2(l,a,b,cls,sub){return '<tr class="'+(cls||"")+'"><td'+(sub?' style="padding-left:24px"':"")+'>'+l+'</td><td class="num">'+n0(a)+'</td><td class="num">'+n0(b)+'</td></tr>'}
-function g2(t){return '<tr class="grup"><td colspan="3">'+t+'</td></tr>'}
-function tbl2(h1,h2,rows){return '<table><thead><tr><th>Keterangan</th><th class="num">'+h1+'</th><th class="num">'+h2+'</th></tr></thead><tbody>'+rows+'</tbody></table>'}
-// baris per akun dalam satu kelompok: kembalikan {h,a,b}
-function rowsAkun(g,mA,mB){
-  let h="",tA=0,tB=0;
-  p.akun.filter(a=>a.g===g).sort(byKode).forEach(function(a){
-    let x=kontrib(a,mA),y=kontrib(a,mB);tA+=x;tB+=y;
-    if(Math.round(x)||Math.round(y))h+=r2(kontribRow(a),x,y,"",1);
-  });
-  return {h:h,a:tA,b:tB};
+/* ===== Form transaksi ===== */
+function isiTipe(){
+ $("fTipe").innerHTML=GRUP.map(g=>'<optgroup label="'+aman(g[0])+'">'+g[1].map(k=>'<option value="'+k+'">'+aman(TIPE[k].l)+'</option>').join("")+'</optgroup>').join("");
 }
-function ekuitasAt(m){
-  let modal=nk("3-101",m),laba=pnl(m).laba,sl=nk("3-103",m)+laba-nk("3-102",m);
-  return {modal:modal,sl:sl,total:modal+sl};
+function ubahTipe(){
+ let k=$("fTipe").value,d=TIPE[k];
+ $("rowKat").classList.toggle("sembunyi",!d.kat);
+ $("rowAset").classList.toggle("sembunyi",!d.aset);
+ if(d.kat){
+  let lama=$("fKat").value,lst=daftarKat(d.kat);
+  $("lblKat").innerText=d.kat==="P"?"Kategori pendapatan":"Kategori beban";
+  $("fKat").innerHTML=lst.map(x=>'<option>'+aman(x)+'</option>').join("");
+  if(lst.includes(lama))$("fKat").value=lama;
+ }
+ let t={kat:d.kat?$("fKat").value:""};
+ $("fInfo").innerHTML="<b>Jurnal otomatis:</b><br>Debit: "+aman(akunNama(akunDari(d.dr,t)))+"<br>Kredit: "+aman(akunNama(akunDari(d.kr,t)));
+}
+$("fKat").addEventListener("change",ubahTipe);
+function buka(){
+ $("fTgl").value=new Date().toISOString().slice(0,10);$("err").innerText="";
+ $("fUmur").value=4;$("fResidu").value=0;
+ ubahTipe();dlg.showModal();
+}
+function tambah(){
+ if(!bisa("tambah"))return;
+ let tgl=$("fTgl").value,ket=$("fKet").value.trim(),jumlah=Number($("fJumlah").value),tp=$("fTipe").value,d=TIPE[tp];
+ if(tgl===""||ket===""||!(jumlah>0)){$("err").innerText="Lengkapi tanggal, keterangan, dan jumlah (lebih dari 0).";return}
+ let t={id:Date.now(),tgl:tgl,ket:ket,tipe:tp,jumlah:jumlah,oleh:sesi.username};
+ if(d.kat)t.kat=$("fKat").value;
+ if(d.aset){
+  let u=Number($("fUmur").value),rs=Number($("fResidu").value)||0;
+  if(!(u>=0)){$("err").innerText="Umur manfaat tidak valid (isi 0 jika tidak disusutkan).";return}
+  if(rs<0||rs>=jumlah){$("err").innerText="Nilai residu harus lebih kecil dari harga perolehan.";return}
+  t.umur=u;t.residu=rs;
+ }
+ data.push(t);
+ simpan();$("fKet").value="";$("fJumlah").value="";dlg.close();render();toast("Transaksi berhasil ditambahkan ✓");
+}
+function hapus(id){if(!bisa("hapus"))return;if(!confirm("Hapus transaksi ini?"))return;data=data.filter(d=>d.id!==id);simpan();render();toast("Transaksi dihapus")}
+
+/* ===== Laporan keuangan ===== */
+function tabel2(rows,K,Kb,hd){
+ let kol=Kb?3:2;
+ let h='<table><thead><tr><th>Keterangan</th><th class="num">'+hd[0]+'</th>'+(Kb?'<th class="num">'+hd[1]+'</th>':'')+'</tr></thead><tbody>';
+ rows.forEach(function(r){
+  if(r.g){h+='<tr class="grup"><td colspan="'+kol+'">'+r.g+'</td></tr>';return}
+  if(r.h){h+='<tr class="sub"><td colspan="'+kol+'">'+r.h+'</td></tr>';return}
+  let a=r.f(K),b=Kb?r.f(Kb):0;
+  h+='<tr class="'+(r.c||"")+'"><td'+(r.s?' style="padding-left:'+(r.s*20+8)+'px"':'')+'>'+r.l+'</td><td class="num">'+ang(a)+'</td>'+(Kb?'<td class="num">'+ang(b)+'</td>':'')+'</tr>';
+ });
+ return h+'</tbody></table>';
+}
+function unionKey(a,b){let s={};Object.keys(a||{}).forEach(k=>s[k]=1);Object.keys(b||{}).forEach(k=>s[k]=1);return Object.keys(s)}
+
+function lapNeraca(K,Kb,hd){
+ let rows=[
+  {g:"ASET"},{h:"Aset lancar"},
+  {l:"Kas",s:1,f:k=>k.akhir.kas},
+  {l:"Piutang usaha",s:1,f:k=>k.akhir.piutang},
+  {l:"Persediaan",s:1,f:k=>k.akhir.persediaan},
+  {l:"Beban dibayar di muka",s:1,f:k=>k.akhir.dimuka},
+  {l:"Total aset lancar",c:"tot",f:k=>k.akhir.kas+k.akhir.piutang+k.akhir.persediaan+k.akhir.dimuka},
+  {h:"Aset tidak lancar"},
+  {l:"Aset tetap, harga perolehan",s:1,f:k=>k.akhir.aset},
+  {l:"Akumulasi penyusutan",s:1,f:k=>-k.akhir.akum},
+  {l:"Total aset tidak lancar (aset tetap, neto)",c:"tot",f:k=>k.akhir.aset-k.akhir.akum},
+  {l:"TOTAL ASET",c:"akhir",f:k=>k.akhir.kas+k.akhir.piutang+k.akhir.persediaan+k.akhir.dimuka+k.akhir.aset-k.akhir.akum},
+  {g:"LIABILITAS DAN EKUITAS"},{h:"Liabilitas jangka pendek"},
+  {l:"Utang usaha & beban masih harus dibayar",s:1,f:k=>k.akhir.utang_usaha},
+  {l:"Utang pajak penghasilan",s:1,f:k=>k.akhir.utang_pajak},
+  {l:"Utang bank jangka pendek",s:1,f:k=>k.akhir.utang_bank_pendek},
+  {l:"Total liabilitas jangka pendek",c:"tot",f:k=>k.akhir.utang_usaha+k.akhir.utang_pajak+k.akhir.utang_bank_pendek},
+  {h:"Liabilitas jangka panjang"},
+  {l:"Utang bank jangka panjang",s:1,f:k=>k.akhir.utang_bank_panjang},
+  {l:"Total liabilitas jangka panjang",c:"tot",f:k=>k.akhir.utang_bank_panjang},
+  {l:"TOTAL LIABILITAS",c:"tot",f:k=>k.akhir.utang_usaha+k.akhir.utang_pajak+k.akhir.utang_bank_pendek+k.akhir.utang_bank_panjang},
+  {h:"Ekuitas"},
+  {l:"Modal pemilik",s:1,f:k=>k.akhir.modal},
+  {l:"Prive",s:1,f:k=>-k.akhir.prive},
+  {l:"Saldo laba",s:1,f:k=>k.akhir.laba},
+  {l:"TOTAL EKUITAS",c:"tot",f:k=>k.akhir.modal-k.akhir.prive+k.akhir.laba},
+  {l:"TOTAL LIABILITAS DAN EKUITAS",c:"akhir",f:k=>k.akhir.utang_usaha+k.akhir.utang_pajak+k.akhir.utang_bank_pendek+k.akhir.utang_bank_panjang+k.akhir.modal-k.akhir.prive+k.akhir.laba}
+ ];
+ function tA(k){return k.akhir.kas+k.akhir.piutang+k.akhir.persediaan+k.akhir.dimuka+k.akhir.aset-k.akhir.akum}
+ function tL(k){return k.akhir.utang_usaha+k.akhir.utang_pajak+k.akhir.utang_bank_pendek+k.akhir.utang_bank_panjang+k.akhir.modal-k.akhir.prive+k.akhir.laba}
+ let seimbang=Math.round(tA(K))===Math.round(tL(K))&&(!Kb||Math.round(tA(Kb))===Math.round(tL(Kb)));
+ let neg=[];
+ [["kas","Kas"],["piutang","Piutang usaha"],["persediaan","Persediaan"],["dimuka","Beban dibayar di muka"],["utang_usaha","Utang usaha"],["utang_pajak","Utang pajak"],["utang_bank_pendek","Utang bank jangka pendek"],["utang_bank_panjang","Utang bank jangka panjang"]].forEach(function(x){if(Math.round(K.akhir[x[0]])<0)neg.push(x[1])});
+ return tabel2(rows,K,Kb,hd)+
+  '<p class="'+(seimbang?"ok":"bad")+'">'+(seimbang?"✓ Seimbang: total aset sama dengan total liabilitas dan ekuitas.":"⚠ Tidak seimbang, periksa data transaksi.")+'</p>'+
+  (neg.length?'<p class="bad">⚠ Saldo negatif pada: '+neg.join(", ")+'. Periksa pencatatan (mis. HPP melebihi persediaan, atau pelunasan melebihi saldo).</p>':'');
+}
+function lapLabaRugi(K,Kb,hd){
+ let kp=unionKey(K.pend,Kb&&Kb.pend),kb2=unionKey(K.beban,Kb&&Kb.beban);
+ let rows=[{g:"PENDAPATAN"}];
+ kp.forEach(n=>rows.push({l:aman(n),s:1,f:k=>k.pend[n]||0}));
+ if(kp.length===0)rows.push({l:"Tidak ada pendapatan",s:1,f:k=>0});
+ rows.push({l:"Total pendapatan",c:"tot",f:k=>k.totPend});
+ rows.push({l:"Beban pokok penjualan",f:k=>-k.hpp});
+ rows.push({l:"LABA BRUTO",c:"tot",f:k=>k.labaBruto});
+ rows.push({g:"BEBAN OPERASIONAL"});
+ kb2.forEach(n=>rows.push({l:aman(n),s:1,f:k=>-(k.beban[n]||0)}));
+ rows.push({l:"Beban penyusutan",s:1,f:k=>-k.peny});
+ rows.push({l:"Total beban operasional",c:"tot",f:k=>-k.totBebanOps});
+ rows.push({l:"LABA USAHA",c:"tot",f:k=>k.labaUsaha});
+ rows.push({l:"Beban keuangan (bunga)",f:k=>-k.bunga});
+ rows.push({l:"LABA SEBELUM PAJAK PENGHASILAN",c:"tot",f:k=>k.labaSblPajak});
+ rows.push({l:"Beban pajak penghasilan",f:k=>-k.pajak});
+ rows.push({l:"LABA (RUGI) PERIODE BERJALAN",c:"akhir",f:k=>k.laba});
+ rows.push({g:"PENGHASILAN KOMPREHENSIF LAIN"});
+ rows.push({l:"Penghasilan komprehensif lain (tidak ada)",s:1,f:k=>0});
+ rows.push({l:"TOTAL PENGHASILAN KOMPREHENSIF PERIODE BERJALAN",c:"akhir",f:k=>k.laba});
+ let mg=K.totPend>0?(K.laba/K.totPend*100).toFixed(1)+"%":"-";
+ return tabel2(rows,K,Kb,hd)+'<p class="kecil">Margin laba bersih periode berjalan: '+mg+'. Beban disajikan menurut sifatnya, dengan HPP dipisah untuk menampilkan laba bruto.</p>';
+}
+function matriksEku(K,judul){
+ let a=K.awal,z=K.akhir;
+ function tr(l,m,pv,lb,cls){return '<tr class="'+(cls||'')+'"><td>'+l+'</td><td class="num">'+ang(m)+'</td><td class="num">'+ang(pv)+'</td><td class="num">'+ang(lb)+'</td><td class="num">'+ang(m+pv+lb)+'</td></tr>'}
+ return '<h4>'+judul+'</h4><div class="bungkus"><table><thead><tr><th>Keterangan</th><th class="num">Modal pemilik</th><th class="num">Prive</th><th class="num">Saldo laba</th><th class="num">Total ekuitas</th></tr></thead><tbody>'+
+  tr('Saldo awal',a.modal,-a.prive,a.laba,'tot')+
+  tr('Setoran modal',K.setor,0,0)+
+  tr('Prive (penarikan pemilik)',0,-K.prive,0)+
+  tr('Laba (rugi) periode berjalan',0,0,K.laba)+
+  tr('Penghasilan komprehensif lain',0,0,0)+
+  tr('Saldo akhir',z.modal,-z.prive,z.laba,'akhir')+'</tbody></table></div>';
+}
+function lapEkuitas(K,Kb,r){
+ let h=matriksEku(K,"Periode berjalan: "+rentang(r.b1,r.b2));
+ if(Kb)h+=matriksEku(Kb,"Periode pembanding: "+rentang(r.banding.b1,r.banding.b2));
+ return h;
+}
+function lapArusKas(K,Kb,hd){
+ let rows=[
+  {g:"ARUS KAS DARI AKTIVITAS OPERASI"},
+  {l:"Laba sebelum pajak penghasilan",s:1,f:k=>k.labaSblPajak},
+  {l:"Penyesuaian: beban penyusutan",s:1,f:k=>k.peny},
+  {l:"(Kenaikan) penurunan piutang usaha",s:1,f:k=>-k.dPiut},
+  {l:"(Kenaikan) penurunan persediaan",s:1,f:k=>-k.dPers},
+  {l:"(Kenaikan) penurunan beban dibayar di muka",s:1,f:k=>-k.dMuka},
+  {l:"Kenaikan (penurunan) utang usaha & beban masih harus dibayar",s:1,f:k=>k.dUsaha},
+  {l:"Kas dihasilkan dari operasi",c:"tot",f:k=>k.kasDariOps},
+  {l:"Pajak penghasilan dibayar",s:1,f:k=>-k.pajakBayar},
+  {l:"Kas bersih dari aktivitas operasi",c:"tot",f:k=>k.kasOps},
+  {g:"ARUS KAS DARI AKTIVITAS INVESTASI"},
+  {l:"Perolehan aset tetap",s:1,f:k=>-k.beliAset},
+  {l:"Kas bersih dari aktivitas investasi",c:"tot",f:k=>k.kasInv},
+  {g:"ARUS KAS DARI AKTIVITAS PENDANAAN"},
+  {l:"Setoran modal pemilik",s:1,f:k=>k.setor},
+  {l:"Prive (penarikan pemilik)",s:1,f:k=>-k.prive},
+  {l:"Penerimaan pinjaman bank",s:1,f:k=>k.terimaPinjam},
+  {l:"Pembayaran pokok pinjaman bank",s:1,f:k=>-k.bayarPinjam},
+  {l:"Kas bersih dari aktivitas pendanaan",c:"tot",f:k=>k.kasDan},
+  {l:"KENAIKAN (PENURUNAN) BERSIH KAS",c:"tot",f:k=>k.kasNet},
+  {l:"Kas pada awal periode",f:k=>k.awal.kas},
+  {l:"KAS PADA AKHIR PERIODE",c:"akhir",f:k=>k.awal.kas+k.kasNet}
+ ];
+ let cocok=K.kasCek&&(!Kb||Kb.kasCek);
+ return tabel2(rows,K,Kb,hd)+
+  '<p class="'+(cocok?"ok":"bad")+'">'+(cocok?"✓ Saldo kas akhir sesuai dengan Laporan Posisi Keuangan.":"⚠ Saldo kas akhir tidak sesuai dengan neraca, periksa data.")+'</p>'+
+  '<p class="kecil">Metode tidak langsung. Bunga dibayar disajikan dalam aktivitas operasi (sudah termasuk dalam laba sebelum pajak). Prive disajikan dalam aktivitas pendanaan.</p>';
+}
+function jadwalAset(r){
+ let b2=r.b2,ls=data.filter(t=>t.tipe==="beli_aset"&&bulanTrx(t)<=b2);
+ if(ls.length===0)return '<p class="kecil">Tidak ada aset tetap.</p>';
+ let tc=0,ta=0;
+ let h='<div class="bungkus"><table><thead><tr><th>Aset</th><th>Perolehan</th><th class="num">Umur (th)</th><th class="num">Harga perolehan</th><th class="num">Akum. penyusutan</th><th class="num">Nilai buku</th></tr></thead><tbody>';
+ ls.sort((a,b)=>a.tgl.localeCompare(b.tgl)).forEach(function(t){
+  let ak=akumAset(t,b2);tc+=t.jumlah;ta+=ak;
+  h+='<tr><td>'+aman(t.ket)+'</td><td>'+tglPendek(t.tgl)+'</td><td class="num">'+(Number(t.umur)>0?t.umur:"tidak disusutkan")+'</td><td class="num">'+ang(t.jumlah)+'</td><td class="num">'+ang(-ak)+'</td><td class="num">'+ang(t.jumlah-ak)+'</td></tr>';
+ });
+ return h+'<tr class="tot"><td colspan="3">Total</td><td class="num">'+ang(tc)+'</td><td class="num">'+ang(-ta)+'</td><td class="num">'+ang(tc-ta)+'</td></tr></tbody></table></div>';
+}
+function lapCalk(K,Kb,r,hd){
+ let jumlahTrx=data.filter(t=>bulanTrx(t)>=r.b1&&bulanTrx(t)<=r.b2).length;
+ let nMig=data.filter(t=>t.migrasi).length;
+ let dasarTxt=p.pajakDasar==="laba"?"laba sebelum pajak per bulan":"pendapatan bruto per bulan";
+ let tarif=Number(p.pajakTarif)||0;
+ let rows=[
+  {h:"Saldo akun utama pada akhir periode"},
+  {l:"Kas",s:1,f:k=>k.akhir.kas},
+  {l:"Piutang usaha",s:1,f:k=>k.akhir.piutang},
+  {l:"Persediaan",s:1,f:k=>k.akhir.persediaan},
+  {l:"Beban dibayar di muka",s:1,f:k=>k.akhir.dimuka},
+  {l:"Utang usaha & beban masih harus dibayar",s:1,f:k=>k.akhir.utang_usaha},
+  {l:"Utang pajak penghasilan",s:1,f:k=>k.akhir.utang_pajak},
+  {l:"Utang bank jangka pendek",s:1,f:k=>k.akhir.utang_bank_pendek},
+  {l:"Utang bank jangka panjang",s:1,f:k=>k.akhir.utang_bank_panjang},
+  {h:"Transaksi dengan pemilik (pihak berelasi) pada periode"},
+  {l:"Setoran modal",s:1,f:k=>k.setor},
+  {l:"Prive (penarikan)",s:1,f:k=>-k.prive},
+  {h:"Pajak penghasilan"},
+  {l:"Beban pajak periode berjalan",s:1,f:k=>k.pajak},
+  {l:"Pajak dibayar periode berjalan",s:1,f:k=>k.pajakBayar}
+ ];
+ return '<h4>1. Informasi umum</h4>'+
+  '<p>'+aman(p.usaha)+' menyusun laporan keuangan ini untuk periode <b>'+tglPanjang(r.b1+"-01")+' sampai '+tglPanjang(akhirBulan(r.b2))+'</b>. Laporan disajikan dalam Rupiah (Rp). Jumlah transaksi yang dicatat pada periode: <b>'+jumlahTrx+'</b>.</p>'+
+  '<h4>2. Dasar penyusunan</h4>'+
+  '<p>Laporan keuangan terdiri dari laporan posisi keuangan, laporan laba rugi dan penghasilan komprehensif lain, laporan perubahan ekuitas, laporan arus kas, dan catatan atas laporan keuangan. Laporan disusun dengan mengacu pada prinsip SAK Entitas Privat yang berbasis IFRS for SMEs, menggunakan <b>basis akrual</b> (kecuali laporan arus kas), pengukuran pada biaya historis, dan asumsi kelangsungan usaha. Angka pembanding disajikan untuk periode setara sebelumnya bila tersedia.</p>'+
+  '<p class="kecil">Laporan ini dihasilkan aplikasi, belum diaudit, dan belum mencakup seluruh pengungkapan yang disyaratkan standar. Pemakaian untuk bank, investor, atau kewajiban pajak sebaiknya ditinjau akuntan.</p>'+
+  '<h4>3. Ringkasan kebijakan akuntansi signifikan</h4>'+
+  '<p><b>a. Kas.</b> Terdiri dari kas dan saldo bank yang tersedia.</p>'+
+  '<p><b>b. Piutang usaha.</b> Dicatat sebesar jumlah penjualan kredit dikurangi pelunasan. Belum dibentuk penyisihan kerugian piutang.</p>'+
+  '<p><b>c. Persediaan.</b> Dicatat sebesar biaya perolehan. Harga pokok penjualan dicatat berkala (periodik) sebesar persediaan yang dipakai pada periode tersebut.</p>'+
+  '<p><b>d. Beban dibayar di muka.</b> Dicatat sebagai aset saat dibayar dan diakui sebagai beban sesuai masa manfaatnya.</p>'+
+  '<p><b>e. Aset tetap.</b> Dicatat sebesar harga perolehan dikurangi akumulasi penyusutan. Penyusutan memakai metode garis lurus per bulan mulai bulan perolehan, berdasarkan umur manfaat dan nilai residu tiap aset. Aset tanpa umur manfaat (mis. tanah) tidak disusutkan.</p>'+
+  '<p><b>f. Liabilitas.</b> Utang usaha, utang pajak, dan pinjaman bank dicatat sebesar pokok. Pinjaman diklasifikasikan jangka pendek atau jangka panjang sesuai pilihan saat pencatatan, tanpa reklasifikasi bagian lancar dari pinjaman jangka panjang.</p>'+
+  '<p><b>g. Pengakuan pendapatan.</b> Pendapatan diakui pada tanggal penyerahan barang atau jasa kepada pelanggan, baik tunai maupun kredit.</p>'+
+  '<p><b>h. Beban.</b> Diakui pada saat terjadi (basis akrual). Bunga pinjaman diakui sebagai beban saat dibayar.</p>'+
+  '<p><b>i. Pajak penghasilan.</b> '+(tarif>0?'Dihitung sebesar '+tarif.toLocaleString("id-ID")+'% dari '+dasarTxt+', diakui sebagai beban dan utang pajak hingga disetor. Pajak tangguhan tidak diakui.':'Tidak dikenakan pada periode ini (tarif 0%). Pajak tangguhan tidak diakui.')+'</p>'+
+  '<p><b>j. Ekuitas.</b> Terdiri dari modal pemilik (setoran), prive (penarikan), dan saldo laba.</p>'+
+  '<h4>4. Estimasi dan pertimbangan signifikan</h4>'+
+  '<p>Umur manfaat dan nilai residu aset tetap ditetapkan oleh pengguna saat aset dicatat. Perubahan estimasi tidak otomatis menyesuaikan angka periode lalu. Tidak ada estimasi lain yang dinilai signifikan.</p>'+
+  '<h4>5. Rincian akun</h4>'+
+  tabel2(rows,K,Kb,hd)+
+  '<h4>Jadwal aset tetap pada akhir periode</h4>'+jadwalAset(r)+
+  '<h4>6. Pihak berelasi</h4>'+
+  '<p>Transaksi dengan pemilik pada periode berjalan berupa setoran modal sebesar '+rp(K.setor)+' dan prive sebesar '+rp(K.prive)+'. Tidak ada pihak berelasi lain yang dilaporkan.</p>'+
+  '<h4>7. Peristiwa setelah periode pelaporan</h4>'+
+  '<p>Tidak ada peristiwa penting setelah akhir periode yang diketahui dan perlu diungkapkan.</p>'+
+  '<h4>8. Catatan tambahan</h4>'+
+  '<p style="white-space:pre-wrap">'+(p.catatan?aman(p.catatan):'<span class="kecil">Tidak ada catatan tambahan. Tambahkan di Pengaturan, bagian Profil usaha.</span>')+'</p>'+
+  (nMig>0?'<h4>9. Data dari versi sebelumnya</h4><p>'+nMig+' transaksi berasal dari pencatatan lama berbasis kas. Transaksi tersebut dicatat sebagai transaksi tunai, dan pembelian aset lama diberi umur manfaat 4 tahun tanpa nilai residu. Periksa dan sesuaikan bila perlu.</p>':'');
+}
+function urutAkun(a){
+ let tetap=["kas","piutang","persediaan","dimuka","aset","akum","utang_usaha","utang_pajak","utang_bank_pendek","utang_bank_panjang","modal","prive"];
+ let i=tetap.indexOf(a);if(i>=0)return "1"+String(i).padStart(2,"0")+a;
+ if(a.indexOf("P:")===0)return "2"+a;
+ if(a==="hpp")return "300";
+ if(a.indexOf("B:")===0)return "4"+a;
+ return {penyusutan:"500",bunga:"501",pajak:"502"}[a]||"9"+a;
+}
+function lapJurnal(J,r){
+ let L=J.filter(l=>l.b>=r.b1&&l.b<=r.b2).sort((a,b)=>a.tgl<b.tgl?-1:a.tgl>b.tgl?1:0);
+ if(L.length===0)return '<p class="kecil">Tidak ada jurnal pada periode ini.</p>';
+ let td=0,tk=0;
+ let h='<div class="bungkus"><table><thead><tr><th>Tanggal</th><th>Akun / keterangan</th><th class="num">Debit</th><th class="num">Kredit</th></tr></thead><tbody>';
+ L.forEach(function(l){
+  td+=l.d;tk+=l.k;
+  let kr=l.k>0;
+  h+='<tr><td>'+(kr?"":tglPendek(l.tgl))+'</td><td'+(kr?' style="padding-left:28px"':'')+'>'+aman(akunNama(l.akun))+(kr?"":'<span class="oto">'+aman(l.ket)+(l.oto?" · otomatis":"")+'</span>')+'</td><td class="num">'+(l.d>0?ang(l.d):"")+'</td><td class="num">'+(kr?ang(l.k):"")+'</td></tr>';
+ });
+ return h+'<tr class="tot"><td colspan="2">Total</td><td class="num">'+ang(td)+'</td><td class="num">'+ang(tk)+'</td></tr></tbody></table></div>'+
+  '<p class="'+(Math.round(td)===Math.round(tk)?"ok":"bad")+'">'+(Math.round(td)===Math.round(tk)?"✓ Total debit sama dengan total kredit.":"⚠ Debit dan kredit tidak sama.")+'</p>'+
+  '<p class="kecil">Jurnal penyusutan dan beban pajak dibuat otomatis setiap akhir bulan.</p>';
+}
+function lapSaldo(J,r){
+ let ak={};J.forEach(function(l){if(l.b<=r.b2)ak[l.akun]=(ak[l.akun]||0)+l.d-l.k});
+ let ks=Object.keys(ak).filter(a=>Math.round(ak[a])!==0).sort((a,b)=>urutAkun(a)<urutAkun(b)?-1:1);
+ if(ks.length===0)return '<p class="kecil">Belum ada saldo.</p>';
+ let td=0,tk=0;
+ let h='<div class="bungkus"><table><thead><tr><th>Akun</th><th class="num">Debit</th><th class="num">Kredit</th></tr></thead><tbody>';
+ ks.forEach(function(a){
+  let v=ak[a];if(v>0)td+=v;else tk+=-v;
+  h+='<tr><td>'+aman(akunNama(a))+'</td><td class="num">'+(v>0?ang(v):"")+'</td><td class="num">'+(v<0?ang(-v):"")+'</td></tr>';
+ });
+ return h+'<tr class="akhir"><td>Total</td><td class="num">'+ang(td)+'</td><td class="num">'+ang(tk)+'</td></tr></tbody></table></div>'+
+  '<p class="'+(Math.round(td)===Math.round(tk)?"ok":"bad")+'">'+(Math.round(td)===Math.round(tk)?"✓ Seimbang.":"⚠ Tidak seimbang.")+'</p>'+
+  '<p class="kecil">Akun pendapatan dan beban menunjukkan saldo akumulasi sejak awal pencatatan, bukan hanya periode terpilih.</p>';
 }
 
-// ===== 1. Neraca =====
-function lapNeraca(P,Q,sP,sQ){
-  let al=rowsAkun("al",sP,sQ),at=rowsAkun("at",sP,sQ),ll=rowsAkun("ll",sP,sQ),lp=rowsAkun("lp",sP,sQ);
-  let eP=ekuitasAt(sP),eQ=ekuitasAt(sQ);
-  let asetP=al.a+at.a,asetQ=al.b+at.b,liabP=ll.a+lp.a,liabQ=ll.b+lp.b;
-  let totP=liabP+eP.total,totQ=liabQ+eQ.total;
-  let seimbang=Math.round(asetP)===Math.round(totP)&&Math.round(asetQ)===Math.round(totQ);
-  let h=g2("ASET")+g2("Aset lancar")+al.h+r2("Total aset lancar",al.a,al.b,"tot")+
-    g2("Aset tidak lancar")+at.h+r2("Total aset tidak lancar",at.a,at.b,"tot")+
-    r2("TOTAL ASET",asetP,asetQ,"akhir")+
-    g2("LIABILITAS")+g2("Liabilitas jangka pendek")+ll.h+r2("Total liabilitas jangka pendek",ll.a,ll.b,"tot")+
-    g2("Liabilitas jangka panjang")+lp.h+r2("Total liabilitas jangka panjang",lp.a,lp.b,"tot")+
-    r2("TOTAL LIABILITAS",liabP,liabQ,"akhir")+
-    g2("EKUITAS")+r2("Modal pemilik",eP.modal,eQ.modal,"",1)+r2("Saldo laba (termasuk laba periode berjalan, setelah prive)",eP.sl,eQ.sl,"",1)+
-    r2("TOTAL EKUITAS",eP.total,eQ.total,"akhir")+
-    r2("TOTAL LIABILITAS DAN EKUITAS",totP,totQ,"akhir");
-  return tbl2(tglPanjang(P.akhir),tglPanjang(Q.akhir),h)+
-    '<p class="'+(seimbang?"ok":"bad")+'">'+(seimbang?"✓ Neraca seimbang (Aset = Liabilitas + Ekuitas)":"⚠ Neraca tidak seimbang, periksa jurnal")+"</p>";
-}
-
-// ===== 2. Laba rugi & penghasilan komprehensif lain =====
-function lapLabaRugi(P,Q,mP,mQ){
-  let pd=rowsAkun("pd",mP,mQ),bp=rowsAkun("bp",mP,mQ),bb=rowsAkun("bb",mP,mQ),pl=rowsAkun("pl",mP,mQ),bl=rowsAkun("bl",mP,mQ),pj=rowsAkun("pj",mP,mQ);
-  let a=pnl(mP),b=pnl(mQ);
-  let h=g2("PENDAPATAN USAHA")+pd.h+r2("Total pendapatan usaha",a.pd,b.pd,"tot")+
-    g2("BEBAN POKOK PENJUALAN")+bp.h+r2("Total beban pokok penjualan",a.bp,b.bp,"tot")+
-    r2("LABA KOTOR",a.kotor,b.kotor,"tot")+
-    g2("BEBAN USAHA")+bb.h+r2("Total beban usaha",a.bb,b.bb,"tot")+
-    r2("LABA USAHA",a.usaha,b.usaha,"tot")+
-    g2("PENDAPATAN DAN BEBAN LAIN-LAIN")+pl.h+bl.h+
-    r2("LABA SEBELUM PAJAK PENGHASILAN",a.sebPajak,b.sebPajak,"tot")+
-    pj.h+r2("Total beban pajak penghasilan",a.pj,b.pj,"tot")+
-    r2(a.laba>=0?"LABA BERSIH PERIODE BERJALAN":"RUGI BERSIH PERIODE BERJALAN",a.laba,b.laba,"akhir")+
-    g2("PENGHASILAN KOMPREHENSIF LAIN")+r2("Penghasilan komprehensif lain (tidak ada)",0,0,"",1)+
-    r2("TOTAL PENGHASILAN KOMPREHENSIF",a.laba,b.laba,"akhir");
-  return tbl2(P.label,Q.label,h);
-}
-
-// ===== 3. Perubahan ekuitas =====
-function matriksEkuitas(P){
-  let sb=saldoMap(jur,null,hariSebelum(P.awal)),mp=saldoMap(jur,P.awal,P.akhir);
-  let e0=ekuitasAt(sb);
-  let set=nk("3-101",mp),laba=pnl(mp).laba,prv=nk("3-102",mp),lain=nk("3-103",mp);
-  let mod1=e0.modal+set,sl1=e0.sl+laba-prv+lain;
-  function r3(l,a,b,cls){return '<tr class="'+(cls||"")+'"><td>'+l+'</td><td class="num">'+n0(a)+'</td><td class="num">'+n0(b)+'</td><td class="num">'+n0(a+b)+'</td></tr>'}
-  let h=r3("Saldo awal ("+tglPanjang(hariSebelum(P.awal))+")",e0.modal,e0.sl,"tot")+
-    r3("Setoran modal pemilik",set,0)+
-    r3(laba>=0?"Laba bersih periode berjalan":"Rugi bersih periode berjalan",0,laba)+
-    r3("Prive (penarikan pemilik)",0,-prv)+
-    (Math.round(lain)?r3("Penyesuaian saldo laba",0,lain):"")+
-    r3("SALDO AKHIR ("+tglPanjang(P.akhir)+")",mod1,sl1,"akhir");
-  return '<table><thead><tr><th>Keterangan</th><th class="num">Modal pemilik</th><th class="num">Saldo laba</th><th class="num">Total ekuitas</th></tr></thead><tbody>'+h+'</tbody></table>';
-}
-function lapEkuitas(P,Q){
-  return '<h4>'+P.label+'</h4>'+matriksEkuitas(P)+'<h4>Periode pembanding: '+Q.label+'</h4>'+matriksEkuitas(Q);
-}
-
-// ===== 4. Arus kas (metode langsung) + rekonsiliasi =====
-function aruskas(P){
-  let r={pelanggan:0,pemasok:0,bunga:0,lain:0,pajak:0,jual:0,beli:0,modal:0,eklain:0,prive:0,pinjT:0,pinjB:0};
-  jur.forEach(function(e){
-    if(e.tgl<P.awal||e.tgl>P.akhir)return;
-    let c=kasBersih(e);if(Math.round(c)===0)return;
-    e.baris.forEach(function(b){
-      if(b.a==="1-101")return;
-      let x=(b.k||0)-(b.d||0);if(!x)return;
-      let a=akunDari(b.a),g=a?a.g:"bb";
-      if(g==="pd"||b.a==="1-102")r.pelanggan+=x;
-      else if(g==="pl")r.lain+=x;
-      else if(g==="bl")r.bunga+=x;
-      else if(g==="pj"||b.a==="2-103")r.pajak+=x;
-      else if(g==="bp"||g==="bb"||g==="al"||g==="ll"&&b.a!=="2-104")r.pemasok+=x;
-      else if(g==="at"){if(x>0)r.jual+=x;else r.beli+=x}
-      else if(b.a==="3-101")r.modal+=x;
-      else if(g==="ek")r.eklain+=x;
-      else if(b.a==="3-102")r.prive+=x;
-      else{if(x>0)r.pinjT+=x;else r.pinjB+=x}
-    });
-  });
-  r.ops=r.pelanggan+r.pemasok+r.bunga+r.lain+r.pajak;
-  r.inv=r.jual+r.beli;
-  r.dan=r.modal+r.eklain+r.prive+r.pinjT+r.pinjB;
-  r.naik=r.ops+r.inv+r.dan;
-  r.awal=nk("1-101",saldoMap(jur,null,hariSebelum(P.awal)));
-  r.akhir=r.awal+r.naik;
-  r.kasNeraca=nk("1-101",saldoMap(jur,null,P.akhir));
-  // rekonsiliasi laba -> kas operasi
-  let sb=saldoMap(jur,null,hariSebelum(P.awal)),sa=saldoMap(jur,null,P.akhir),mp=saldoMap(jur,P.awal,P.akhir);
-  function d(k){return nk(k,sa)-nk(k,sb)}
-  r.laba=pnl(mp).laba;r.susut=nk("5-205",mp);
-  r.dPiut=d("1-102");r.dPers=d("1-103");r.dBdd=d("1-104");r.dUtang=d("2-101");r.dAkr=d("2-102");r.dPajak=d("2-103");
-  r.opsRek=r.laba+r.susut-r.dPiut-r.dPers-r.dBdd+r.dUtang+r.dAkr+r.dPajak;
-  return r;
-}
-function lapArusKas(P,Q){
-  let a=aruskas(P),b=aruskas(Q);
-  let h=g2("ARUS KAS DARI AKTIVITAS OPERASI")+
-    r2("Penerimaan kas dari pelanggan",a.pelanggan,b.pelanggan,"",1)+
-    r2("Pembayaran kas kepada pemasok dan untuk beban usaha",a.pemasok,b.pemasok,"",1)+
-    r2("Penerimaan pendapatan lain-lain",a.lain,b.lain,"",1)+
-    r2("Pembayaran bunga",a.bunga,b.bunga,"",1)+
-    r2("Pembayaran pajak penghasilan",a.pajak,b.pajak,"",1)+
-    r2("Kas bersih dari aktivitas operasi",a.ops,b.ops,"tot")+
-    g2("ARUS KAS DARI AKTIVITAS INVESTASI")+
-    r2("Penjualan aset tetap",a.jual,b.jual,"",1)+
-    r2("Pembelian aset tetap",a.beli,b.beli,"",1)+
-    r2("Kas bersih dari aktivitas investasi",a.inv,b.inv,"tot")+
-    g2("ARUS KAS DARI AKTIVITAS PENDANAAN")+
-    r2("Setoran modal pemilik",a.modal,b.modal,"",1)+
-    r2("Penerimaan pinjaman",a.pinjT,b.pinjT,"",1)+
-    r2("Pembayaran pokok pinjaman",a.pinjB,b.pinjB,"",1)+
-    r2("Prive (penarikan pemilik)",a.prive+a.eklain,b.prive+b.eklain,"",1)+
-    r2("Kas bersih dari aktivitas pendanaan",a.dan,b.dan,"tot")+
-    r2("KENAIKAN (PENURUNAN) BERSIH KAS",a.naik,b.naik,"tot")+
-    r2("Saldo kas awal periode",a.awal,b.awal)+
-    r2("SALDO KAS AKHIR PERIODE",a.akhir,b.akhir,"akhir");
-  let cocok=Math.round(a.akhir)===Math.round(a.kasNeraca)&&Math.round(b.akhir)===Math.round(b.kasNeraca);
-  let rek=g2("REKONSILIASI LABA BERSIH KE KAS BERSIH DARI AKTIVITAS OPERASI")+
-    r2("Laba bersih periode berjalan",a.laba,b.laba)+
-    r2("Beban penyusutan (non-kas)",a.susut,b.susut,"",1)+
-    r2("(Kenaikan) penurunan piutang usaha",-a.dPiut,-b.dPiut,"",1)+
-    r2("(Kenaikan) penurunan persediaan",-a.dPers,-b.dPers,"",1)+
-    r2("(Kenaikan) penurunan biaya dibayar di muka",-a.dBdd,-b.dBdd,"",1)+
-    r2("Kenaikan (penurunan) utang usaha",a.dUtang,b.dUtang,"",1)+
-    r2("Kenaikan (penurunan) beban yang masih harus dibayar",a.dAkr,b.dAkr,"",1)+
-    r2("Kenaikan (penurunan) utang pajak",a.dPajak,b.dPajak,"",1)+
-    r2("Kas bersih dari aktivitas operasi",a.opsRek,b.opsRek,"tot");
-  let rekOk=Math.round(a.opsRek)===Math.round(a.ops)&&Math.round(b.opsRek)===Math.round(b.ops);
-  return tbl2(P.label,Q.label,h)+
-    '<p class="'+(cocok?"ok":"bad")+'">'+(cocok?"✓ Saldo kas akhir sesuai dengan Neraca":"⚠ Saldo kas akhir tidak sama dengan Neraca, periksa jurnal")+"</p>"+
-    '<h4>Rekonsiliasi (metode tidak langsung)</h4>'+tbl2(P.label,Q.label,rek)+
-    (rekOk?"":'<p class="bad">⚠ Rekonsiliasi berbeda dari arus kas operasi (kemungkinan ada akun khusus yang dipakai tanpa klasifikasi standar)</p>');
-}
-
-// ===== 5. CALK =====
-function lapCalk(P,Q,sP,sQ,mP,mQ){
-  let sb=saldoMap(jur,null,hariSebelum(P.awal));
-  let al=rowsAkun("al",sP,sQ),at=rowsAkun("at",sP,sQ),ll=rowsAkun("ll",sP,sQ),lp=rowsAkun("lp",sP,sQ);
-  let rinci=tbl2(tglPanjang(P.akhir),tglPanjang(Q.akhir),
-    g2("Aset lancar")+al.h+g2("Aset tidak lancar")+at.h+g2("Liabilitas jangka pendek")+ll.h+g2("Liabilitas jangka panjang")+lp.h);
-  let biaya0=nk("1-201",sb),tambah=nk("1-201",mP),biaya1=biaya0+tambah;
-  let akum0=nk("1-202",sb),susut=nk("1-202",mP),akum1=akum0+susut;
-  let mut=tbl2(P.label,"")
-    .replace('<th class="num"></th>','<th class="num"></th>');
-  let aset='<table><thead><tr><th>Aset tetap</th><th class="num">Jumlah</th></tr></thead><tbody>'+
-    br1("Harga perolehan awal",biaya0)+br1("Penambahan (pengurangan) bersih",tambah)+br1("Harga perolehan akhir",biaya1,"tot")+
-    br1("Akumulasi penyusutan awal",akum0)+br1("Beban penyusutan periode berjalan",susut)+br1("Akumulasi penyusutan akhir",akum1,"tot")+
-    br1("NILAI BUKU",biaya1-akum1,"akhir")+'</tbody></table>';
-  let jml=jur.filter(e=>e.tgl>=P.awal&&e.tgl<=P.akhir).length;
-  let L=pnl(mP);
-  return '<h4>1. Informasi umum</h4>'+
-    '<p>'+aman(p.usaha)+' adalah usaha perorangan yang menyusun laporan keuangan untuk periode <b>'+P.label+'</b> ('+tglPanjang(P.awal)+' s.d. '+tglPanjang(P.akhir)+'). Pada periode ini tercatat <b>'+jml+'</b> jurnal. Laporan keuangan terdiri dari Laporan Posisi Keuangan, Laporan Laba Rugi dan Penghasilan Komprehensif Lain, Laporan Perubahan Ekuitas, Laporan Arus Kas, dan Catatan atas Laporan Keuangan, dengan angka pembanding periode sebelumnya.</p>'+
-    '<h4>2. Dasar penyusunan</h4>'+
-    '<p>a. Laporan keuangan disusun dengan mengacu pada Standar Akuntansi Keuangan Entitas Privat (SAK EP) yang berbasis IFRS for SMEs, menggunakan <b>basis akrual</b> (kecuali Laporan Arus Kas) dan asumsi <b>kelangsungan usaha</b>.</p>'+
-    '<p>b. Mata uang penyajian dan fungsional adalah Rupiah (Rp). Pengukuran menggunakan biaya historis.</p>'+
-    '<p>c. Aplikasi ini membantu penyusunan; kesesuaian akhir dengan standar perlu ditinjau oleh akuntan atau auditor.</p>'+
-    '<h4>3. Ikhtisar kebijakan akuntansi</h4>'+
-    '<p><b>Kas dan bank</b>: saldo kas di tangan dan rekening bank.</p>'+
-    '<p><b>Piutang usaha</b>: dicatat sebesar jumlah tagihan; belum ada penyisihan kerugian piutang.</p>'+
-    '<p><b>Persediaan</b>: dicatat sebesar biaya perolehan; pemakaian diakui sebagai beban pokok penjualan melalui jurnal pemakaian persediaan.</p>'+
-    '<p><b>Aset tetap</b>: dinyatakan sebesar harga perolehan dikurangi akumulasi penyusutan, disusutkan dengan metode garis lurus selama <b>'+p.umur+' tahun</b> tanpa nilai residu, dimulai pada bulan perolehan.</p>'+
-    '<p><b>Pengakuan pendapatan</b>: diakui ketika barang diserahkan atau jasa diberikan kepada pelanggan, terlepas dari waktu penerimaan kas.</p>'+
-    '<p><b>Beban</b>: diakui pada periode terjadinya (akrual). Bunga pinjaman disajikan sebagai beban lain-lain.</p>'+
-    '<p><b>Pajak penghasilan</b>: beban pajak dicatat sebesar jumlah terutang yang dimasukkan pengguna; belum ada pengakuan pajak tangguhan.</p>'+
-    '<p><b>Ekuitas</b>: terdiri dari modal pemilik, prive, dan saldo laba.</p>'+
-    '<h4>4. Estimasi dan pertimbangan signifikan</h4>'+
-    '<p>Estimasi utama adalah umur manfaat aset tetap ('+p.umur+' tahun). Penyisihan piutang tak tertagih dan penurunan nilai persediaan belum diperhitungkan secara otomatis dan ditentukan manajemen.</p>'+
-    '<h4>5. Rincian pos laporan posisi keuangan</h4>'+rinci+
-    '<h4>6. Aset tetap</h4>'+aset+
-    '<h4>7. Transaksi dengan pihak berelasi</h4>'+
-    '<p>Pihak berelasi adalah pemilik. Selama periode berjalan: setoran modal <b>'+rp(nk("3-101",mP))+'</b>, prive <b>'+rp(nk("3-102",mP))+'</b>.</p>'+
-    '<h4>8. Ikhtisar kinerja periode berjalan</h4>'+
-    '<p>Pendapatan '+rp(L.pendapatan)+', total beban '+rp(L.beban)+', '+(L.laba>=0?"laba bersih ":"rugi bersih ")+rp(L.laba)+(L.pendapatan>0?" (margin "+(L.laba/L.pendapatan*100).toFixed(1)+"%)":"")+'.</p>'+
-    '<h4>9. Peristiwa setelah periode pelaporan, komitmen, dan kontinjensi</h4>'+
-    '<p style="white-space:pre-wrap">'+(p.catatan?aman(p.catatan):'<span style="color:var(--abu)">Tidak ada catatan tambahan yang dilaporkan manajemen. Tambahkan di Pengaturan &gt; Profil usaha.</span>')+'</p>';
-}
-function br1(l,v,cls){return '<tr class="'+(cls||"")+'"><td>'+l+'</td><td class="num">'+n0(v)+'</td></tr>'}
-
-// ===== Pendukung: neraca saldo & buku besar =====
-function lapSaldo(P,sP){
-  let td=0,tk=0,h="";
-  p.akun.slice().sort(byKode).forEach(function(a){
-    let v=sP[a.k]||0;if(Math.round(v)===0)return;
-    let d=v>0?v:0,k=v<0?-v:0;td+=d;tk+=k;
-    h+='<tr><td>'+aman(a.k)+'</td><td>'+aman(a.n)+'</td><td class="num">'+(d?rp(d):"")+'</td><td class="num">'+(k?rp(k):"")+'</td></tr>';
-  });
-  let ok=Math.round(td)===Math.round(tk);
-  return '<table><thead><tr><th>Kode</th><th>Akun</th><th class="num">Debit</th><th class="num">Kredit</th></tr></thead><tbody>'+h+
-    '<tr class="akhir"><td colspan="2">TOTAL</td><td class="num">'+rp(td)+'</td><td class="num">'+rp(tk)+'</td></tr></tbody></table>'+
-    '<p class="'+(ok?"ok":"bad")+'">'+(ok?"✓ Total debit = total kredit":"⚠ Tidak seimbang")+"</p>";
-}
-function lapBukuBesar(P,kode){
-  let a=akunDari(kode)||p.akun[0];kode=a.k;
-  let awal=nk(kode,saldoMap(jur,null,hariSebelum(P.awal)));
-  let rows=[];
-  jur.forEach(function(e){
-    if(e.tgl<P.awal||e.tgl>P.akhir)return;
-    e.baris.forEach(function(b){if(b.a===kode)rows.push({tgl:e.tgl,ket:e.ket,d:b.d||0,k:b.k||0,id:e.id})});
-  });
-  rows.sort((x,y)=>x.tgl.localeCompare(y.tgl)||x.id-y.id);
-  let s=awal,h='<tr class="grup"><td colspan="2">Saldo awal</td><td></td><td></td><td class="num">'+nrp(s)+'</td></tr>';
-  rows.forEach(function(r){
-    s+=normalD(a)?(r.d-r.k):(r.k-r.d);
-    h+='<tr><td>'+tglPanjang(r.tgl)+'</td><td>'+aman(r.ket)+'</td><td class="num">'+(r.d?rp(r.d):"")+'</td><td class="num">'+(r.k?rp(r.k):"")+'</td><td class="num">'+nrp(s)+'</td></tr>';
-  });
-  h+='<tr class="akhir"><td colspan="4">Saldo akhir</td><td class="num">'+nrp(s)+'</td></tr>';
-  return '<p><b>'+aman(a.k)+' · '+aman(a.n)+'</b> (saldo normal: '+(normalD(a)?"debit":"kredit")+')</p><table><thead><tr><th>Tanggal</th><th>Keterangan</th><th class="num">Debit</th><th class="num">Kredit</th><th class="num">Saldo</th></tr></thead><tbody>'+h+'</tbody></table>';
-}
-
-// ===== Render laporan =====
-const JUDUL_LAP={neraca:"Laporan Posisi Keuangan",labarugi:"Laporan Laba Rugi dan Penghasilan Komprehensif Lain",ekuitas:"Laporan Perubahan Ekuitas",aruskas:"Laporan Arus Kas",calk:"Catatan atas Laporan Keuangan",saldo:"Neraca Saldo",bukubesar:"Buku Besar"};
-function isiPeriodeLap(){
-  let s=$("periodeLap"),lama=s.value,th=new Date().getFullYear(),bi=kb(new Date());
-  let yrs=new Set([th]),bln=new Set([bi]);
-  jur.forEach(function(e){yrs.add(+e.tgl.slice(0,4));bln.add(e.tgl.slice(0,7))});
-  let Y=[...yrs].sort((a,b)=>b-a),B=[...bln].sort().reverse();
-  s.innerHTML='<optgroup label="Tahunan">'+Y.map(y=>'<option value="t:'+y+'">Tahun '+y+'</option>').join("")+'</optgroup><optgroup label="Bulanan">'+B.map(b=>'<option value="b:'+b+'">'+namaBulan(b)+'</option>').join("")+'</optgroup>';
-  s.value=lama&&[...s.options].some(o=>o.value===lama)?lama:"t:"+(Y.includes(th)?th:Y[0]);
-  let bb=$("akunBB"),la=bb.value;
-  bb.innerHTML=opsiAkun();if(la&&akunDari(la))bb.value=la;
-}
+const JUDUL_LAP={neraca:"Laporan Posisi Keuangan",labarugi:"Laporan Laba Rugi dan Penghasilan Komprehensif Lain",ekuitas:"Laporan Perubahan Ekuitas",aruskas:"Laporan Arus Kas",calk:"Catatan atas Laporan Keuangan",jurnal:"Jurnal Umum",saldo:"Neraca Saldo"};
 function renderLaporan(){
-  isiPeriodeLap();
-  let jenis=$("jenisLap").value;
-  $("akunBB").classList.toggle("sembunyi",jenis!=="bukubesar");
-  let P=bangunPeriode($("periodeLap").value),Q=bangunPeriode(P.prev);
-  let mP=saldoMap(jur,P.awal,P.akhir),mQ=saldoMap(jur,Q.awal,Q.akhir);
-  let sP=saldoMap(jur,null,P.akhir),sQ=saldoMap(jur,null,Q.akhir);
-  let tglCetak=new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
-  let sub=jenis==="neraca"?"Per "+tglPanjang(P.akhir):jenis==="saldo"?"Per "+tglPanjang(P.akhir):"Untuk periode yang berakhir pada "+tglPanjang(P.akhir)+" ("+P.label+")";
-  let isi;
-  if(jenis==="neraca")isi=lapNeraca(P,Q,sP,sQ);
-  else if(jenis==="labarugi")isi=lapLabaRugi(P,Q,mP,mQ);
-  else if(jenis==="ekuitas")isi=lapEkuitas(P,Q);
-  else if(jenis==="aruskas")isi=lapArusKas(P,Q);
-  else if(jenis==="calk")isi=lapCalk(P,Q,sP,sQ,mP,mQ);
-  else if(jenis==="saldo")isi=lapSaldo(P,sP);
-  else isi=lapBukuBesar(P,$("akunBB").value);
-  $("lapIsi").innerHTML=
-    '<div class="kop"><h2>'+aman(p.usaha)+"</h2><div><b>"+JUDUL_LAP[jenis]+"</b></div><div>"+sub+"</div><div>Dalam Rupiah · Dicetak: "+tglCetak+"</div></div>"+
-    isi+
-    '<div class="ttd"><div>Disusun oleh,<span></span><b>'+aman(sesi.nama)+"</b><br>"+LABEL[sesi.role]+"</div></div>";
+ let sel=$("periodeLap"),lama=sel.value;
+ let bs=[...new Set(bulanData())],thn=[...new Set(bs.map(b=>b.slice(0,4)))].sort().reverse();
+ sel.innerHTML='<option value="semua">Semua waktu</option>'+thn.map(y=>'<option value="Y:'+y+'">Tahun '+y+'</option>').join("")+bs.slice().reverse().map(b=>'<option value="M:'+b+'">'+namaBulan(b)+'</option>').join("");
+ let ada=Array.from(sel.options).some(o=>o.value===lama);
+ sel.value=ada?lama:(bs.length?"M:"+bs[bs.length-1]:"semua");
+ let jenis=$("jenisLap").value;
+ let r=resolvePeriode(sel.value);
+ let J=bangunJurnal(r.b2);
+ let K=hitung(J,r.b1,r.b2),Kb=r.banding?hitung(J,r.banding.b1,r.banding.b2):null;
+ let hd=jenis==="neraca"?[tglPendek(akhirBulan(r.b2)),r.banding?tglPendek(akhirBulan(r.banding.b2)):""]:[rentang(r.b1,r.b2),r.banding?rentang(r.banding.b1,r.banding.b2):""];
+ let sub;
+ if(jenis==="neraca"||jenis==="saldo")sub="Per "+tglPanjang(akhirBulan(r.b2));
+ else sub="Untuk periode "+tglPanjang(r.b1+"-01")+" sampai "+tglPanjang(akhirBulan(r.b2));
+ let isi;
+ if(jenis==="neraca")isi=lapNeraca(K,Kb,hd);
+ else if(jenis==="labarugi")isi=lapLabaRugi(K,Kb,hd);
+ else if(jenis==="ekuitas")isi=lapEkuitas(K,Kb,r);
+ else if(jenis==="aruskas")isi=lapArusKas(K,Kb,hd);
+ else if(jenis==="calk")isi=lapCalk(K,Kb,r,hd);
+ else if(jenis==="jurnal")isi=lapJurnal(J,r);
+ else isi=lapSaldo(J,r);
+ if(data.length===0)isi='<p class="kecil">Belum ada transaksi. Tambahkan transaksi atau muat data contoh di Pengaturan.</p>';
+ $("lapIsi").innerHTML=
+  '<div class="kop"><h2>'+aman(p.usaha)+'</h2><div><b>'+JUDUL_LAP[jenis]+'</b></div><div>'+sub+'</div><div>(Disajikan dalam Rupiah)</div></div>'+
+  isi+
+  '<p class="kecil" style="margin-top:24px">Dicetak '+tglPanjang(new Date().toISOString().slice(0,10))+'. Disusun oleh '+aman(sesi.nama)+', '+LABEL[sesi.role]+'.</p>';
 }
 
 function tema(){
-  let g=document.documentElement.dataset.tema==="gelap";
-  document.documentElement.dataset.tema=g?"":"gelap";
-  try{localStorage.setItem("temaKasku",g?"":"gelap")}catch(e){}
+ let g=document.documentElement.dataset.tema==="gelap";
+ document.documentElement.dataset.tema=g?"":"gelap";
+ try{localStorage.setItem("temaKasku",g?"":"gelap")}catch(e){}
 }
 try{document.documentElement.dataset.tema=localStorage.getItem("temaKasku")||""}catch(e){}
-terapkanProfil();mulai();
+terapkanProfil();isiTipe();mulai();
 </script>
 </body>
 </html>
