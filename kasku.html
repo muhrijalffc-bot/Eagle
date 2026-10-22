@@ -28,6 +28,7 @@ button,select,input,textarea{font:inherit}
 .btn:hover{border-color:var(--utama)}
 .btn.utama{background:var(--utama);border-color:var(--utama);color:#fff;font-weight:600}
 .btn.utama:hover{opacity:.9}
+.btn:disabled{opacity:.6;cursor:wait}
 select.btn{padding-right:8px}
 .grid{display:grid;gap:16px}
 .kpi{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
@@ -77,7 +78,7 @@ dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px
 .baris{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 #err{color:var(--merah);font-size:13px;min-height:16px;margin-top:10px}
 #fInfo{background:var(--utama2);border-radius:10px;padding:8px 10px;margin:10px 0 0;line-height:1.5}
-#toast{position:fixed;bottom:24px;right:24px;background:var(--sisi);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:200}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--sisi);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:200;max-width:min(420px,90vw)}
 #toast.tampil{opacity:1;transform:none}
 .sembunyi{display:none!important}
 .lb{display:block;font-size:12px;color:var(--abu);margin:12px 0 4px}
@@ -116,22 +117,26 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 }
 @media(max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:12px}.profil{display:none}nav{display:flex;gap:6px;overflow-x:auto}nav a{white-space:nowrap}.logo{padding-bottom:10px}.dua{grid-template-columns:1fr}.isi{padding:0 16px 40px}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 <body class="terkunci">
 <div id="login">
-  <div class="kotak">
+  <div class="kotak sembunyi" id="kotakLogin">
     <div class="lg">💼</div>
     <h1 id="lgJudul">Masuk</h1>
     <p id="lgSub"></p>
-    <div id="lgSetup" class="sembunyi"><input class="in" id="lgNama" placeholder="Nama lengkap"></div>
-    <input class="in" id="lgUser" placeholder="Username" autocomplete="username">
+    <div id="lgSetup" class="sembunyi"><input class="in" id="lgNama" placeholder="Nama lengkap" autocomplete="name"></div>
+    <input class="in" id="lgUser" type="email" placeholder="Email" autocomplete="email">
     <input class="in" id="lgPass" type="password" placeholder="Password" autocomplete="current-password">
     <div id="lgUlang" class="sembunyi"><input class="in" id="lgPass2" type="password" placeholder="Ulangi password" autocomplete="new-password"></div>
     <label class="lihat"><input type="checkbox" onchange="lihatPw(this.checked)"> Tampilkan password</label>
     <button class="btn utama" id="lgTombol" onclick="kirimLogin()">Masuk</button>
-    <button class="tautan" id="lgLupa" onclick="bukaLupa()">Lupa username / password?</button>
+    <button class="tautan" id="lgLupa" onclick="kirimReset()">Lupa password?</button>
+    <button class="tautan" id="lgGanti" onclick="gantiModeLogin()">Belum punya akun? Daftar sebagai Pemilik</button>
     <div id="lgErr"></div>
-    <small>Akun disimpan di browser ini. Jika sandi pemulihan juga hilang, satu-satunya cara adalah menghapus data situs di browser (semua data ikut hilang).</small>
+    <small>Akun dan data disimpan aman di server Firebase, jadi bisa dibuka dari HP, laptop, atau perangkat lain dengan akun yang sama.</small>
   </div>
 </div>
 <div class="app">
@@ -254,20 +259,15 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
         </div>
       </div>
       <div class="kartu" style="margin-top:16px">
-        <div class="judul"><h2>Sandi pemulihan</h2></div>
-        <p class="delta">Dipakai untuk memulihkan akunmu jika lupa username atau password. <b id="statusPulih"></b></p>
-        <button class="btn" onclick="bukaPulih()">🔑 Buat / ganti sandi pemulihan</button>
-      </div>
-      <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Pengguna &amp; hak akses</h2></div>
-        <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (tambah/hapus), laporan, ekspor. <b>Kasir</b>: hanya mencatat transaksi dan melihat catatannya sendiri.</p>
+        <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (tambah/hapus), laporan, ekspor. <b>Kasir</b>: hanya mencatat transaksi dan melihat catatannya sendiri. Setiap pengguna masuk dengan emailnya sendiri. Jika lupa password, pakai tautan &quot;Lupa password?&quot; di halaman masuk atau tombol Reset password di bawah.</p>
         <div class="bungkus"><table>
           <thead><tr><th>Pengguna</th><th>Peran</th><th></th></tr></thead>
           <tbody id="daftarUser"></tbody>
         </table></div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px">
           <input class="in" id="uNama" placeholder="Nama lengkap">
-          <input class="in" id="uUser" placeholder="Username">
+          <input class="in" id="uUser" type="email" placeholder="Email" autocomplete="off">
           <input class="in" id="uPass" type="password" placeholder="Password (min. 6)" autocomplete="new-password">
           <select class="in" id="uPeran"><option value="kasir">Kasir</option><option value="akuntan">Akuntan</option><option value="pemilik">Pemilik</option></select>
           <button class="btn utama" onclick="tambahUser()">+ Tambah pengguna</button>
@@ -276,7 +276,7 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
       </div>
       <div class="kartu" style="margin-top:16px">
         <div class="judul"><h2>Data</h2></div>
-        <p class="delta">Format impor CSV baru: tanggal, keterangan, tipe (kode atau nama jenis transaksi), kategori, jumlah, umur_tahun, residu. Format lama (tanggal, keterangan, kategori, masuk/keluar, jumlah) tetap bisa diimpor dan dicatat sebagai transaksi tunai. Tanggal boleh YYYY-MM-DD atau DD/MM/YYYY.</p>
+        <p class="delta">Data tersimpan di Firebase dan otomatis sinkron ke semua perangkat. Format impor CSV: tanggal, keterangan, tipe (kode atau nama jenis transaksi), kategori, jumlah, umur_tahun, residu. Format lama (tanggal, keterangan, kategori, masuk/keluar, jumlah) tetap bisa diimpor dan dicatat sebagai transaksi tunai. Tanggal boleh YYYY-MM-DD atau DD/MM/YYYY.</p>
         <input type="file" id="fileCsv" accept=".csv,text/csv" class="sembunyi" onchange="impor(this)">
         <div class="aksi">
           <button class="btn" onclick="document.getElementById('fileCsv').click()">⬆ Impor CSV</button>
@@ -306,50 +306,16 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
   <div id="err"></div>
   <div class="baris"><button class="btn" onclick="dlg.close()">Batal</button><button class="btn utama" onclick="tambah()">Simpan</button></div>
 </dialog>
-<dialog id="dlgPw">
-  <h2>Ganti password</h2>
-  <p class="delta" id="pwUntuk"></p>
-  <label>Password baru</label><input type="password" id="pwBaru" autocomplete="new-password">
-  <div id="errPw" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
-  <div class="baris"><button class="btn" onclick="dlgPw.close()">Batal</button><button class="btn utama" onclick="simpanPw()">Simpan</button></div>
-</dialog>
-<dialog id="dlgPulih">
-  <h2>🔑 Buat sandi pemulihan</h2>
-  <p class="delta">Sandi ini dipakai jika kamu lupa username atau password. Simpan di tempat aman (dicatat di kertas atau pengelola password). Sandi tidak akan ditampilkan lagi setelah disimpan.</p>
-  <label>Sandi pemulihan (minimal 8 karakter)</label>
-  <input id="pulihKode" autocomplete="off" placeholder="Ketik sendiri, atau buat otomatis">
-  <button class="btn" style="margin-top:8px" onclick="buatKode()">🎲 Buat otomatis</button>
-  <label style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:13px"><input type="checkbox" id="pulihOk" style="width:auto"> Saya sudah menyimpan sandi ini</label>
-  <div id="errPulih" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
-  <div class="baris"><button class="btn" onclick="lewatiPulih()">Nanti saja</button><button class="btn utama" onclick="simpanPulih()">Simpan</button></div>
-</dialog>
-<dialog id="dlgLupa">
-  <h2>Pulihkan akses</h2>
-  <div id="lupa1">
-    <p class="delta">Masukkan sandi pemulihan yang kamu buat sebelumnya. Username akan ditampilkan, lalu kamu bisa membuat password baru.</p>
-    <label>Sandi pemulihan</label>
-    <input id="lupaKode" autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX">
-    <div id="errLupa1" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
-    <div class="baris"><button class="btn" onclick="document.getElementById('dlgLupa').close()">Batal</button><button class="btn utama" onclick="cekPulih()">Verifikasi</button></div>
-  </div>
-  <div id="lupa2" class="sembunyi">
-    <p>✅ Terverifikasi. Username kamu: <b id="lupaUser"></b></p>
-    <label>Password baru</label><input type="password" id="lupaPw" autocomplete="new-password">
-    <label>Ulangi password baru</label><input type="password" id="lupaPw2" autocomplete="new-password">
-    <div id="errLupa2" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
-    <div class="baris"><button class="btn" onclick="document.getElementById('dlgLupa').close()">Batal</button><button class="btn utama" onclick="simpanLupa()">Simpan &amp; masuk</button></div>
-  </div>
-</dialog>
 <dialog id="dlgData" oncancel="event.preventDefault()">
   <h2>Mulai dengan data apa?</h2>
-  <p class="delta">Pilih data awal untuk aplikasi ini. Akun, kategori, dan pengaturan tidak terpengaruh.</p>
+  <p class="delta">Pilih data awal untuk akun baru ini. Data akan disimpan di Firebase dan bisa dibuka dari perangkat lain.</p>
   <button class="btn utama" onclick="pilihData('kosong')">✨ Data baru (kosong)</button>
   <button class="btn" onclick="pilihData('contoh')">🧪 Data contoh (untuk mencoba)</button>
-  <button class="btn" id="btnDataAda" onclick="pilihData('ada')">📂 Pertahankan data yang sudah ada</button>
+  <button class="btn" id="btnDataAda" onclick="pilihData('ada')">📂 Unggah data lama dari browser ini</button>
 </dialog>
 <dialog id="dlgBaru">
   <h2>✨ Mulai data baru</h2>
-  <p class="delta">Semua transaksi akan dihapus dan kamu mulai dari data kosong. Akun pengguna, kategori, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
+  <p class="delta">Semua transaksi akan dihapus dari Firebase dan kamu mulai dari data kosong. Akun pengguna, kategori, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
   <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="baruCadangan" checked style="width:auto"> Unduh cadangan CSV dulu (disarankan)</label>
   <label>Ketik <b>BARU</b> untuk melanjutkan</label>
   <input id="baruKonfirm" autocomplete="off" placeholder="BARU">
@@ -361,6 +327,25 @@ aside,.topbar,#atas,#kartuTabel,#halamanPengaturan,.noprint,#toast{display:none!
 <script>
 const KUNCI="dashboardAkuntansi",KUNCI_P="kaskuPengaturan";
 const WARNA=["#4f46e5","#f43f5e","#f59e0b","#10b981","#06b6d4","#8b5cf6","#94a3b8"];
+
+/* ===== Firebase ===== */
+const firebaseConfig={
+  apiKey:"AIzaSyCCD80eM6w_Lsv6adAsy7jIprV2lBlBNwQ",
+  authDomain:"benevolent-saber.firebaseapp.com",
+  projectId:"benevolent-saber",
+  storageBucket:"benevolent-saber.firebasestorage.app",
+  messagingSenderId:"618752593746",
+  appId:"1:618752593746:web:2cc9a88c34bd45069f348b",
+  measurementId:"G-DMBLDE1LNC"
+};
+const FB_OK=typeof firebase!=="undefined";
+let auth=null,db=null;
+if(FB_OK){
+ firebase.initializeApp(firebaseConfig);
+ auth=firebase.auth();
+ db=firebase.firestore();
+ try{db.enablePersistence({synchronizeTabs:true}).catch(function(){})}catch(e){}
+}
 
 /* ===== Jenis transaksi -> jurnal otomatis =====
    dr / kr = akun debit / kredit. "P" = akun pendapatan (kategori), "B" = akun beban (kategori). */
@@ -443,7 +428,7 @@ const PDEF={v:2,usaha:"Kasku",catatan:"",pajakTarif:0.5,pajakDasar:"pendapatan",
  katBeban:["Gaji","Sewa","Listrik & Air","Pemasaran","Perlengkapan","Transportasi","Lainnya"]};
 const KELAS_LAMA={"Modal Pemilik":"ekuitas","Aset Tetap":"aset","Pinjaman":"utang"};
 
-/* ===== Muat & migrasi dari versi lama (basis kas) ===== */
+/* ===== Data lama di browser (hanya dibaca untuk diunggah ke Firebase) ===== */
 function konversi(t,kelas){
  if(t.tipe)return t;
  let k=kelas[t.kat]||"operasi",m=t.jenis==="masuk",n=Object.assign({},t);
@@ -455,7 +440,7 @@ function konversi(t,kelas){
  n.migrasi=true;
  return n;
 }
-let data=[],p=null,migrasiBerubah=false;
+let data=[],p=null,dataLokal=null;
 (function muatAwal(){
  let rawP=null,rawD=null;
  try{let x=localStorage.getItem(KUNCI_P);if(x)rawP=JSON.parse(x)}catch(e){}
@@ -464,24 +449,19 @@ let data=[],p=null,migrasiBerubah=false;
  let kelas=Object.assign({},KELAS_LAMA,(rawP&&rawP.kelas)||{});
  if(rawP&&rawP.v===2){np=Object.assign(np,rawP)}
  else{
-  if(rawP){["usaha","catatan"].forEach(function(k){if(rawP[k]!==undefined)np[k]=rawP[k]});migrasiBerubah=true}
+  if(rawP){["usaha","catatan"].forEach(function(k){if(rawP[k]!==undefined)np[k]=rawP[k]})}
   let pend=new Set(PDEF.katPend),beb=new Set(PDEF.katBeban);
   ((rawP&&rawP.kategori)||[]).forEach(function(k){if((kelas[k]||"operasi")==="operasi"&&!pend.has(k)&&!beb.has(k))beb.add(k)});
   (rawD||[]).forEach(function(t){if(t.tipe)return;if((kelas[t.kat]||"operasi")!=="operasi")return;if(t.jenis==="masuk")pend.add(t.kat);else beb.add(t.kat)});
   np.katPend=Array.from(pend);np.katBeban=Array.from(beb);
  }
+ delete np.kelas;
  p=np;
- if(rawD===null){data=JSON.parse(JSON.stringify(contoh))}
- else{
-  data=rawD.map(function(t){if(!t.tipe)migrasiBerubah=true;return konversi(t,kelas)});
-  if(migrasiBerubah){try{localStorage.setItem(KUNCI,JSON.stringify(data));localStorage.setItem(KUNCI_P,JSON.stringify(p))}catch(e){}}
- }
+ if(rawD!==null){dataLokal=rawD.map(function(t){return konversi(t,kelas)})}
 })();
 let tampilan="dashboard",jenisAktif="semua";
-function simpanP(){try{localStorage.setItem(KUNCI_P,JSON.stringify(p))}catch(e){}}
 const $=id=>document.getElementById(id);
 const dlg=$("dlg");
-function simpan(){try{localStorage.setItem(KUNCI,JSON.stringify(data))}catch(e){}}
 function rp(n){return "Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID")}
 function nrp(n){return (Math.round(n)<0?"-":"")+rp(n)}
 function ang(n){n=Math.round(n);if(n===0)return "-";let s=Math.abs(n).toLocaleString("id-ID");return n<0?"("+s+")":s}
@@ -497,7 +477,30 @@ function tglPanjang(s){return new Date(s+"T00:00:00").toLocaleDateString("id-ID"
 function tglPendek(s){return new Date(s+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})}
 function rentang(b1,b2){return b1===b2?bPendek(b1):bPendek(b1)+" – "+bPendek(b2)}
 function jumlahSum(o){return Object.keys(o).reduce((a,k)=>a+o[k],0)}
-function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2200)}
+function toast(t){let e=$("toast");e.innerText=t;e.classList.add("tampil");setTimeout(()=>e.classList.remove("tampil"),2600)}
+
+/* ===== Penyimpanan di Firebase ===== */
+function refBisnis(){return db.collection("bisnis").doc(sesi.bisnis)}
+function refTrx(){return refBisnis().collection("transaksi")}
+function simpanP(){
+ if(!sesi||!bisa("pengaturan"))return;
+ refBisnis().set(p).catch(function(e){toast("Gagal menyimpan pengaturan: "+pesanAuth(e))});
+}
+async function tulisSemua(arr){
+ for(let i=0;i<arr.length;i+=400){
+  let b=db.batch();
+  arr.slice(i,i+400).forEach(function(t){b.set(refTrx().doc(String(t.id)),t)});
+  await b.commit();
+ }
+}
+async function hapusSemua(){
+ let s=await refTrx().get();
+ for(let i=0;i<s.docs.length;i+=400){
+  let b=db.batch();
+  s.docs.slice(i,i+400).forEach(function(d){b.delete(d.ref)});
+  await b.commit();
+ }
+}
 
 /* ===== Mesin akuntansi: jurnal, penyusutan, pajak ===== */
 function jurnalTrx(t){
@@ -621,6 +624,7 @@ function ganti(v){
  render();
 }
 function render(){
+ if(!sesi)return;
  renderDashboard();
  if(tampilan==="transaksi")$("subjudul").innerText=dataDilihat().length+" transaksi tercatat";
  if(tampilan==="laporan"){renderLaporan();$("subjudul").innerText="Laporan keuangan basis akrual";}
@@ -680,7 +684,7 @@ function renderDashboard(){
  let tampil=dp.filter(function(d){
   let td=TIPE[d.tipe]||{l:d.tipe,a:"nonkas"};
   return (jenisAktif==="semua"||td.a===jenisAktif)&&(q===""||(d.ket+" "+(d.kat||"")+" "+td.l).toLowerCase().includes(q));
- }).sort((a,b)=>b.tgl.localeCompare(a.tgl)||b.id-a.id);
+ }).sort((a,b)=>b.tgl.localeCompare(a.tgl)||String(b.id).localeCompare(String(a.id),undefined,{numeric:true}));
  if(tampilan==="dashboard")tampil=tampil.slice(0,6);
  $("isiTabel").innerHTML=tampil.length===0?'<tr><td colspan="5" class="kosong">Tidak ada transaksi ditemukan</td></tr>':
   tampil.map(function(d){
@@ -692,116 +696,198 @@ function renderDashboard(){
     '<td>'+new Date(d.tgl+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})+'</td>'+
     '<td><span class="badge '+td.a+'">'+lb+'</span></td>'+
     '<td class="num" style="font-weight:600;color:var(--'+warna+')">'+tanda+rp(d.jumlah)+'</td>'+
-    '<td class="num">'+(bisa("hapus")?'<button class="x" onclick="hapus('+d.id+')" title="Hapus">🗑️</button>':"")+'</td></tr>';
+    '<td class="num">'+(bisa("hapus")?'<button class="x" onclick="hapus(\''+d.id+'\')" title="Hapus">🗑️</button>':"")+'</td></tr>';
   }).join("");
 }
 
-/* ===== Login & hak akses ===== */
+/* ===== Login (Firebase Authentication) & hak akses ===== */
 const LABEL={pemilik:"Pemilik",akuntan:"Akuntan",kasir:"Kasir"};
 const IZIN={
  pemilik:["dashboard","transaksi","laporan","pengaturan","tambah","hapus","ekspor","pengguna"],
  akuntan:["dashboard","transaksi","laporan","tambah","hapus","ekspor"],
  kasir:["transaksi","tambah"]
 };
-const KUNCI_U="kaskuPengguna";
-let users=muatU(),sesi=null,modeLogin="login",gagal=0,kunciSampai=0,idPw=null;
-function muatU(){try{let x=localStorage.getItem(KUNCI_U);if(x)return JSON.parse(x)}catch(e){}return []}
-function simpanU(){try{localStorage.setItem(KUNCI_U,JSON.stringify(users))}catch(e){}}
+let users=[],sesi=null,modeLogin="login",gagal=0,kunciSampai=0,sedangDaftar=false,perluPilihData=false,unsub=[];
 function bisa(x){return !!sesi&&IZIN[sesi.role].includes(x)}
-function dataDilihat(){return sesi&&sesi.role==="kasir"?data.filter(d=>d.oleh===sesi.username):data}
+function dataDilihat(){return data}
 
-function acak(){return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,"0")).join("")}
-async function hash(pw,salt){
- let enc=new TextEncoder();
- let kunci=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]);
- let bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:100000,hash:"SHA-256"},kunci,256);
- return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,"0")).join("");
+function pesanAuth(e){
+ let m={
+  "auth/invalid-email":"Format email tidak valid.",
+  "auth/user-not-found":"Email atau password salah.",
+  "auth/wrong-password":"Email atau password salah.",
+  "auth/invalid-credential":"Email atau password salah.",
+  "auth/invalid-login-credentials":"Email atau password salah.",
+  "auth/email-already-in-use":"Email ini sudah terdaftar.",
+  "auth/weak-password":"Password terlalu lemah (minimal 6 karakter).",
+  "auth/too-many-requests":"Terlalu banyak percobaan. Coba lagi beberapa menit lagi.",
+  "auth/network-request-failed":"Tidak ada koneksi internet.",
+  "auth/operation-not-allowed":"Metode Email/Password belum diaktifkan di Firebase Authentication.",
+  "permission-denied":"Akses ditolak oleh aturan keamanan Firestore. Pastikan Rules sudah dipublikasikan."
+ };
+ return m[e&&e.code]||("Terjadi kesalahan: "+((e&&(e.code||e.message))||e));
 }
-async function buatUser(nama,username,pw,role){
- let salt=acak();
- return {id:Date.now()+Math.floor(Math.random()*1000),username:username,nama:nama,role:role,salt:salt,hash:await hash(pw,salt)};
-}
+function pesanLogin(t,ok){let e=$("lgErr");e.innerText=t||"";e.style.color=ok?"var(--hijau)":"var(--merah)"}
 function tampilLogin(mode){
  modeLogin=mode;
  $("login").classList.remove("sembunyi");
+ $("kotakLogin").classList.remove("sembunyi");
  document.body.classList.add("terkunci");
  let setup=mode==="setup";
  $("lgJudul").innerText=setup?"Buat akun Pemilik":p.usaha;
- $("lgSub").innerText=setup?"Aplikasi baru dipakai. Buat akun Pemilik dengan akses penuh.":"Masuk untuk melanjutkan";
+ $("lgSub").innerText=setup?"Daftar sebagai Pemilik dengan akses penuh. Kasir dan akuntan ditambahkan nanti dari Pengaturan.":"Masuk untuk melanjutkan";
  $("lgSetup").classList.toggle("sembunyi",!setup);
  $("lgUlang").classList.toggle("sembunyi",!setup);
  $("lgTombol").innerText=setup?"Buat akun & masuk":"Masuk";
  $("lgLupa").classList.toggle("sembunyi",setup);
- $("lgErr").innerText="";
+ $("lgGanti").innerText=setup?"Sudah punya akun? Masuk":"Belum punya akun? Daftar sebagai Pemilik";
+ $("lgPass").autocomplete=setup?"new-password":"current-password";
+ pesanLogin("");
  $("lgPass").value="";$("lgPass2").value="";
 }
+function gantiModeLogin(){tampilLogin(modeLogin==="setup"?"login":"setup")}
 function lihatPw(t){$("lgPass").type=t?"text":"password";$("lgPass2").type=t?"text":"password"}
 async function kirimLogin(){
- let err=$("lgErr");err.innerText="";
- let user=$("lgUser").value.trim().toLowerCase(),pw=$("lgPass").value;
+ pesanLogin("");
+ let email=$("lgUser").value.trim().toLowerCase(),pw=$("lgPass").value;
+ if(!/^\S+@\S+\.\S+$/.test(email)){pesanLogin("Masukkan email yang valid.");return}
  if(modeLogin==="setup"){
   let nama=$("lgNama").value.trim();
-  if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
-  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
-  if(pw!==$("lgPass2").value){err.innerText="Konfirmasi password tidak sama.";return}
-  let u=await buatUser(nama,user,pw,"pemilik");
-  perluPilihData=true;users.push(u);simpanU();masuk(u,true);return;
+  if(nama===""){pesanLogin("Isi nama lengkap.");return}
+  if(pw.length<6){pesanLogin("Password minimal 6 karakter.");return}
+  if(pw!==$("lgPass2").value){pesanLogin("Konfirmasi password tidak sama.");return}
+  $("lgTombol").disabled=true;
+  sedangDaftar=true;
+  try{
+   let cred=await auth.createUserWithEmailAndPassword(email,pw);
+   try{
+    let uid=cred.user.uid;
+    await db.collection("users").doc(uid).set({nama:nama,email:email,role:"pemilik",bisnis:uid});
+    await db.collection("bisnis").doc(uid).set(p);
+   }catch(e2){
+    try{await cred.user.delete()}catch(x){}
+    throw e2;
+   }
+   sedangDaftar=false;
+   perluPilihData=true;
+   await bukaSesi(cred.user,true);
+  }catch(e){
+   sedangDaftar=false;
+   pesanLogin(pesanAuth(e));
+  }finally{$("lgTombol").disabled=false}
+  return;
  }
- if(Date.now()<kunciSampai){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.";return}
- let u=users.find(x=>x.username===user);
- let h=await hash(pw,u?u.salt:"tidak-ada");
- if(u&&h===u.hash){gagal=0;masuk(u,true)}
- else{gagal++;if(gagal>=5){kunciSampai=Date.now()+30000;gagal=0}err.innerText="Username atau password salah."}
+ if(Date.now()<kunciSampai){pesanLogin("Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciSampai-Date.now())/1000)+" detik.");return}
+ $("lgTombol").disabled=true;
+ try{await auth.signInWithEmailAndPassword(email,pw)}
+ catch(e){gagal++;if(gagal>=5){kunciSampai=Date.now()+30000;gagal=0}pesanLogin(pesanAuth(e))}
+ finally{$("lgTombol").disabled=false}
 }
-function masuk(u,baru){
- sesi={id:u.id,username:u.username,nama:u.nama,role:u.role};
- try{sessionStorage.setItem("kaskuSesi",String(u.id))}catch(e){}
+async function kirimReset(){
+ let email=$("lgUser").value.trim().toLowerCase();
+ if(!/^\S+@\S+\.\S+$/.test(email)){pesanLogin("Isi emailmu di kolom Email dulu, lalu klik Lupa password.");return}
+ try{
+  await auth.sendPasswordResetEmail(email);
+  pesanLogin("Jika email terdaftar, tautan reset password sudah dikirim. Cek kotak masuk dan folder spam.",true);
+ }catch(e){pesanLogin(pesanAuth(e))}
+}
+async function bukaSesi(u,baru){
+ try{
+  let s=await db.collection("users").doc(u.uid).get();
+  if(!s.exists){
+   await auth.signOut();
+   tampilLogin("login");
+   pesanLogin("Akun ini belum terdaftar di Kasku atau aksesnya sudah dicabut pemilik.");
+   return;
+  }
+  let d=s.data();
+  sesi={id:u.uid,uid:u.uid,email:u.email||d.email,nama:d.nama,role:d.role,bisnis:d.bisnis};
+ }catch(e){
+  tampilLogin("login");
+  pesanLogin(pesanAuth(e));
+  return;
+ }
  $("login").classList.add("sembunyi");
  document.body.classList.remove("terkunci");
  $("lgUser").value="";$("lgPass").value="";
  terapkanProfil();terapkanHak();
+ mulaiSinkron();
  ganti(bisa("dashboard")?"dashboard":"transaksi");
- if(baru&&u.role==="pemilik"){if(perluPilihData){bukaData()}else if(!u.pulih){bukaPulih()}}
+ if(baru&&sesi.role==="pemilik"&&perluPilihData)bukaData();
 }
-function keluar(){
- sesi=null;
- try{sessionStorage.removeItem("kaskuSesi")}catch(e){}
- tampilLogin("login");
-}
+function keluar(){if(auth)auth.signOut()}
 function terapkanHak(){
  for(let k in JUDUL){$("nav-"+k).classList.toggle("sembunyi",!bisa(k))}
  $("btnEkspor").classList.toggle("sembunyi",!bisa("ekspor"));
  $("btnTambah").classList.toggle("sembunyi",!bisa("tambah"));
 }
-function mulai(){
- if(!window.crypto||!crypto.subtle){
-  tampilLogin("login");
-  $("lgErr").innerText="Browser ini tidak mendukung enkripsi password. Buka lewat https (misalnya GitHub Pages) atau browser terbaru.";
-  $("lgTombol").disabled=true;return;
+
+/* ===== Sinkronisasi realtime ===== */
+function galatSinkron(e){console.error(e);toast("Sinkronisasi gagal: "+pesanAuth(e))}
+function hentikanSinkron(){unsub.forEach(function(f){try{f()}catch(e){}});unsub=[]}
+function mulaiSinkron(){
+ hentikanSinkron();
+ let ref=refBisnis();
+ /* perubahan peran/nama akun sendiri */
+ unsub.push(db.collection("users").doc(sesi.uid).onSnapshot(function(s){
+  if(!sesi)return;
+  if(!s.exists){toast("Akses akunmu sudah dicabut");auth.signOut();return}
+  let d=s.data(),ubahPeranSendiri=d.role!==sesi.role;
+  sesi.nama=d.nama;sesi.role=d.role;
+  terapkanProfil();terapkanHak();
+  if(ubahPeranSendiri){
+   mulaiSinkron();
+   ganti(bisa(tampilan)?tampilan:(bisa("dashboard")?"dashboard":"transaksi"));
+  }
+ },galatSinkron));
+ /* profil usaha, pajak, kategori */
+ unsub.push(ref.onSnapshot(function(s){
+  p=Object.assign(JSON.parse(JSON.stringify(PDEF)),s.exists?s.data():{});
+  terapkanProfil();render();
+ },galatSinkron));
+ /* transaksi (kasir hanya melihat miliknya sendiri) */
+ let q=ref.collection("transaksi");
+ if(sesi.role==="kasir")q=q.where("oleh","==",sesi.uid);
+ unsub.push(q.onSnapshot(function(s){
+  data=s.docs.map(function(d){return Object.assign({id:d.id},d.data())});
+  data.forEach(function(t){if(!isNaN(Number(t.id)))t.id=Number(t.id)});
+  render();
+ },galatSinkron));
+ /* daftar pengguna (hanya pemilik) */
+ if(sesi.role==="pemilik"){
+  unsub.push(db.collection("users").where("bisnis","==",sesi.bisnis).onSnapshot(function(s){
+   users=s.docs.map(function(d){return Object.assign({id:d.id},d.data())}).sort((a,b)=>String(a.nama).localeCompare(String(b.nama)));
+   if(tampilan==="pengaturan")renderUser();
+  },galatSinkron));
  }
- if(users.length===0){tampilLogin("setup");return}
- let id=null;try{id=sessionStorage.getItem("kaskuSesi")}catch(e){}
- let u=users.find(x=>String(x.id)===id);
- if(u){masuk(u)}else{tampilLogin("login")}
+}
+if(FB_OK){
+ auth.onAuthStateChanged(function(u){
+  if(sedangDaftar)return;
+  if(!u){
+   hentikanSinkron();sesi=null;data=[];users=[];
+   tampilLogin("login");
+   return;
+  }
+  if(sesi&&sesi.uid===u.uid)return;
+  bukaSesi(u,false);
+ });
 }
 document.getElementById("login").addEventListener("keydown",function(e){if(e.key==="Enter")kirimLogin()});
 
 /* ===== Data awal / data baru ===== */
-let perluPilihData=false;
 function bukaData(){
- let ada=false;try{ada=localStorage.getItem(KUNCI)!==null}catch(e){}
- $("btnDataAda").classList.toggle("sembunyi",!ada);
+ $("btnDataAda").classList.toggle("sembunyi",!(dataLokal&&dataLokal.length));
  document.getElementById("dlgData").showModal();
 }
-function pilihData(mode){
- if(mode==="kosong"){data=[]}
- else if(mode==="contoh"){data=JSON.parse(JSON.stringify(contoh))}
- simpan();perluPilihData=false;
+async function pilihData(mode){
  document.getElementById("dlgData").close();
- render();
- toast(mode==="kosong"?"Data baru (kosong) siap dipakai ✓":mode==="contoh"?"Data contoh dimuat":"Data lama dipertahankan");
- let me=users.find(x=>sesi&&x.id===sesi.id);
- if(me&&!me.pulih){bukaPulih()}
+ perluPilihData=false;
+ try{
+  if(mode==="contoh"){await tulisSemua(JSON.parse(JSON.stringify(contoh)))}
+  else if(mode==="ada"&&dataLokal&&dataLokal.length){await tulisSemua(JSON.parse(JSON.stringify(dataLokal)))}
+  toast(mode==="kosong"?"Data baru (kosong) siap dipakai ✓":mode==="contoh"?"Data contoh dimuat":"Data lama berhasil diunggah ✓");
+ }catch(e){toast("Gagal menyimpan data: "+pesanAuth(e))}
 }
 function bukaBaru(){
  if(!bisa("pengaturan"))return;
@@ -809,127 +895,63 @@ function bukaBaru(){
  $("baruCadangan").checked=data.length>0;
  document.getElementById("dlgBaru").showModal();
 }
-function jalankanBaru(){
+async function jalankanBaru(){
  if(!bisa("pengaturan"))return;
  if($("baruKonfirm").value.trim().toUpperCase()!=="BARU"){$("errBaru").innerText='Ketik "BARU" untuk melanjutkan.';return}
  if($("baruCadangan").checked&&data.length>0){ekspor()}
- data=[];simpan();
- document.getElementById("dlgBaru").close();
- render();toast("Data baru siap dipakai ✓");
-}
-
-/* ===== Sandi pemulihan ===== */
-let userPulih=null,gagalP=0,kunciP=0;
-function normKode(x){return String(x||"").toUpperCase().replace(/[\s-]/g,"")}
-function buatKode(){
- let abj="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",a=crypto.getRandomValues(new Uint8Array(16)),k="";
- for(let i=0;i<16;i++){k+=abj[a[i]%abj.length];if(i%4===3&&i<15){k+="-"}}
- $("pulihKode").value=k;
-}
-function bukaPulih(){
- $("pulihKode").value="";$("pulihOk").checked=false;$("errPulih").innerText="";
- document.getElementById("dlgPulih").showModal();
-}
-function lewatiPulih(){document.getElementById("dlgPulih").close()}
-async function simpanPulih(){
- if(!sesi)return;
- let k=normKode($("pulihKode").value);
- if(k.length<8){$("errPulih").innerText="Sandi pemulihan minimal 8 karakter.";return}
- if(!$("pulihOk").checked){$("errPulih").innerText="Centang dulu setelah kamu menyimpan sandinya.";return}
- let u=users.find(x=>x.id===sesi.id);if(!u)return;
- let salt=acak();
- u.pulih={salt:salt,hash:await hash(k,salt)};
- simpanU();
- document.getElementById("dlgPulih").close();
- $("pulihKode").value="";
- if(tampilan==="pengaturan")renderPengaturan();
- toast("Sandi pemulihan disimpan ✓");
-}
-function bukaLupa(){
- userPulih=null;
- $("lupaKode").value="";$("lupaPw").value="";$("lupaPw2").value="";
- $("errLupa1").innerText="";$("errLupa2").innerText="";
- $("lupa1").classList.remove("sembunyi");$("lupa2").classList.add("sembunyi");
- document.getElementById("dlgLupa").showModal();
-}
-async function cekPulih(){
- let err=$("errLupa1");err.innerText="";
- if(Date.now()<kunciP){err.innerText="Terlalu banyak percobaan. Coba lagi dalam "+Math.ceil((kunciP-Date.now())/1000)+" detik.";return}
- let k=normKode($("lupaKode").value);
- if(k.length<8){err.innerText="Masukkan sandi pemulihan dengan benar.";return}
- let cocok=null;
- for(let u of users){
-  if(u.pulih&&(await hash(k,u.pulih.salt))===u.pulih.hash){cocok=u;break}
- }
- if(!cocok){
-  gagalP++;if(gagalP>=5){kunciP=Date.now()+60000;gagalP=0}
-  err.innerText="Sandi pemulihan tidak cocok.";return;
- }
- gagalP=0;userPulih=cocok;
- $("lupaUser").innerText="@"+cocok.username+" ("+cocok.nama+")";
- $("lupa1").classList.add("sembunyi");$("lupa2").classList.remove("sembunyi");
-}
-async function simpanLupa(){
- let err=$("errLupa2");err.innerText="";
- if(!userPulih)return;
- let pw=$("lupaPw").value;
- if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
- if(pw!==$("lupaPw2").value){err.innerText="Konfirmasi password tidak sama.";return}
- let u=users.find(x=>x.id===userPulih.id);if(!u)return;
- u.salt=acak();u.hash=await hash(pw,u.salt);
- delete u.pulih;
- simpanU();userPulih=null;
- document.getElementById("dlgLupa").close();
- masuk(u,true);
+ try{
+  await hapusSemua();
+  document.getElementById("dlgBaru").close();
+  toast("Data baru siap dipakai ✓");
+ }catch(e){$("errBaru").innerText="Gagal menghapus: "+pesanAuth(e)}
 }
 
 /* ===== Kelola pengguna ===== */
 function jumlahPemilik(){return users.filter(u=>u.role==="pemilik").length}
 function renderUser(){
  if(!bisa("pengguna")){$("daftarUser").innerHTML="";return}
- $("daftarUser").innerHTML=users.map(u=>'<tr><td><b>'+aman(u.nama)+'</b><small style="display:block;color:var(--abu)">@'+aman(u.username)+(u.id===sesi.id?" (kamu)":"")+'</small></td>'+
-  '<td><select class="btn" onchange="ubahPeran('+u.id+',this.value)">'+Object.keys(LABEL).map(r=>'<option value="'+r+'"'+(u.role===r?" selected":"")+">"+LABEL[r]+"</option>").join("")+"</select></td>"+
-  '<td class="num"><button class="btn" onclick="bukaPw('+u.id+')">🔑 Password</button> <button class="btn" style="color:var(--merah)" onclick="hapusUser('+u.id+')">Hapus</button></td></tr>').join("");
+ $("daftarUser").innerHTML=users.map(u=>'<tr><td><b>'+aman(u.nama)+'</b><small style="display:block;color:var(--abu)">'+aman(u.email||"")+(u.id===sesi.uid?" (kamu)":"")+'</small></td>'+
+  '<td><select class="btn" onchange="ubahPeran(\''+u.id+'\',this.value)">'+Object.keys(LABEL).map(r=>'<option value="'+r+'"'+(u.role===r?" selected":"")+">"+LABEL[r]+"</option>").join("")+"</select></td>"+
+  '<td class="num"><button class="btn" onclick="resetPwUser(\''+u.id+'\')">🔑 Reset password</button> <button class="btn" style="color:var(--merah)" onclick="hapusUser(\''+u.id+'\')">Hapus</button></td></tr>').join("");
 }
 async function tambahUser(){
  if(!bisa("pengguna"))return;
  let err=$("errUser");err.innerText="";
- let nama=$("uNama").value.trim(),user=$("uUser").value.trim().toLowerCase(),pw=$("uPass").value,role=$("uPeran").value;
- if(nama===""||!/^[a-z0-9._-]{3,}$/.test(user)){err.innerText="Isi nama dan username (min. 3 huruf/angka, tanpa spasi).";return}
+ let nama=$("uNama").value.trim(),email=$("uUser").value.trim().toLowerCase(),pw=$("uPass").value,role=$("uPeran").value;
+ if(nama===""){err.innerText="Isi nama lengkap.";return}
+ if(!/^\S+@\S+\.\S+$/.test(email)){err.innerText="Isi email yang valid.";return}
  if(pw.length<6){err.innerText="Password minimal 6 karakter.";return}
- if(users.some(x=>x.username===user)){err.innerText="Username sudah dipakai.";return}
- users.push(await buatUser(nama,user,pw,role));
- simpanU();$("uNama").value="";$("uUser").value="";$("uPass").value="";
- renderUser();toast("Pengguna ditambahkan ✓");
+ if(users.some(x=>x.email===email)){err.innerText="Email sudah dipakai pengguna lain.";return}
+ let app2=firebase.apps.find(a=>a.name==="sekunder")||firebase.initializeApp(firebaseConfig,"sekunder");
+ let a2=app2.auth(),cred=null;
+ try{
+  cred=await a2.createUserWithEmailAndPassword(email,pw);
+  await db.collection("users").doc(cred.user.uid).set({nama:nama,email:email,role:role,bisnis:sesi.bisnis});
+  $("uNama").value="";$("uUser").value="";$("uPass").value="";
+  toast("Pengguna ditambahkan ✓");
+ }catch(e){
+  if(cred){try{await cred.user.delete()}catch(x){}}
+  err.innerText=e&&e.code==="auth/email-already-in-use"?"Email ini sudah terdaftar di Firebase. Pakai email lain, atau hapus akun lamanya di Firebase Console → Authentication.":pesanAuth(e);
+ }finally{try{await a2.signOut()}catch(x){}}
 }
 function ubahPeran(id,role){
  if(!bisa("pengguna"))return;
  let u=users.find(x=>x.id===id);if(!u)return;
  if(u.role==="pemilik"&&role!=="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");renderUser();return}
- u.role=role;simpanU();
- if(u.id===sesi.id){sesi.role=role;terapkanHak();ganti(bisa("dashboard")?"dashboard":"transaksi");return}
- renderUser();toast("Peran diperbarui");
+ db.collection("users").doc(id).update({role:role}).then(function(){toast("Peran diperbarui")}).catch(function(e){toast(pesanAuth(e));renderUser()});
 }
 function hapusUser(id){
  if(!bisa("pengguna"))return;
  let u=users.find(x=>x.id===id);if(!u)return;
- if(id===sesi.id){toast("Akun yang sedang dipakai tidak bisa dihapus");return}
+ if(id===sesi.uid){toast("Akun yang sedang dipakai tidak bisa dihapus");return}
  if(u.role==="pemilik"&&jumlahPemilik()<=1){toast("Harus ada minimal 1 Pemilik");return}
- if(!confirm("Hapus pengguna "+u.nama+"?"))return;
- users=users.filter(x=>x.id!==id);simpanU();renderUser();toast("Pengguna dihapus");
+ if(!confirm("Cabut akses "+u.nama+"? Orang ini tidak bisa lagi masuk ke Kasku."))return;
+ db.collection("users").doc(id).delete().then(function(){toast("Akses pengguna dicabut")}).catch(function(e){toast(pesanAuth(e))});
 }
-function bukaPw(id){
- let u=users.find(x=>x.id===id);if(!u)return;
- idPw=id;$("pwUntuk").innerText="Untuk: "+u.nama+" (@"+u.username+")";
- $("pwBaru").value="";$("errPw").innerText="";document.getElementById("dlgPw").showModal();
-}
-async function simpanPw(){
+function resetPwUser(id){
  if(!bisa("pengguna"))return;
- let pw=$("pwBaru").value,u=users.find(x=>x.id===idPw);
- if(!u)return;
- if(pw.length<6){$("errPw").innerText="Password minimal 6 karakter.";return}
- u.salt=acak();u.hash=await hash(pw,u.salt);simpanU();
- document.getElementById("dlgPw").close();toast("Password diganti ✓");
+ let u=users.find(x=>x.id===id);if(!u||!u.email)return;
+ auth.sendPasswordResetEmail(u.email).then(function(){toast("Email reset password dikirim ke "+u.email)}).catch(function(e){toast(pesanAuth(e))});
 }
 
 /* ===== Profil, pajak, kategori ===== */
@@ -976,11 +998,9 @@ function hapusKat(j,i){
 }
 function renderPengaturan(){
  renderUser();
- let me=users.find(x=>sesi&&x.id===sesi.id);
- $("statusPulih").innerText=me&&me.pulih?"Status: sudah dibuat ✅":"Status: belum dibuat ⚠️";
  $("daftarKatP").innerHTML=p.katPend.map((k,i)=>'<span class="tag">'+aman(k)+' <button class="x" onclick="hapusKat(\'P\','+i+')" title="Hapus">✕</button></span>').join("");
  $("daftarKatB").innerHTML=p.katBeban.map((k,i)=>'<span class="tag">'+aman(k)+' <button class="x" onclick="hapusKat(\'B\','+i+')" title="Hapus">✕</button></span>').join("");
- $("infoData").innerText=data.length+" transaksi tersimpan di browser ini.";
+ $("infoData").innerText=data.length+" transaksi tersimpan di Firebase dan sinkron ke semua perangkat.";
 }
 
 /* ===== Impor / ekspor / reset ===== */
@@ -1028,10 +1048,10 @@ function impor(el){
  if(!bisa("pengaturan"))return;
  let f=el.files[0];if(!f)return;
  let r=new FileReader();
- r.onload=function(){
+ r.onload=async function(){
   let rows=urai(String(r.result).replace(/^﻿/,""));
   if(rows.length&&/tanggal|date/i.test(rows[0][0]))rows.shift();
-  let ok=0,lewat=0;
+  let ok=0,lewat=0,baru=[];
   rows.forEach(function(c,i){
    let tgl=normTgl(c[0]);if(tgl===""){lewat++;return}
    let ket=(c[1]||"").trim()||"(tanpa keterangan)",jl=normJenis(c[3]),t;
@@ -1049,21 +1069,28 @@ function impor(el){
     if(d.kat)t.kat=pastikanKat(d.kat,(c[3]||"").trim()||(d.kat==="P"?"Penjualan":"Lainnya"));
     if(d.aset){let u=Number(c[5]);t.umur=u>=0&&String(c[5]||"").trim()!==""?u:4;t.residu=Math.max(0,Number(c[6])||0)}
    }
-   data.push(t);ok++;
+   baru.push(t);ok++;
   });
-  simpan();simpanP();render();
-  toast(ok+" baris diimpor"+(lewat?", "+lewat+" dilewati":""));
+  try{
+   await tulisSemua(baru);
+   simpanP();
+   toast(ok+" baris diimpor"+(lewat?", "+lewat+" dilewati":""));
+  }catch(e){toast("Gagal impor: "+pesanAuth(e))}
   el.value="";
  };
  r.readAsText(f);
 }
-function resetContoh(){
+async function resetContoh(){
  if(!bisa("pengaturan"))return;
  if(!confirm("Ganti semua data dengan data contoh?"))return;
- data=JSON.parse(JSON.stringify(contoh));
- ["Penjualan","Pendapatan Jasa","Pendapatan Lain-lain"].forEach(k=>pastikanKat("P",k));
- ["Gaji","Sewa","Listrik & Air","Pemasaran"].forEach(k=>pastikanKat("B",k));
- simpan();simpanP();render();toast("Data contoh dikembalikan");
+ try{
+  await hapusSemua();
+  await tulisSemua(JSON.parse(JSON.stringify(contoh)));
+  ["Penjualan","Pendapatan Jasa","Pendapatan Lain-lain"].forEach(k=>pastikanKat("P",k));
+  ["Gaji","Sewa","Listrik & Air","Pemasaran"].forEach(k=>pastikanKat("B",k));
+  simpanP();
+  toast("Data contoh dikembalikan");
+ }catch(e){toast("Gagal: "+pesanAuth(e))}
 }
 function ekspor(){
  if(!bisa("ekspor"))return;
@@ -1101,7 +1128,7 @@ function tambah(){
  if(!bisa("tambah"))return;
  let tgl=$("fTgl").value,ket=$("fKet").value.trim(),jumlah=Number($("fJumlah").value),tp=$("fTipe").value,d=TIPE[tp];
  if(tgl===""||ket===""||!(jumlah>0)){$("err").innerText="Lengkapi tanggal, keterangan, dan jumlah (lebih dari 0).";return}
- let t={id:Date.now(),tgl:tgl,ket:ket,tipe:tp,jumlah:jumlah,oleh:sesi.username};
+ let t={id:Date.now(),tgl:tgl,ket:ket,tipe:tp,jumlah:jumlah,oleh:sesi.uid};
  if(d.kat)t.kat=$("fKat").value;
  if(d.aset){
   let u=Number($("fUmur").value),rs=Number($("fResidu").value)||0;
@@ -1109,10 +1136,14 @@ function tambah(){
   if(rs<0||rs>=jumlah){$("err").innerText="Nilai residu harus lebih kecil dari harga perolehan.";return}
   t.umur=u;t.residu=rs;
  }
- data.push(t);
- simpan();$("fKet").value="";$("fJumlah").value="";dlg.close();render();toast("Transaksi berhasil ditambahkan ✓");
+ refTrx().doc(String(t.id)).set(t).catch(function(e){toast("Gagal menyimpan transaksi: "+pesanAuth(e))});
+ $("fKet").value="";$("fJumlah").value="";dlg.close();toast("Transaksi berhasil ditambahkan ✓");
 }
-function hapus(id){if(!bisa("hapus"))return;if(!confirm("Hapus transaksi ini?"))return;data=data.filter(d=>d.id!==id);simpan();render();toast("Transaksi dihapus")}
+function hapus(id){
+ if(!bisa("hapus"))return;
+ if(!confirm("Hapus transaksi ini?"))return;
+ refTrx().doc(String(id)).delete().then(function(){toast("Transaksi dihapus")}).catch(function(e){toast("Gagal menghapus: "+pesanAuth(e))});
+}
 
 /* ===== Laporan keuangan ===== */
 function tabel2(rows,K,Kb,hd){
@@ -1370,7 +1401,12 @@ function tema(){
  try{localStorage.setItem("temaKasku",g?"":"gelap")}catch(e){}
 }
 try{document.documentElement.dataset.tema=localStorage.getItem("temaKasku")||""}catch(e){}
-terapkanProfil();isiTipe();mulai();
+terapkanProfil();isiTipe();
+if(!FB_OK){
+ tampilLogin("login");
+ pesanLogin("Gagal memuat Firebase. Periksa koneksi internet lalu muat ulang halaman.");
+ $("lgTombol").disabled=true;
+}
 </script>
 </body>
 </html>
