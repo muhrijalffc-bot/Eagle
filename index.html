@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kasku — Dashboard Akuntansi</title>
+<link rel="stylesheet" href="css/fiori.css">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="terkunci">
+<div id="login">
+  <div class="kotak sembunyi" id="kotakLogin">
+    <div class="lg">K</div>
+    <h1 id="lgJudul">Masuk</h1>
+    <p id="lgSub"></p>
+    <div id="lgSetup" class="sembunyi"><input class="in" id="lgNama" placeholder="Nama lengkap" autocomplete="name"></div>
+    <input class="in" id="lgUser" type="email" placeholder="Email" autocomplete="email">
+    <input class="in" id="lgPass" type="password" placeholder="Password" autocomplete="current-password">
+    <div id="lgUlang" class="sembunyi"><input class="in" id="lgPass2" type="password" placeholder="Ulangi password" autocomplete="new-password"></div>
+    <label class="lihat"><input type="checkbox" onchange="lihatPw(this.checked)"> Tampilkan password</label>
+    <button class="btn utama" id="lgTombol" onclick="kirimLogin()">Masuk</button>
+    <button class="tautan" id="lgLupa" onclick="kirimReset()">Lupa password?</button>
+    <button class="tautan" id="lgGanti" onclick="gantiModeLogin()">Belum punya akun? Daftar sebagai Pemilik</button>
+    <div id="lgErr"></div>
+    <small>Akun dan data disimpan aman di server Firebase, jadi bisa dibuka dari HP, laptop, atau perangkat lain dengan akun yang sama.</small>
+  </div>
+</div>
+<div class="app">
+  <header class="shell">
+    <button class="ib" onclick="toggleSisi()" title="Menu navigasi">☰</button>
+    <div class="merek"><span class="tanda">K</span><span id="namaUsaha">Kasku</span><span class="pisah"></span><small>Akuntansi</small></div>
+    <div class="cariG"><input id="cariGlobal" type="search" placeholder="Cari transaksi..." oninput="cariGlobal(this.value)"></div>
+    <button class="ib" onclick="tema()" title="Ganti tema">🌓</button>
+    <button class="avatar" id="avatar" onclick="menuUser(event)" title="Akun">P</button>
+    <div class="menuU sembunyi" id="menuU" onclick="event.stopPropagation()">
+      <div class="kepala"><b id="namaPengguna">Putri</b><small id="peranPengguna">Pemilik usaha</small></div>
+      <button onclick="keluar()">🔒 Keluar</button>
+    </div>
+  </header>
+  <div class="badan">
+    <aside>
+      <div class="cap">Navigasi</div>
+      <nav>
+        <a class="aktif" id="nav-dashboard" onclick="ganti('dashboard')"><i>📊</i><span>Dashboard</span></a>
+        <a id="nav-transaksi" onclick="ganti('transaksi')"><i>🧾</i><span>Transaksi</span></a>
+        <a id="nav-laporan" onclick="ganti('laporan')"><i>📑</i><span>Laporan</span></a>
+        <a id="nav-pengaturan" onclick="ganti('pengaturan')"><i>⚙️</i><span>Pengaturan</span></a>
+      </nav>
+    </aside>
+    <div id="tirai" onclick="toggleSisi()"></div>
+
+    <main class="isi">
+      <div class="header-hal">
+        <div class="crumb">Beranda › <b id="crumb">Dashboard</b></div>
+        <div class="baris-judul">
+          <div><h1 id="judulHalaman">Dashboard</h1><p id="subjudul"></p></div>
+          <div class="aksi">
+            <select class="btn" id="periode" onchange="render()">
+              <option value="semua">Semua waktu</option>
+              <option value="bulan">Bulan ini</option>
+            </select>
+            <button class="btn" id="btnEkspor" onclick="ekspor()">⬇ Ekspor CSV</button>
+            <button class="btn utama" id="btnTambah" onclick="buka()">+ Transaksi baru</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="konten">
+        <div id="atas">
+          <h2 class="seksi">Indikator utama</h2>
+          <div class="grid kpi" id="kpi"></div>
+          <div class="grid dua">
+            <div class="kartu">
+              <div class="judul"><h2>Arus kas 6 bulan terakhir</h2>
+                <div class="legenda"><span><i style="background:var(--hijau)"></i>Kas masuk</span><span><i style="background:var(--merah)"></i>Kas keluar</span></div></div>
+              <div class="grafik" id="grafik"></div>
+            </div>
+            <div class="kartu">
+              <div class="judul"><h2>Beban per kategori</h2></div>
+              <div id="donat"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kartu" id="kartuTabel" style="margin-top:16px">
+          <div class="judul">
+            <h2 id="judulTabel">Transaksi terbaru</h2>
+            <div class="aksi">
+              <input class="cari" id="cari" placeholder="🔍 Cari transaksi..." oninput="render()">
+              <button class="chip aktif" data-j="semua" onclick="filterJ(this)">Semua</button>
+              <button class="chip" data-j="masuk" onclick="filterJ(this)">Kas masuk</button>
+              <button class="chip" data-j="keluar" onclick="filterJ(this)">Kas keluar</button>
+              <button class="chip" data-j="nonkas" onclick="filterJ(this)">Non-kas</button>
+            </div>
+          </div>
+          <div class="bungkus"><table>
+            <thead><tr><th>Transaksi</th><th>Tanggal</th><th>Arus kas</th><th class="num">Jumlah</th><th></th></tr></thead>
+            <tbody id="isiTabel"></tbody>
+          </table></div>
+        </div>
+
+        <div id="halamanLaporan" class="sembunyi">
+          <div class="kartu noprint" style="margin-bottom:16px">
+            <div class="judul"><h2>Pilih laporan &amp; periode</h2>
+              <div class="aksi">
+                <select class="btn" id="jenisLap" onchange="renderLaporan()">
+                  <option value="neraca">1. Laporan Posisi Keuangan</option>
+                  <option value="labarugi">2. Laporan Laba Rugi &amp; Penghasilan Komprehensif Lain</option>
+                  <option value="ekuitas">3. Laporan Perubahan Ekuitas</option>
+                  <option value="aruskas">4. Laporan Arus Kas</option>
+                  <option value="calk">5. Catatan atas Laporan Keuangan</option>
+                  <option value="jurnal">Pendukung: Jurnal Umum</option>
+                  <option value="saldo">Pendukung: Neraca Saldo</option>
+                </select>
+                <select class="btn" id="periodeLap" onchange="renderLaporan()"></select>
+                <button class="btn utama" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+              </div>
+            </div>
+          </div>
+          <div class="kartu"><div class="lap" id="lapIsi"></div></div>
+        </div>
+
+        <div id="halamanPengaturan" class="sembunyi">
+          <div class="grid dua2">
+            <div class="kartu">
+              <div class="judul"><h2>Profil usaha</h2></div>
+              <label class="lb">Nama usaha</label><input class="in" id="sUsaha">
+              <label class="lb">Catatan tambahan (muncul di Catatan atas Laporan Keuangan)</label>
+              <textarea class="in" id="sCatatan" rows="4" placeholder="Contoh: Usaha berdiri sejak 2026, bergerak di bidang penjualan..."></textarea>
+              <div class="aksi" style="margin-top:16px"><button class="btn utama" onclick="simpanProfil()">Simpan profil</button></div>
+            </div>
+            <div class="kartu">
+              <div class="judul"><h2>Pajak penghasilan</h2></div>
+              <label class="lb">Tarif (%)</label><input class="in" id="sTarif" type="number" min="0" step="0.1">
+              <label class="lb">Dasar pengenaan</label>
+              <select class="in" id="sDasar">
+                <option value="pendapatan">% dari pendapatan bruto per bulan (PPh final)</option>
+                <option value="laba">% dari laba sebelum pajak per bulan (tanpa kompensasi rugi)</option>
+              </select>
+              <p class="delta">Bawaan 0,5% dari omzet mengikuti PPh final UMKM (PP 55/2022). Isi 0 jika usahamu tidak dikenai, dan periksa ketentuan terbaru. Ini bukan nasihat pajak. Perubahan berlaku untuk semua periode.</p>
+              <div class="aksi"><button class="btn utama" onclick="simpanPajak()">Simpan pajak</button></div>
+            </div>
+          </div>
+          <div class="grid dua2" style="margin-top:16px">
+            <div class="kartu">
+              <div class="judul"><h2>Kategori pendapatan</h2></div>
+              <div id="daftarKatP"></div>
+              <div class="aksi" style="margin-top:8px;flex-wrap:nowrap">
+                <input class="in" id="katBaruP" placeholder="Nama kategori pendapatan">
+                <button class="btn" onclick="tambahKat('P')">+ Tambah</button>
+              </div>
+            </div>
+            <div class="kartu">
+              <div class="judul"><h2>Kategori beban</h2></div>
+              <div id="daftarKatB"></div>
+              <div class="aksi" style="margin-top:8px;flex-wrap:nowrap">
+                <input class="in" id="katBaruB" placeholder="Nama kategori beban">
+                <button class="btn" onclick="tambahKat('B')">+ Tambah</button>
+              </div>
+            </div>
+          </div>
+          <div class="kartu" style="margin-top:16px">
+            <div class="judul"><h2>Pengguna &amp; hak akses</h2></div>
+            <p class="delta"><b>Pemilik</b>: akses penuh. <b>Akuntan</b>: dashboard, transaksi (tambah/hapus), laporan, ekspor. <b>Kasir</b>: hanya mencatat transaksi dan melihat catatannya sendiri. Setiap pengguna masuk dengan emailnya sendiri. Jika lupa password, pakai tautan &quot;Lupa password?&quot; di halaman masuk atau tombol Reset password di bawah.</p>
+            <div class="bungkus"><table>
+              <thead><tr><th>Pengguna</th><th>Peran</th><th></th></tr></thead>
+              <tbody id="daftarUser"></tbody>
+            </table></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px">
+              <input class="in" id="uNama" placeholder="Nama lengkap">
+              <input class="in" id="uUser" type="email" placeholder="Email" autocomplete="off">
+              <input class="in" id="uPass" type="password" placeholder="Password (min. 6)" autocomplete="new-password">
+              <select class="in" id="uPeran"><option value="kasir">Kasir</option><option value="akuntan">Akuntan</option><option value="pemilik">Pemilik</option></select>
+              <button class="btn utama" onclick="tambahUser()">+ Tambah pengguna</button>
+            </div>
+            <p id="errUser" style="color:var(--merah);font-size:13px;min-height:16px;margin:8px 0 0"></p>
+          </div>
+          <div class="kartu" style="margin-top:16px">
+            <div class="judul"><h2>Data</h2></div>
+            <p class="delta">Data tersimpan di Firebase dan otomatis sinkron ke semua perangkat. Format impor CSV: tanggal, keterangan, tipe (kode atau nama jenis transaksi), kategori, jumlah, umur_tahun, residu. Format lama (tanggal, keterangan, kategori, masuk/keluar, jumlah) tetap bisa diimpor dan dicatat sebagai transaksi tunai. Tanggal boleh YYYY-MM-DD atau DD/MM/YYYY.</p>
+            <input type="file" id="fileCsv" accept=".csv,text/csv" class="sembunyi" onchange="impor(this)">
+            <div class="aksi">
+              <button class="btn" onclick="document.getElementById('fileCsv').click()">⬆ Impor CSV</button>
+              <button class="btn" onclick="ekspor()">⬇ Ekspor CSV</button>
+              <button class="btn" onclick="resetContoh()">↺ Kembalikan data contoh</button>
+              <button class="btn" style="color:var(--merah)" onclick="bukaBaru()">✨ Mulai data baru</button>
+            </div>
+            <p class="delta" id="infoData"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<dialog id="dlg">
+  <h2>Transaksi baru</h2>
+  <label>Tanggal</label><input type="date" id="fTgl">
+  <label>Jenis transaksi</label>
+  <select id="fTipe" onchange="ubahTipe()"></select>
+  <div id="fInfo" class="delta"></div>
+  <label>Keterangan</label><input id="fKet" placeholder="Contoh: Penjualan produk A">
+  <div id="rowKat"><label id="lblKat">Kategori</label><select id="fKat"></select></div>
+  <div id="rowAset" class="sembunyi">
+    <label>Umur manfaat (tahun). Isi 0 jika tidak disusutkan, mis. tanah</label><input type="number" id="fUmur" min="0" step="0.5" value="4">
+    <label>Nilai residu (Rp)</label><input type="number" id="fResidu" min="0" value="0">
+  </div>
+  <label>Jumlah (Rp)</label><input type="number" id="fJumlah" min="1" placeholder="0">
+  <div id="err"></div>
+  <div class="baris"><button class="btn" onclick="dlg.close()">Batal</button><button class="btn utama" onclick="tambah()">Simpan</button></div>
+</dialog>
+<dialog id="dlgData" oncancel="event.preventDefault()">
+  <h2>Mulai dengan data apa?</h2>
+  <p class="delta">Pilih data awal untuk akun baru ini. Data akan disimpan di Firebase dan bisa dibuka dari perangkat lain.</p>
+  <button class="btn utama" onclick="pilihData('kosong')">✨ Data baru (kosong)</button>
+  <button class="btn" onclick="pilihData('contoh')">🧪 Data contoh (untuk mencoba)</button>
+  <button class="btn" id="btnDataAda" onclick="pilihData('ada')">📂 Unggah data lama dari browser ini</button>
+</dialog>
+<dialog id="dlgBaru">
+  <h2>✨ Mulai data baru</h2>
+  <p class="delta">Semua transaksi akan dihapus dari Firebase dan kamu mulai dari data kosong. Akun pengguna, kategori, dan profil usaha <b>tetap ada</b>. Tindakan ini tidak bisa dibatalkan.</p>
+  <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="baruCadangan" checked style="width:auto"> Unduh cadangan CSV dulu (disarankan)</label>
+  <label>Ketik <b>BARU</b> untuk melanjutkan</label>
+  <input id="baruKonfirm" autocomplete="off" placeholder="BARU">
+  <div id="errBaru" style="color:var(--merah);font-size:13px;min-height:16px;margin-top:10px"></div>
+  <div class="baris"><button class="btn" onclick="document.getElementById('dlgBaru').close()">Batal</button><button class="btn utama" style="background:var(--merah);border-color:var(--merah)" onclick="jalankanBaru()">Hapus &amp; mulai baru</button></div>
+</dialog>
+<div id="toast"></div>
+
+<script src="js/firebase.js"></script>
+<script src="js/data.js"></script>
+<script src="js/akuntansi.js"></script>
+<script src="js/shell.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/halaman/dashboard.js"></script>
+<script src="js/halaman/transaksi.js"></script>
+<script src="js/halaman/pengaturan.js"></script>
+<script src="js/halaman/laporan.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
